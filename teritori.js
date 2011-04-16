@@ -171,7 +171,7 @@ THE SOFTWARE.
             (function () {
                 var link_style, to_link, content;
 
-                title = 'Placemark's description of Google Maps';
+                title = 'Placemark\'s description of Google Maps';
 
                 link_style = ' style="color:#' + link_color + '"';
 
