@@ -279,7 +279,7 @@ THE SOFTWARE.
                 if (actions && actions.find('.trtr_gethtml').length === 0) {
                     tweet_link = actions.siblings('.tweet-timestamp').attr('href');
                     tweet_id = (tweet_link.match(/^\/(#\!\/)?([a-zA-Z0-9_]{1,15})\/status(es)?\/([1-9][0-9]+)/))[4];
-                    action_gethtml = $('&npsp; <a href="#" class="trtr_gethtml" style="padding-left:18px;"><span>GetHTML<span></a>');
+                    action_gethtml = $('<a href="#" class="trtr_gethtml" style="padding-left:18px"><span>GetHTML</span></a>');
                     actions.append(action_gethtml);
                     action_gethtml.click(function () {
                         load_jsonp(tweet_id);
