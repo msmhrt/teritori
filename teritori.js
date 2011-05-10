@@ -31,9 +31,9 @@ THE SOFTWARE.
         trtr.option = {};
 
         newstyle_config = {
-            'tweet': 'mode:tweet'
-            'profile': 'mode:profile'
-            'kml': 'mode:tweet4kml',
+            'tweet': 'mode:tweet',
+            'profile': 'mode:profile',
+            'kml': 'mode:tweet4kml'
         };
 
         if (config) {
