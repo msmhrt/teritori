@@ -25,11 +25,42 @@ THE SOFTWARE.
 (function () {
     var trtr = teritori;
 
-    trtr.has_option = function (option) {
-        if (trtr.cfg === option) {
-            return true;
+    trtr.parse_config = function (config) {
+        var i, newstyle_config, option_list, option;
+
+        trtr.option = {};
+
+        newstyle_config = {
+            'kml': 'mode:tweet4kml',
+            'profile': 'mode:profile'
+        };
+
+        if (config) {
+            if (newstyle_config.hasOwnProperty(config)) {
+                config = newstyle_config[config];
+            }
+        } else {
+            config = 'mode:tweet';
         }
-        return false;
+
+        option_list = config.split(',');
+        for (i = 0; i < option_list.length; i += 1) {
+            option = option_list[i].split(':');
+            switch (option[0]) {
+            case 'mode':
+                trtr.option.mode = option[1];
+                break;
+            case 'debug':
+                if (option[1] === 'true') {
+                    trtr.option.debug = true;
+                }
+                break;
+            }
+        }
+
+        if (trtr.option.debug) {
+            console.info(trtr.option);
+        }
     };
 
     trtr.display_dialog = function (title, htmlcode) {
@@ -126,7 +157,7 @@ THE SOFTWARE.
             return dt_tweeted.getFullYear() + '年' + (dt_tweeted.getMonth() + 1) + '月' + dt_tweeted.getDate() + '日 ' + dt_tweeted.getHours() + ':' + ("0" + dt_tweeted.getMinutes()).slice(-2);
         }(tweet.created_at));
 
-        if (trtr.has_option('profile')) {
+        if (trtr.option.mode === 'profile') {
             (function () {
                 var to_link, content, user_url_html;
 
@@ -167,7 +198,7 @@ THE SOFTWARE.
                 htmlcode += '<div class="trtr_userid_' + user_id + '" style="display:block;-webkit-font-smoothing:antialiased;color:#444;font:13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-sefif"><div style="display:inline-block;padding:20px 20px 16px 20px;width:510px;background-color#fff"><div style="float:left"><a href="http://twitter.com/' + screen_name + '" target="_blank"><img src="' + profile_image_url + '" alt="' + user_name + '"></a></div><div style="margin-left:15px;display:inline-block;width:367px"><div style="font-weight:bold"><h2 style="line-height:36px;font-size:30px;margin:0">' + user_name + '</h2></div><div style="font-size:13px;line-height:22px;padding:0"><span style="font-size:18px;font-weight:bold"><a href="http://twitter.com/' + screen_name + '" target="_blank">@' + screen_name + '</a></span> ' + user_location + ' </div><div style="overflow:hidden;text-overflow:ellipsis;color:#777;font-family:Georgia,serif;font-size:14px;font-style:italic;">' + user_description + '</div>' + user_url_html + '</div></div></div>\n';
                 htmlcode += '<!-- end of profile -->\n';
             }());
-        } else if (trtr.has_option('kml')) {
+        } else if (trtr.option.mode === 'tweet4kml') {
             (function () {
                 var link_style, to_link, content;
 
@@ -206,7 +237,7 @@ THE SOFTWARE.
 
                 htmlcode = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + text_color + ';font-size:16px"><div>' + content + ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + screen_name + '/status/' + tweet_id + '"' + link_style + '>' + timestamp + '</a> ' + source + 'から </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #e6e6e6"><a href="http://twitter.com/' + screen_name + '"' + link_style + '><img src="' + profile_image_url + '" alt="' + user_name + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + screen_name + '"' + link_style + '>@' + screen_name + '</a></strong><span style="color:#999;font-size:14px"><br>' + user_name + ' </span></div></div>';
             }());
-        } else {
+        } else if (trtr.option.mode === 'tweet') {
             (function () {
                 var to_link, content;
 
@@ -241,7 +272,9 @@ THE SOFTWARE.
                 htmlcode += '<div class="trtr_tweetid_' + tweet_id + '" style="background:url(' + background_image_url + ') #' + background_color + ';padding:20px;"><p class="trtrTweet" style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + text_color + ';font-size:16px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px;">' + content + ' <span class="timestamp" style="font-size:12px;display:block;"><a title="' + timestamp + '" href="http://twitter.com/' + screen_name + '/status/' + tweet_id + '">' + timestamp + '</a> via ' + source + ' </span><span class="metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="author" style="line-height:19px;"><a href="http://twitter.com/' + screen_name + '"><img src="' + profile_image_url + '" style="float:left;margin:0 7px 0 0px;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + screen_name + '">' + user_name + '</a></strong><br/>@' + screen_name + '</span></span></p></div>';
                 htmlcode += '<!-- end of tweet -->';
             }());
-
+        } else {
+            alert("teritori: Unknown mode '" + trtr.option.mode + "'");
+            return;
         }
 
         trtr.display_dialog(title, htmlcode);
@@ -249,6 +282,8 @@ THE SOFTWARE.
 
     trtr.main = function () {
         var url, matches, load_jsonp;
+
+        trtr.parse_config(trtr.cfg);
 
         url = document.location.href;
         matches = url.match(/^https?:\/\/twitter\.com(\/#\!)?(\/([a-zA-Z0-9_]{1,15})(\/status(es)?\/([1-9][0-9]+))?)?/);
