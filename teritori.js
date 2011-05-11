@@ -25,43 +25,48 @@ THE SOFTWARE.
 (function () {
     var trtr = teritori;
 
-    trtr.parse_config = function (config) {
-        var i, newstyle_config, option_list, option;
+    trtr.get_option_from_cfg = function (config_string) {
+        var i, newconfig_table, config_list, config, option;
 
-        trtr.option = {};
+        option = {
+            'mode': 'tweet',
+            'debug': false
+        };
 
-        newstyle_config = {
+        if (!config_string) {
+            return option;
+        }
+
+        newconfig_table = {
             'tweet': 'mode:tweet',
             'profile': 'mode:profile',
             'kml': 'mode:tweet4kml'
         };
 
-        if (config) {
-            if (newstyle_config.hasOwnProperty(config)) {
-                config = newstyle_config[config];
-            }
-        } else {
-            config = 'mode:tweet';
+        if (newconfig_table.hasOwnProperty(config_string)) {
+            config_string = newconfig_table[config_string];
         }
 
-        option_list = config.split(',');
-        for (i = 0; i < option_list.length; i += 1) {
-            option = option_list[i].split(':');
-            switch (option[0]) {
+        config_list = config_string.split(',');
+        for (i = 0; i < config_list.length; i += 1) {
+            config = config_list[i].split(':');
+            switch (config[0]) {
             case 'mode':
-                trtr.option.mode = option[1];
+                option.mode = config[1];
                 break;
             case 'debug':
-                if (option[1] === 'true') {
-                    trtr.option.debug = true;
+                if (config[1] === 'true') {
+                    option.debug = true;
                 }
                 break;
             }
         }
 
-        if (trtr.option.debug) {
-            console.info(trtr.option);
+        if (option.debug) {
+            console.info(option);
         }
+
+        return option;
     };
 
     trtr.display_dialog = function (title, htmlcode) {
@@ -284,7 +289,7 @@ THE SOFTWARE.
     trtr.main = function () {
         var url, matches, load_jsonp;
 
-        trtr.parse_config(trtr.cfg);
+        trtr.option = trtr.get_option_from_cfg(trtr.cfg);
 
         url = document.location.href;
         matches = url.match(/^https?:\/\/twitter\.com(\/#\!)?(\/([a-zA-Z0-9_]{1,15})(\/status(es)?\/([1-9][0-9]+))?)?/);
