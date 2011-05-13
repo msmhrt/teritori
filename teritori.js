@@ -78,7 +78,7 @@ THE SOFTWARE.
     };
 
     trtr.display_dialog = function (title, htmlcode) {
-        var close_dialog, select_text, trtr_dialog, position, trtr_dialog_header;
+        var close_dialog, select_text, trtr_dialog, dialog_position, trtr_dialog_header;
 
         close_dialog = function () {
             $('.trtr-dialog').remove();
@@ -86,17 +86,17 @@ THE SOFTWARE.
         };
 
         if (trtr.dialog_loaded) {
-            position = $('.trtr-dialog').position();
+            dialog_position = [parseInt($('.trtr-dialog').css('top'), 10), parseInt($('.trtr-dialog').css('left'), 10)];
             trtr.dialog_loaded = false;
             close_dialog();
         }
 
         trtr_dialog = $('<div class="trtr-dialog" style="position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:500px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:5px 15px 8px 15px"><div>' + title + '</div><div class="trtr-dialog-textarea"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:452px;height:156px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div></div></div>').appendTo('body');
 
-        if (position) {
+        if (dialog_position) {
             trtr_dialog.css({
-                'top': position.top,
-                'left': position.left
+                'top': dialog_position[0],
+                'left': dialog_position[1]
             });
         } else {
             trtr_dialog.css({
