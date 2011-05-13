@@ -65,7 +65,7 @@ THE SOFTWARE.
         }
 
         if (option.debug) {
-            console.info(option);
+            console.info('teritori: option = ', option);
         }
 
         return option;
