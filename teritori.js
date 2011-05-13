@@ -30,7 +30,8 @@ THE SOFTWARE.
 
         option = {
             'mode': 'tweet',
-            'debug': false
+            'debug': false,
+            'link': 'entity'
         };
 
         if (!config_string) {
@@ -59,6 +60,11 @@ THE SOFTWARE.
                     option.debug = true;
                 } else if (config[1] === 'false') {
                     option.debug = false;
+                }
+                break;
+            case 'link':
+                if (config[1] === 'entity' || config[1] === 'auto') {
+                    option.link = config[1];
                 }
                 break;
             }
@@ -129,6 +135,55 @@ THE SOFTWARE.
         });
 
         trtr.dialog_loaded = true;
+    };
+
+    trtr.apply_entities = function (text, entities, entity_callback) {
+        var i, j, index, start, end, linked_text, entity_list, entity;
+
+        entity_list = [];
+        for (i in entities) {
+            if ((typeof entities[i] !== 'function') && (entities[i].length !== 0)) {
+                for (j = 0; j < entities[i].length; j += 1) {
+                    entity_list.push([i, entities[i][j]]);
+                }
+            }
+        }
+
+        if (entity_list.length === 0) {
+            return text;
+        }
+
+        entity_list.sort(function (a, b) {
+            return a[1].indices[0] - b[1].indices[0];
+        });
+
+        index = 0;
+        linked_text = '';
+        for (i = 0; i < entity_list.length; i += 1) {
+            entity = entity_list[i];
+            if (entity_callback.hasOwnProperty(entity[0]) !== true) {
+                alert("teritori: Unknown parameter '" + entity[0] + "' in entity");
+                return text;
+            }
+
+            start = entity[1].indices[0];
+            end = entity[1].indices[1];
+
+            if (index > start || start > end || end > text.length) {
+                alert('teritori: Unordered indices (' + index + ', ' + start + ', ' + end + ', ' + text.length + ')');
+                return text;
+            }
+
+            linked_text += text.substring(index, start);
+            linked_text += entity_callback[entity[0]](entity[1], text.substring(start, end));
+            index = end;
+
+        }
+        if (end < text.length) {
+            linked_text += text.substring(end, text.length);
+        }
+
+        return linked_text;
     };
 
     trtr.display_htmlcode = function (tweet) {
@@ -208,7 +263,19 @@ THE SOFTWARE.
             }());
         } else if (trtr.option.mode === 'tweet4kml') {
             (function () {
-                var link_style, to_link, content;
+                var link_style, to_link, content, entity_callback;
+
+                entity_callback = {
+                    'hashtags': function (entity, string) {
+                        return '<a href="http://search.twitter.com/search?q=%23' + entity.text + '" style="color:#' + link_color + '">#' + entity.text + '</a>';
+                    },
+                    'urls': function (entity, string) {
+                        return '<a href="' + entity.url + '" style="color:#' + link_color + '">' + entity.url + '</a>';
+                    },
+                    'user_mentions': function (entity, string) {
+                        return '@<a href="http://twitter.com/' + entity.screen_name + '" style="color:#' + link_color + '">' + string.substring(1) + '</a>';
+                    }
+                };
 
                 title = 'Placemark\'s description of Google Maps';
 
@@ -235,7 +302,34 @@ THE SOFTWARE.
                     return pre_text + '<a href="' + url + '"' + link_style + '>' + text + '</a>';
                 };
 
-                content = tweet.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
+                if (trtr.option.link === 'entity') {
+                    content = trtr.apply_entities(tweet.text, tweet.entities, entity_callback);
+                } else if (trtr.option.link === 'auto') {
+                    content = tweet.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
+                } else {
+                    alert("teritori: Unknown link option '" + trtr.option.link + "'");
+                    return;
+                }
+
+                if (trtr.option.debug) {
+                    (function () {
+                        var link_entity, link_auto;
+
+                        if (trtr.option.link === 'entity') {
+                            link_entity = content;
+                            link_auto = tweet.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
+                        } else if (trtr.option.link === 'auto') {
+                            link_entity = trtr.apply_entities(tweet.text, tweet.entities, entity_callback);
+                            link_auto = content;
+                        }
+
+                        if (link_entity !== link_auto) {
+                            alert('teritori: link_entity !== link_auto');
+                            console.info('teritori: link_entity = ', link_entity);
+                            console.info('teritori: link_auto =   ', link_auto);
+                        }
+                    }());
+                }
 
                 if (source === 'web') {
                     source = '<a href="http://twitter.com/"' + link_style + ' rel="nofollow">Twitter</a>';
@@ -247,7 +341,19 @@ THE SOFTWARE.
             }());
         } else if (trtr.option.mode === 'tweet') {
             (function () {
-                var to_link, content;
+                var to_link, content, entity_callback;
+
+                entity_callback = {
+                    'hashtags': function (entity, string) {
+                        return '<a href="http://search.twitter.com/search?q=%23' + entity.text + '" target="_new">#' + entity.text + '</a>';
+                    },
+                    'urls': function (entity, string) {
+                        return '<a href="' + entity.url + '" target="_new">' + entity.url + '</a>';
+                    },
+                    'user_mentions': function (entity, string) {
+                        return '@<a href="http://twitter.com/' + entity.screen_name + '" target="_new">' + string.substring(1) + '</a>';
+                    }
+                };
 
                 title = 'Tweet';
 
@@ -273,7 +379,34 @@ THE SOFTWARE.
                     return pre_text + '<a href="' + url + '" target="_new">' + text + '</a>';
                 };
 
-                content = tweet.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
+                if (trtr.option.link === 'entity') {
+                    content = trtr.apply_entities(tweet.text, tweet.entities, entity_callback);
+                } else if (trtr.option.link === 'auto') {
+                    content = tweet.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
+                } else {
+                    alert("teritori: Unknown link option '" + trtr.option.link + "'");
+                    return;
+                }
+
+                if (trtr.option.debug) {
+                    (function () {
+                        var link_entity, link_auto;
+
+                        if (trtr.option.link === 'entity') {
+                            link_entity = content;
+                            link_auto = tweet.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
+                        } else if (trtr.option.link === 'auto') {
+                            link_entity = trtr.apply_entities(tweet.text, tweet.entities, entity_callback);
+                            link_auto = content;
+                        }
+
+                        if (link_entity !== link_auto) {
+                            alert('teritori: link_entity !== link_auto');
+                            console.info('teritori: link_entity = ', link_entity);
+                            console.info('teritori: link_auto =   ', link_auto);
+                        }
+                    }());
+                }
 
                 htmlcode = '<!-- http://twitter.com/' + screen_name + '/status/' + tweet_id + ' -->\n';
                 htmlcode += '<style type="text/css">.trtr_tweetid_' + tweet_id + ' a {text-decoration:none;color:#' + link_color + ' !important;} .trtr_tweetid_' + tweet_id + ' a:hover {text-decoration:underline;}</style>\n';
