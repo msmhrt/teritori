@@ -57,6 +57,8 @@ THE SOFTWARE.
             case 'debug':
                 if (config[1] === 'true') {
                     option.debug = true;
+                } else if (config[1] === 'false') {
+                    option.debug = false;
                 }
                 break;
             }
