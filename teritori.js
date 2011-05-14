@@ -77,8 +77,8 @@ THE SOFTWARE.
         return option;
     };
 
-    trtr.display_dialog = function (title, htmlcode) {
-        var close_dialog, select_text, trtr_dialog, dialog_position, trtr_dialog_header;
+    trtr.display_dialog = function (htmlcode) {
+        var close_dialog, select_text, trtr_dialog, dialog_position, trtr_dialog_header, trtr_mode_select_menu;
 
         close_dialog = function () {
             $('.trtr-dialog').remove();
@@ -91,7 +91,18 @@ THE SOFTWARE.
             close_dialog();
         }
 
-        trtr_dialog = $('<div class="trtr-dialog" style="position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:500px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:5px 15px 8px 15px"><div>' + title + '</div><div class="trtr-dialog-textarea"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:452px;height:156px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div></div></div>').appendTo('body');
+        trtr_dialog = $('<div class="trtr-dialog" style="position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:500px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><span style="margin-right:1em"><strong>Mode</strong></span><select style="margin-bottom:10px" class="trtr-mode-select-menu"></select><div class="trtr-dialog-textarea"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:452px;height:156px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div></div></div>').appendTo('body');
+
+        trtr_mode_select_menu = trtr_dialog.find('.trtr-mode-select-menu');
+        trtr_mode_select_menu.append($('<option value="tweet">Tweet</option>'));
+        trtr_mode_select_menu.append($('<option value="profile">Twitter User Profile</option>'));
+        trtr_mode_select_menu.append($('<option value="tweet4kml">Placemark\'s description of Google Maps</option>'));
+        trtr_mode_select_menu.val(trtr.option.mode);
+
+        trtr_mode_select_menu.bind('change', function () {
+            trtr.option.mode = trtr_dialog.find('.trtr-mode-select-menu option:selected').val();
+            trtr.load_jsonp('repeat');
+        });
 
         if (dialog_position) {
             trtr_dialog.css({
@@ -187,7 +198,7 @@ THE SOFTWARE.
     };
 
     trtr.display_htmlcode = function (tweet) {
-        var tweet_id, source, screen_name, user_name, user_id, user_description, user_location, user_url, background_image_url, profile_image_url, background_color, text_color, link_color, timestamp, title, htmlcode;
+        var tweet_id, source, screen_name, user_name, user_id, user_description, user_location, user_url, background_image_url, profile_image_url, background_color, text_color, link_color, timestamp, htmlcode;
 
         if (tweet.retweeted_status) {
             tweet = tweet.retweeted_status;
@@ -223,8 +234,6 @@ THE SOFTWARE.
         if (trtr.option.mode === 'profile') {
             (function () {
                 var to_link, content, user_url_html;
-
-                title = 'Twitter User Profile';
 
                 to_link = function () {
                     var a = arguments,
@@ -276,8 +285,6 @@ THE SOFTWARE.
                         return '@<a href="http://twitter.com/' + entity.screen_name + '" style="color:#' + link_color + '">' + string.substring(1) + '</a>';
                     }
                 };
-
-                title = 'Placemark\'s description of Google Maps';
 
                 link_style = ' style="color:#' + link_color + '"';
 
@@ -355,8 +362,6 @@ THE SOFTWARE.
                     }
                 };
 
-                title = 'Tweet';
-
                 to_link = function () {
                     var a = arguments,
                         url = '',
@@ -418,11 +423,25 @@ THE SOFTWARE.
             return;
         }
 
-        trtr.display_dialog(title, htmlcode);
+        trtr.display_dialog(htmlcode);
+    };
+
+    trtr.load_jsonp = function (id) {
+        var jsonp;
+
+        if (id === 'repeat') {
+            id = trtr.last_id;
+        } else {
+            trtr.last_id = id;
+        }
+        jsonp = document.createElement('script');
+        jsonp.type = 'text/javascript';
+        jsonp.src = 'http://api.twitter.com/1/statuses/show.json?include_entities=true&contributor_details=true&callback=teritori.display_htmlcode&id=' + id;
+        document.getElementsByTagName('head')[0].appendChild(jsonp);
     };
 
     trtr.main = function () {
-        var url, matches, load_jsonp;
+        var url, matches;
 
         trtr.option = trtr.get_option_from_cfg(trtr.cfg);
 
@@ -433,20 +452,8 @@ THE SOFTWARE.
             return;
         }
 
-        load_jsonp = function (id) {
-            var jsonp;
-
-            if (id === 0) {
-                return;
-            }
-            jsonp = document.createElement('script');
-            jsonp.type = 'text/javascript';
-            jsonp.src = 'http://api.twitter.com/1/statuses/show.json?include_entities=true&contributor_details=true&callback=teritori.display_htmlcode&id=' + id;
-            document.getElementsByTagName('head')[0].appendChild(jsonp);
-        };
-
         if (matches[6]) {
-            load_jsonp(matches[6]);
+            trtr.load_jsonp(matches[6]);
         } else {
             $('.stream-tweet').live('hover', function () {
                 var actions, tweet_link, tweet_id, action_gethtml;
@@ -458,7 +465,7 @@ THE SOFTWARE.
                     action_gethtml = $('<a href="#" class="trtr_gethtml" style="padding-left:18px"><span>GetHTML</span></a>');
                     actions.append(action_gethtml);
                     action_gethtml.click(function () {
-                        load_jsonp(tweet_id);
+                        trtr.load_jsonp(tweet_id);
                     });
                 }
             });
