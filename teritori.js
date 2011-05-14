@@ -200,6 +200,8 @@ THE SOFTWARE.
     trtr.display_htmlcode = function (tweet) {
         var tweet_id, source, screen_name, user_name, user_id, user_description, user_location, user_url, background_image_url, profile_image_url, background_color, text_color, link_color, timestamp, htmlcode;
 
+        trtr.cached_json['statuses/show/' + tweet.id_str] = tweet;
+
         if (tweet.retweeted_status) {
             tweet = tweet.retweeted_status;
         }
@@ -427,23 +429,36 @@ THE SOFTWARE.
     };
 
     trtr.load_jsonp = function (id) {
-        var jsonp;
+        var jsonp, cache_key;
 
         if (id === 'repeat') {
             id = trtr.last_id;
         } else {
             trtr.last_id = id;
         }
-        jsonp = document.createElement('script');
-        jsonp.type = 'text/javascript';
-        jsonp.src = 'http://api.twitter.com/1/statuses/show.json?include_entities=true&contributor_details=true&callback=teritori.display_htmlcode&id=' + id;
-        document.getElementsByTagName('head')[0].appendChild(jsonp);
+
+        cache_key = 'statuses/show/' + id;
+        if (trtr.cached_json.hasOwnProperty(cache_key)) {
+            trtr.display_htmlcode(trtr.cached_json[cache_key]);
+            if (trtr.option.debug) {
+                console.info('teritori: cache_key = ', cache_key);
+            }
+        } else {
+            jsonp = document.createElement('script');
+            jsonp.type = 'text/javascript';
+            jsonp.src = 'http://api.twitter.com/1/statuses/show.json?include_entities=true&contributor_details=true&callback=teritori.display_htmlcode&id=' + id;
+            document.getElementsByTagName('head')[0].appendChild(jsonp);
+        }
     };
 
     trtr.main = function () {
         var url, matches;
 
         trtr.option = trtr.get_option_from_cfg(trtr.cfg);
+
+        if (!trtr.cached_json) {
+            trtr.cached_json = {};
+        }
 
         url = document.location.href;
         matches = url.match(/^https?:\/\/twitter\.com(\/#\!)?(\/([a-zA-Z0-9_]{1,15})(\/status(es)?\/([1-9][0-9]+))?)?/);
