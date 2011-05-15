@@ -31,7 +31,8 @@ THE SOFTWARE.
         option = {
             'mode': 'tweet',
             'debug': false,
-            'link': 'entity'
+            'link': 'entity',
+            'preview': true
         };
 
         if (!config_string) {
@@ -65,6 +66,13 @@ THE SOFTWARE.
             case 'link':
                 if (config[1] === 'entity' || config[1] === 'auto') {
                     option.link = config[1];
+                }
+                break;
+            case 'preview':
+                if (config[1] === 'true') {
+                    option.preview = true;
+                } else if (config[1] === 'false') {
+                    option.preview = false;
                 }
                 break;
             }
