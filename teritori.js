@@ -153,7 +153,7 @@ THE SOFTWARE.
         if (trtr_dialog.draggable) {
             trtr_dialog.draggable({
                 handle: trtr_dialog_header,
-                stop: function (e, ui) {
+                stop: function () {
                     select_text();
                 }
             });
@@ -303,10 +303,10 @@ THE SOFTWARE.
                 var link_style, to_link, content, entity_callback;
 
                 entity_callback = {
-                    'hashtags': function (entity, string) {
+                    'hashtags': function (entity) {
                         return '<a href="http://search.twitter.com/search?q=%23' + entity.text + '" style="color:#' + link_color + '">#' + entity.text + '</a>';
                     },
-                    'urls': function (entity, string) {
+                    'urls': function (entity) {
                         return '<a href="' + entity.url + '" style="color:#' + link_color + '">' + entity.url + '</a>';
                     },
                     'user_mentions': function (entity, string) {
@@ -379,10 +379,10 @@ THE SOFTWARE.
                 var to_link, content, entity_callback;
 
                 entity_callback = {
-                    'hashtags': function (entity, string) {
+                    'hashtags': function (entity) {
                         return '<a href="http://search.twitter.com/search?q=%23' + entity.text + '" target="_new">#' + entity.text + '</a>';
                     },
-                    'urls': function (entity, string) {
+                    'urls': function (entity) {
                         return '<a href="' + entity.url + '" target="_new">' + entity.url + '</a>';
                     },
                     'user_mentions': function (entity, string) {
