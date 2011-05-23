@@ -464,36 +464,28 @@ THE SOFTWARE.
 
                 entity_callback = {
                     'hashtags': function (entity) {
-                        return '<a href="http://search.twitter.com/search?q=%23' + entity.text + '" target="_new">#' + entity.text + '</a>';
+                        return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + entity.text + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + entity.text + '</span></a>';
                     },
                     'urls': function (entity) {
-                        return '<a href="' + entity.url + '" target="_new">' + entity.url + '</a>';
+                        return '<a href="' + entity.url + '" target="_new"><span class="trtr_link_text">' + entity.url + '</span></a>';
                     },
                     'user_mentions': function (entity, string) {
-                        return '@<a href="http://twitter.com/' + entity.screen_name + '" target="_new">' + string.substring(1) + '</a>';
+                        return '<a class="trtr_link" href="http://twitter.com/' + entity.screen_name + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + string.substring(1) + '</span></a>';
                     }
                 };
 
                 to_link = function () {
-                    var a = arguments,
-                        url = '',
-                        text = '',
-                        pre_text = '';
-
+                    var a = arguments;
 
                     if (a[1]) {
-                        url = a[1];
-                        text = a[1];
+                        return '<a href="' + a[1] + '" target="_new"><span class="trtr_link_text">' + a[1] + '</span></a>';
                     } else if (a[2]) {
-                        url = 'http://search.twitter.com/search?q=%23' + a[2];
-                        text = '#' + a[2];
+                        return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + a[2] + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + a[2] + '</span></a>';
                     } else if (a[3]) {
-                        url = 'http://twitter.com/' + a[3];
-                        pre_text = '@';
-                        text = a[3];
+                        return '<a class="trtr_link" href="http://twitter.com/' + a[3] + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + a[3] + '</span></a>';
+                    } else {
+                        alert("teritori: Unknown link error");
                     }
-
-                    return pre_text + '<a href="' + url + '" target="_new">' + text + '</a>';
                 };
 
                 if (trtr.option.link === 'entity') {
@@ -526,7 +518,7 @@ THE SOFTWARE.
                 }
 
                 htmlcode = '<!-- http://twitter.com/' + screen_name + '/status/' + tweet_id + ' -->\n';
-                htmlcode += '<style type="text/css">.trtr_tweetid_' + tweet_id + ' a {text-decoration:none;color:#' + link_color + ' !important;} .trtr_tweetid_' + tweet_id + ' a:hover {text-decoration:underline;}</style>\n';
+                htmlcode += '<style type="text/css">.trtr_tweetid_' + tweet_id + ' a {text-decoration:none;color:#' + link_color + ' !important} .trtr_tweetid_' + tweet_id + ' a.trtr_link span.trtr_link_symbol {opacity:0.5} .trtr_tweetid_' + tweet_id + ' a:hover {text-decoration:underline} .trtr_tweetid_' + tweet_id + ' a.trtr_link:hover {text-decoration:none} .trtr_tweetid_' + tweet_id + ' a.trtr_link:hover span.trtr_link_text {text-decoration:underline}</style>';
                 htmlcode += '<div class="trtr_tweetid_' + tweet_id + '" style="background:url(' + background_image_url + ') #' + background_color + ';padding:20px;"><p class="trtrTweet" style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + text_color + ';font-size:16px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px;">' + content + ' <span class="timestamp" style="font-size:12px;display:block;"><a title="' + timestamp + '" href="http://twitter.com/' + screen_name + '/status/' + tweet_id + '">' + timestamp + '</a> via ' + source + ' </span><span class="metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="author" style="line-height:19px;"><a href="http://twitter.com/' + screen_name + '"><img src="' + profile_image_url + '" style="float:left;margin:0 7px 0 0px;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + screen_name + '">' + user_name + '</a></strong><br/>@' + screen_name + '</span></span></p></div>';
                 htmlcode += '<!-- end of tweet -->';
             }());
