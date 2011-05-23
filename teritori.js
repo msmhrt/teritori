@@ -223,8 +223,90 @@ THE SOFTWARE.
         return linked_text;
     };
 
+    trtr.get_color_array = function (color_str) {
+        var m, color_array;
+
+        color_array = [];
+        m = color_str.match(/^([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+        if (m) {
+            color_array[0] = parseInt(m[1], 16);
+            color_array[1] = parseInt(m[2], 16);
+            color_array[2] = parseInt(m[3], 16);
+            return color_array;
+        }
+
+        m = color_str.match(/^([0-9a-f])([0-9a-f])([0-9a-f])$/i);
+        if (m) {
+            color_array[0] = parseInt(m[1] + m[1], 16);
+            color_array[1] = parseInt(m[2] + m[2], 16);
+            color_array[2] = parseInt(m[3] + m[3], 16);
+            return color_array;
+        }
+
+        return undefined;
+    };
+
+    trtr.get_color_str_blended = function (fgcolor_val, bgcolor_val, opacity) {
+        var color_val;
+
+        if (opacity < 0) {
+            opacity = 0;
+        } else if (1.0 < opacity) {
+            opacity = 1.0;
+        }
+
+        color_val = Math.round(bgcolor_val + ((fgcolor_val - bgcolor_val) * opacity));
+
+        if (color_val < 0) {
+            color_val = 0;
+        } else if (color_val > 255) {
+            color_val = 255;
+        }
+
+        return ('0' + color_val.toString(16)).slice(-2);
+    };
+
+    trtr.get_color_blended_by_opacity = function (fgcolor_str, bgcolor_str, opacity) {
+        var fgcolor_array, bgcolor_array, color_str;
+
+        if (bgcolor_str === undefined) {
+            bgcolor_str = "FFFFFF";
+        }
+
+        if (opacity === undefined) {
+            opacity = 0.5;
+        }
+
+        fgcolor_array = trtr.get_color_array(fgcolor_str);
+        if (fgcolor_array === undefined) {
+            alert("teritori: fgcolor_str has unknown color format '" + fgcolor_str + "'");
+            return undefined;
+        }
+
+        bgcolor_array = trtr.get_color_array(bgcolor_str);
+        if (bgcolor_array === undefined) {
+            alert("teritori: bgcolor_str has unknown color format '" + bgcolor_str + "'");
+            return undefined;
+        }
+
+        color_str = "";
+        color_str += trtr.get_color_str_blended(fgcolor_array[0], bgcolor_array[0], opacity);
+        color_str += trtr.get_color_str_blended(fgcolor_array[1], bgcolor_array[1], opacity);
+        color_str += trtr.get_color_str_blended(fgcolor_array[2], bgcolor_array[2], opacity);
+        color_str = color_str.toUpperCase();
+
+        if (trtr.option.debug) {
+            console.info('teritori: fgcolor_str =', fgcolor_str);
+            console.info('teritori: bgcolor_str =', bgcolor_str);
+            console.info('teritori: opacity =', opacity);
+            console.info('teritori: color_str =', color_str);
+        }
+
+        return color_str;
+    };
+
     trtr.display_htmlcode = function (tweet) {
-        var tweet_id, source, screen_name, user_name, user_id, user_description, user_location, user_url, background_image_url, profile_image_url, background_color, text_color, link_color, timestamp, htmlcode;
+        var tweet_id, source, screen_name, user_name, user_id, user_description, user_location, user_url, background_image_url, profile_image_url, background_color, text_color, link_color, symbol_color, timestamp, htmlcode;
 
         trtr.cached_json['statuses/show/' + tweet.id_str] = tweet;
 
@@ -246,6 +328,7 @@ THE SOFTWARE.
         background_color = tweet.user.profile_background_color;
         text_color = tweet.user.profile_text_color;
         link_color = tweet.user.profile_link_color;
+        symbol_color = trtr.get_color_blended_by_opacity(link_color);
 
         timestamp = (function (dt_tweeted_string) {
             var dt_value, dt_js_string, parsed_dt, dt_delta, dt_tweeted;
@@ -304,13 +387,13 @@ THE SOFTWARE.
 
                 entity_callback = {
                     'hashtags': function (entity) {
-                        return '<a href="http://search.twitter.com/search?q=%23' + entity.text + '" style="color:#' + link_color + '">#' + entity.text + '</a>';
+                        return '<span style="color:#' + symbol_color + '">#</span><a href="http://search.twitter.com/search?q=%23' + entity.text + '" style="color:#' + link_color + '">' + entity.text + '</a>';
                     },
                     'urls': function (entity) {
                         return '<a href="' + entity.url + '" style="color:#' + link_color + '">' + entity.url + '</a>';
                     },
                     'user_mentions': function (entity, string) {
-                        return '@<a href="http://twitter.com/' + entity.screen_name + '" style="color:#' + link_color + '">' + string.substring(1) + '</a>';
+                        return '<span style="color:#' + symbol_color + '">@</span><a href="http://twitter.com/' + entity.screen_name + '" style="color:#' + link_color + '">' + string.substring(1) + '</a>';
                     }
                 };
 
@@ -327,10 +410,11 @@ THE SOFTWARE.
                         text = a[1];
                     } else if (a[2]) {
                         url = 'http://search.twitter.com/search?q=%23' + a[2];
-                        text = '#' + a[2];
+                        pre_text = '<span style="color:#' + symbol_color + '">#</span>';
+                        text = a[2];
                     } else if (a[3]) {
                         url = 'http://twitter.com/' + a[3];
-                        pre_text = '@';
+                        pre_text = '<span style="color:#' + symbol_color + '">@</span>';
                         text = a[3];
                     }
 
@@ -372,7 +456,7 @@ THE SOFTWARE.
                     source = source.replace(/^<a href="([!#$%&'()*+,\-.\/0-9:;=?@A-Z\\_a-z~]+)" rel="nofollow">/, '<a href="$1"' + link_style + ' rel="nofollow">');
                 }
 
-                htmlcode = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + text_color + ';font-size:16px"><div>' + content + ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + screen_name + '/status/' + tweet_id + '"' + link_style + '>' + timestamp + '</a> ' + source + 'から </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #e6e6e6"><a href="http://twitter.com/' + screen_name + '"' + link_style + '><img src="' + profile_image_url + '" alt="' + user_name + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + screen_name + '"' + link_style + '>@' + screen_name + '</a></strong><span style="color:#999;font-size:14px"><br>' + user_name + ' </span></div></div>';
+                htmlcode = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + text_color + ';font-size:16px"><div>' + content + ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + screen_name + '/status/' + tweet_id + '"' + link_style + '>' + timestamp + '</a> ' + source + 'から </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #E6E6E6"><a href="http://twitter.com/' + screen_name + '"' + link_style + '><img src="' + profile_image_url + '" alt="' + user_name + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + screen_name + '"' + link_style + '>@' + screen_name + '</a></strong><span style="color:#999;font-size:14px"><br>' + user_name + ' </span></div></div>';
             }());
         } else if (trtr.option.mode === 'tweet') {
             (function () {
