@@ -23,7 +23,7 @@ THE SOFTWARE.
 */
 
 (function () {
-    var trtr = teritori;
+    var trtr = window.teritori;
 
     trtr.get_option_from_cfg = function (config_string) {
         var i, newconfig_table, config_list, config, option;
