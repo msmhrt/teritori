@@ -394,6 +394,9 @@ THE SOFTWARE.
                     },
                     'user_mentions': function (entity, string) {
                         return '<span style="color:#' + symbol_color + '">@</span><a href="http://twitter.com/' + entity.screen_name + '" style="color:#' + link_color + '">' + string.substring(1) + '</a>';
+                    },
+                    'media': function (entity) {
+                        return '<a href="' + entity.url + '" style="color:#' + link_color + '">' + entity.url + '</a>';
                     }
                 };
 
@@ -471,6 +474,9 @@ THE SOFTWARE.
                     },
                     'user_mentions': function (entity, string) {
                         return '<a class="trtr_link" href="http://twitter.com/' + entity.screen_name + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + string.substring(1) + '</span></a>';
+                    },
+                    'media': function (entity) {
+                        return '<a href="' + entity.url + '" target="_new"><span class="trtr_link_text">' + entity.url + '</span></a>';
                     }
                 };
 
