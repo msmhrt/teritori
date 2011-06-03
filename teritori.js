@@ -320,8 +320,8 @@ THE SOFTWARE.
         screen_name = tweet.user.screen_name;
         user_name = tweet.user.name;
         user_id = tweet.user.id_str;
-        user_description = tweet.user.description;
-        user_location = tweet.user.location;
+        user_description = (tweet.user.description === null) ? "" : tweet.user.description;
+        user_location = (tweet.user.location === null) ? "" : tweet.user.location;
         user_url = tweet.user.url;
         background_image_url = tweet.user.profile_background_image_url;
         profile_image_url = tweet.user.profile_image_url;
