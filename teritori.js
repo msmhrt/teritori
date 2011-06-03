@@ -207,7 +207,7 @@ THE SOFTWARE.
             end = entity[1].indices[1];
 
             if (index > start || start > end || end > text.length) {
-                alert('teritori: Unordered indices (' + index + ', ' + start + ', ' + end + ', ' + text.length + ')');
+                alert('teritori: Unordered indices (' + index.toString() + ', ' + start.toString() + ', ' + end.toString() + ', ' + text.length.toString() + ')');
                 return text;
             }
 
@@ -339,7 +339,7 @@ THE SOFTWARE.
             dt_tweeted = new Date();
             dt_delta = dt_tweeted.getTimezoneOffset() * 60 * 1000;
             dt_tweeted.setTime(parsed_dt - dt_delta);
-            return dt_tweeted.getFullYear() + '年' + (dt_tweeted.getMonth() + 1) + '月' + dt_tweeted.getDate() + '日 ' + dt_tweeted.getHours() + ':' + ("0" + dt_tweeted.getMinutes()).slice(-2);
+            return dt_tweeted.getFullYear().toString() + '年' + (dt_tweeted.getMonth() + 1).toString() + '月' + dt_tweeted.getDate().toString() + '日 ' + dt_tweeted.getHours().toString() + ':' + ("0" + dt_tweeted.getMinutes().toString()).slice(-2);
         }(tweet.created_at));
 
         if (trtr.option.mode === 'profile') {
