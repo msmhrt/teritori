@@ -306,7 +306,7 @@ THE SOFTWARE.
     };
 
     trtr.display_htmlcode = function (tweet) {
-        var tweet_id, source, screen_name, user_name, user_id, user_description, user_location, user_url, background_image_url, profile_image_url, background_color, text_color, link_color, symbol_color, timestamp, htmlcode;
+        var tweet_id, source, screen_name, user_name, user_id, user_description, user_location, user_url, background_image_url, profile_image_url, background_color, text_color, link_color, symbol_color, background_tile, timestamp, htmlcode;
 
         trtr.cached_json['statuses/show/' + tweet.id_str] = tweet;
 
@@ -324,6 +324,7 @@ THE SOFTWARE.
         user_location = (tweet.user.location === null) ? "" : tweet.user.location;
         user_url = tweet.user.url;
         background_image_url = tweet.user.profile_background_image_url;
+        background_tile = tweet.user.profile_background_tile;
         profile_image_url = tweet.user.profile_image_url;
         background_color = tweet.user.profile_background_color;
         text_color = tweet.user.profile_text_color;
@@ -463,7 +464,7 @@ THE SOFTWARE.
             }());
         } else if (trtr.option.mode === 'tweet') {
             (function () {
-                var to_link, content, entity_callback;
+                var to_link, content, entity_callback, background_repeat;
 
                 entity_callback = {
                     'hashtags': function (entity) {
@@ -523,9 +524,11 @@ THE SOFTWARE.
                     }());
                 }
 
+                background_repeat = background_tile ? "" : " no-repeat";
+
                 htmlcode = '<!-- http://twitter.com/' + screen_name + '/status/' + tweet_id + ' -->\n';
                 htmlcode += '<style type="text/css">.trtr_tweetid_' + tweet_id + ' a {text-decoration:none;color:#' + link_color + ' !important} .trtr_tweetid_' + tweet_id + ' a.trtr_link span.trtr_link_symbol {opacity:0.5} .trtr_tweetid_' + tweet_id + ' a:hover {text-decoration:underline} .trtr_tweetid_' + tweet_id + ' a.trtr_link:hover {text-decoration:none} .trtr_tweetid_' + tweet_id + ' a.trtr_link:hover span.trtr_link_text {text-decoration:underline}</style>';
-                htmlcode += '<div class="trtr_tweetid_' + tweet_id + '" style="background:url(' + background_image_url + ') #' + background_color + ';padding:20px;"><div style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + text_color + ';font-size:16px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px;word-wrap:break-word">' + content + ' <span class="timestamp" style="font-size:12px;display:block;"><a title="' + timestamp + '" href="http://twitter.com/' + screen_name + '/status/' + tweet_id + '">' + timestamp + '</a> via ' + source + ' </span><span class="metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="author" style="line-height:19px;"><a href="http://twitter.com/' + screen_name + '"><img src="' + profile_image_url + '" style="float:left;margin:0 7px 0 0px;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + screen_name + '">' + user_name + '</a></strong><br/>@' + screen_name + '</span></span></div></div>\n';
+                htmlcode += '<div class="trtr_tweetid_' + tweet_id + '" style="background:url(' + background_image_url + ')' + background_repeat + ' #' + background_color + ';padding:20px;"><div style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + text_color + ';font-size:16px !important;line-height:22px;-moz-border-radius:5px;-webkit-border-radius:5px;word-wrap:break-word">' + content + ' <span class="timestamp" style="font-size:12px;display:block;"><a title="' + timestamp + '" href="http://twitter.com/' + screen_name + '/status/' + tweet_id + '">' + timestamp + '</a> via ' + source + ' </span><span class="metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="author" style="line-height:19px;"><a href="http://twitter.com/' + screen_name + '"><img src="' + profile_image_url + '" style="float:left;margin:0 7px 0 0px;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + screen_name + '">' + user_name + '</a></strong><br/>@' + screen_name + '</span></span></div></div>\n';
                 htmlcode += '<!-- end of tweet -->\n';
             }());
         } else {
