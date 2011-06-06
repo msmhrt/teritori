@@ -32,6 +32,7 @@ THE SOFTWARE.
             'mode': 'tweet',
             'debug': false,
             'link': 'entity',
+            'showtco': true,
             'preview': true
         };
 
@@ -68,6 +69,13 @@ THE SOFTWARE.
                     option.link = config[1];
                 }
                 break;
+            case 'showtco':
+                if (config[1] === 'true') {
+                    option.showtco = true;
+                } else if (config[1] === 'false') {
+                    option.showtco = false;
+                }
+                break;
             case 'preview':
                 if (config[1] === 'true') {
                     option.preview = true;
@@ -86,7 +94,7 @@ THE SOFTWARE.
     };
 
     trtr.display_dialog = function (htmlcode) {
-        var close_dialog, select_text, trtr_dialog, dialog_position, trtr_dialog_header, trtr_mode_select_menu, trtr_preview_checkbox;
+        var close_dialog, select_text, trtr_dialog, dialog_position, trtr_dialog_header, trtr_mode_select_menu, trtr_preview_checkbox, trtr_showtco_checkbox;
 
         close_dialog = function () {
             $('.trtr-dialog').remove();
@@ -99,7 +107,7 @@ THE SOFTWARE.
             close_dialog();
         }
 
-        trtr_dialog = $('<div class="trtr-dialog" style="position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><span style="margin-right:1em"><strong>Mode</strong></span><select style="margin-bottom:10px" class="trtr-mode-select-menu"></select><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div><div><input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>Preview</strong></div><div class="trtr-dialog-previewarea"></div></div></div>').appendTo('body');
+        trtr_dialog = $('<div class="trtr-dialog" style="position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><span style="margin-right:1em"><strong>Mode</strong></span><select style="margin-bottom:10px" class="trtr-mode-select-menu"></select><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div><div><input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>Preview</strong><input class="trtr-dialog-showtco-checkbox" style="margin-left:1em" type="checkbox" > <strong>Show http://t.co/...</strong></div><div class="trtr-dialog-previewarea"></div></div></div>').appendTo('body');
 
         trtr_mode_select_menu = trtr_dialog.find('.trtr-mode-select-menu');
         trtr_mode_select_menu.append($('<option value="tweet">Tweet</option>'));
@@ -128,6 +136,18 @@ THE SOFTWARE.
                 trtr_dialog.find(".trtr-dialog-preview").remove();
                 trtr.option.preview = false;
             }
+        });
+
+        trtr_showtco_checkbox = trtr_dialog.find(".trtr-dialog-showtco-checkbox");
+        if (trtr.option.showtco) {
+            trtr_showtco_checkbox.attr("checked", "checked");
+        } else {
+            trtr_showtco_checkbox.attr("checked", "");
+        }
+
+        trtr_showtco_checkbox.click(function () {
+            trtr.option.showtco = trtr_showtco_checkbox.is(":checked") ? true : false;
+            trtr.load_jsonp('repeat');
         });
 
         if (dialog_position) {
@@ -392,13 +412,29 @@ THE SOFTWARE.
                         return '<span style="color:#' + symbol_color + '">#</span><a href="http://search.twitter.com/search?q=%23' + entity.text + '" style="color:#' + link_color + '">' + entity.text + '</a>';
                     },
                     'urls': function (entity) {
-                        return '<a href="' + entity.url + '" style="color:#' + link_color + '">' + entity.url + '</a>';
+                        var linktext;
+
+                        if (!trtr.option.showtco && entity.hasOwnProperty('display_url')) {
+                            linktext = entity.display_url;
+                        } else {
+                            linktext = entity.url;
+                        }
+
+                        return '<a href="' + entity.url + '" style="color:#' + link_color + '">' + linktext + '</a>';
                     },
                     'user_mentions': function (entity, string) {
                         return '<span style="color:#' + symbol_color + '">@</span><a href="http://twitter.com/' + entity.screen_name + '" style="color:#' + link_color + '">' + string.substring(1) + '</a>';
                     },
                     'media': function (entity) {
-                        return '<a href="' + entity.url + '" style="color:#' + link_color + '">' + entity.url + '</a>';
+                        var linktext;
+
+                        if (!trtr.option.showtco && entity.hasOwnProperty('display_url')) {
+                            linktext = entity.display_url;
+                        } else {
+                            linktext = entity.url;
+                        }
+
+                        return '<a href="' + entity.url + '" style="color:#' + link_color + '">' + linktext + '</a>';
                     }
                 };
 
@@ -472,13 +508,29 @@ THE SOFTWARE.
                         return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + entity.text + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + entity.text + '</span></a>';
                     },
                     'urls': function (entity) {
-                        return '<a href="' + entity.url + '" target="_new"><span class="trtr_link_text">' + entity.url + '</span></a>';
+                        var linktext;
+
+                        if (!trtr.option.showtco && entity.hasOwnProperty('display_url')) {
+                            linktext = entity.display_url;
+                        } else {
+                            linktext = entity.url;
+                        }
+
+                        return '<a href="' + entity.url + '" target="_new"><span class="trtr_link_text">' + linktext + '</span></a>';
                     },
                     'user_mentions': function (entity, string) {
                         return '<a class="trtr_link" href="http://twitter.com/' + entity.screen_name + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + string.substring(1) + '</span></a>';
                     },
                     'media': function (entity) {
-                        return '<a href="' + entity.url + '" target="_new"><span class="trtr_link_text">' + entity.url + '</span></a>';
+                        var linktext;
+
+                        if (!trtr.option.showtco && entity.hasOwnProperty('display_url')) {
+                            linktext = entity.display_url;
+                        } else {
+                            linktext = entity.url;
+                        }
+
+                        return '<a href="' + entity.url + '" target="_new"><span class="trtr_link_text">' + linktext + '</span></a>';
                     }
                 };
 
