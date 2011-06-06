@@ -130,7 +130,7 @@ THE SOFTWARE.
 
         trtr_preview_checkbox.click(function () {
             if (trtr_preview_checkbox.is(":checked")) {
-                trtr_dialog.find(".trtr-dialog-previewarea").append('<div class="trtr-dialog-preview">' + htmlcode + '</div>');
+                trtr_dialog.find(".trtr-dialog-previewarea").append('<div class="trtr-dialog-preview" style="margin-top:5px">' + htmlcode + '</div>');
                 trtr.option.preview = true;
             } else {
                 trtr_dialog.find(".trtr-dialog-preview").remove();
