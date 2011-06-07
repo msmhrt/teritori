@@ -325,6 +325,18 @@ THE SOFTWARE.
         return color_str;
     };
 
+    trtr.get_timestamp = function (dt_tweeted_string) {
+        var dt_value, dt_js_string, parsed_dt, dt_delta, dt_tweeted;
+
+        dt_value = dt_tweeted_string.split(' ');
+        dt_js_string = dt_value[1] + ' ' + dt_value[2] + ', ' + dt_value[5] + ' ' + dt_value[3];
+        parsed_dt = Date.parse(dt_js_string);
+        dt_tweeted = new Date();
+        dt_delta = dt_tweeted.getTimezoneOffset() * 60 * 1000;
+        dt_tweeted.setTime(parsed_dt - dt_delta);
+        return dt_tweeted.getFullYear().toString() + '年' + (dt_tweeted.getMonth() + 1).toString() + '月' + dt_tweeted.getDate().toString() + '日 ' + dt_tweeted.getHours().toString() + ':' + ("0" + dt_tweeted.getMinutes().toString()).slice(-2);
+    };
+
     trtr.display_htmlcode = function (tweet) {
         var tweet_id, source, screen_name, user_name, user_id, user_description, user_location, user_url, background_image_url, profile_image_url, background_color, text_color, link_color, symbol_color, background_image, background_tile, timestamp, htmlcode;
 
@@ -351,18 +363,7 @@ THE SOFTWARE.
         text_color = tweet.user.profile_text_color;
         link_color = tweet.user.profile_link_color;
         symbol_color = trtr.get_color_blended_by_opacity(link_color);
-
-        timestamp = (function (dt_tweeted_string) {
-            var dt_value, dt_js_string, parsed_dt, dt_delta, dt_tweeted;
-
-            dt_value = dt_tweeted_string.split(' ');
-            dt_js_string = dt_value[1] + ' ' + dt_value[2] + ', ' + dt_value[5] + ' ' + dt_value[3];
-            parsed_dt = Date.parse(dt_js_string);
-            dt_tweeted = new Date();
-            dt_delta = dt_tweeted.getTimezoneOffset() * 60 * 1000;
-            dt_tweeted.setTime(parsed_dt - dt_delta);
-            return dt_tweeted.getFullYear().toString() + '年' + (dt_tweeted.getMonth() + 1).toString() + '月' + dt_tweeted.getDate().toString() + '日 ' + dt_tweeted.getHours().toString() + ':' + ("0" + dt_tweeted.getMinutes().toString()).slice(-2);
-        }(tweet.created_at));
+        timestamp = trtr.get_timestamp(tweet.created_at);
 
         if (trtr.option.mode === 'profile') {
             (function () {
