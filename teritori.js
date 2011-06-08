@@ -55,7 +55,9 @@ THE SOFTWARE.
             config = config_list[i].split(':');
             switch (config[0]) {
             case 'mode':
-                option.mode = config[1];
+                if (trtr.mode.hasOwnProperty(config[1])) {
+                    option.mode = config[1];
+                }
                 break;
             case 'debug':
                 if (config[1] === 'true') {
