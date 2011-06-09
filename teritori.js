@@ -23,7 +23,64 @@ THE SOFTWARE.
 */
 
 (function () {
-    var trtr = window.teritori;
+    var trtr, mes;
+
+    trtr = window.teritori;
+
+    mes = function (key) {
+        return trtr.lang[trtr.option.lang][key];
+    };
+
+    trtr.lang = {
+        'en': {
+            'lang_en': 'English',
+            'lang_ja': 'Japanese - 日本語',
+            'tweet_description': 'Tweet',
+            'profile_description': 'Twitter User Profile',
+            'tweet4kml_description': 'Placemark\'s description of Google Maps',
+            'option_mode': 'Mode',
+            'option_lang': 'Lang',
+            'option_preview': 'Preview',
+            'option_showtco': 'Show http://t.co/...',
+            'action_favorite': 'Favorite',
+            'action_follow': 'Follow',
+            'action_reply': 'Reply',
+            'action_retweet': 'Retweet',
+            'format_source': 'via %s',
+            'format_date': function (dt) {
+                return ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'][dt.getMonth()] + ' ' + ('0' + dt.getDate().toString()).slice(-2) + ', ' + dt.getFullYear().toString() + ' ' + (dt.getHours() % 12 || 12).toString() + ':' + ('0' + dt.getMinutes().toString()).slice(-2) + ' ' + ((dt.getHours() < 12) ? 'am' : 'pm');
+            }
+        },
+        'ja': {
+            'lang_en': '英語 - English',
+            'lang_ja': '日本語',
+            'tweet_description': 'ツイート',
+            'profile_description': 'ユーザープロフィール',
+            'tweet4kml_description': 'ツイート（Googleマップ用）',
+            'option_mode': '種類',
+            'option_lang': '言語',
+            'option_preview': 'プレビュー',
+            'option_showtco': 'http: //t.co/... を表示',
+            'action_favorite': 'お気に入り',
+            'action_follow': 'フォロー',
+            'action_reply': '返信',
+            'action_retweet': 'リツイート',
+            'format_source': '%sから',
+            'format_date': function (dt) {
+                return dt.getFullYear().toString() + '年' + (dt.getMonth() + 1).toString() + '月' + dt.getDate().toString() + '日 ' + dt.getHours().toString() + ':' + ('0' + dt.getMinutes().toString()).slice(-2);
+            }
+        }
+    };
+
+    trtr.get_lang = function () {
+        var lang = window.twttr.pageLocale;
+
+        if (!trtr.lang.hasOwnProperty(lang)) {
+            lang = 'en';
+        }
+
+        return lang;
+    };
 
     trtr.get_option_from_cfg = function (config_string) {
         var i, newconfig_table, config_list, config, option;
@@ -33,7 +90,8 @@ THE SOFTWARE.
             'debug': false,
             'link': 'entity',
             'showtco': true,
-            'preview': true
+            'preview': true,
+            'lang': trtr.get_lang() || 'en'
         };
 
         if (!config_string) {
@@ -85,6 +143,11 @@ THE SOFTWARE.
                     option.preview = false;
                 }
                 break;
+            case 'lang':
+                if (trtr.lang.hasOwnProperty(config[1])) {
+                    option.lang = config[1];
+                }
+                break;
             }
         }
 
@@ -96,7 +159,7 @@ THE SOFTWARE.
     };
 
     trtr.display_dialog = function (htmlcode) {
-        var i, close_dialog, select_text, trtr_dialog, mode_list, dialog_position, trtr_dialog_header, trtr_mode_select_menu, trtr_preview_checkbox, trtr_showtco_checkbox;
+        var i, close_dialog, select_text, trtr_dialog, mode_list, lang_list, dialog_position, trtr_dialog_header, trtr_mode_select_menu, trtr_lang_select_menu, trtr_preview_checkbox, trtr_showtco_checkbox;
 
         close_dialog = function () {
             $('.trtr-dialog').remove();
@@ -109,12 +172,12 @@ THE SOFTWARE.
             close_dialog();
         }
 
-        trtr_dialog = $('<div class="trtr-dialog" style="position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><span style="margin-right:1em"><strong>Mode</strong></span><select style="margin-bottom:10px" class="trtr-mode-select-menu"></select><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div><div><input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>Preview</strong><input class="trtr-dialog-showtco-checkbox" style="margin-left:1em" type="checkbox" > <strong>Show http://t.co/...</strong></div><div class="trtr-dialog-previewarea"></div></div></div>').appendTo('body');
+        trtr_dialog = $('<div class="trtr-dialog" style="position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><span style="margin-right:0.5em"><strong>' + mes('option_mode') + '</strong></span><select style="margin-bottom:10px" class="trtr-mode-select-menu"></select><span style="margin-left:2em;margin-right:0.5em"><strong>' + mes('option_lang') + '</strong></span><select style="margin-bottom:10px" class="trtr-lang-select-menu"></select><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div><div><input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>' + mes('option_preview') + '</strong><input class="trtr-dialog-showtco-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + mes('option_showtco') + '</strong></div><div class="trtr-dialog-previewarea"></div></div></div>').appendTo('body');
 
         mode_list = [];
         for (i in trtr.mode) {
             if (trtr.mode.hasOwnProperty(i)) {
-                mode_list.push([i, trtr.mode[i].description]);
+                mode_list.push([i, mes(trtr.mode[i].description)]);
             }
         }
 
@@ -136,6 +199,34 @@ THE SOFTWARE.
 
         trtr_mode_select_menu.bind('change', function () {
             trtr.option.mode = trtr_dialog.find('.trtr-mode-select-menu option:selected').val();
+            trtr.load_jsonp('repeat');
+        });
+
+        lang_list = [];
+        for (i in trtr.lang) {
+            if (trtr.lang.hasOwnProperty(i)) {
+                lang_list.push([i, mes('lang_' + i.toString())]);
+            }
+        }
+
+        lang_list.sort(function (a, b) {
+            if (a[1] === b[1]) {
+                if (a[0] === b[0]) {
+                    return 0;
+                }
+                return (a[0] > b[0]) ? 1 : -1;
+            }
+            return (a[1] > b[1]) ? 1 : -1;
+        });
+
+        trtr_lang_select_menu = trtr_dialog.find('.trtr-lang-select-menu');
+        for (i = 0; i < lang_list.length; i += 1) {
+            trtr_lang_select_menu.append($('<option value="' + lang_list[i][0] + '">' + lang_list[i][1] + '</option>'));
+        }
+        trtr_lang_select_menu.val(trtr.option.lang);
+
+        trtr_lang_select_menu.bind('change', function () {
+            trtr.option.lang = trtr_dialog.find('.trtr-lang-select-menu option:selected').val();
             trtr.load_jsonp('repeat');
         });
 
@@ -353,13 +444,13 @@ THE SOFTWARE.
         dt_tweeted = new Date();
         dt_delta = dt_tweeted.getTimezoneOffset() * 60 * 1000;
         dt_tweeted.setTime(parsed_dt - dt_delta);
-        return dt_tweeted.getFullYear().toString() + '年' + (dt_tweeted.getMonth() + 1).toString() + '月' + dt_tweeted.getDate().toString() + '日 ' + dt_tweeted.getHours().toString() + ':' + ("0" + dt_tweeted.getMinutes().toString()).slice(-2);
+        return mes('format_date')(dt_tweeted);
     };
 
 
     trtr.mode = {
         'profile': {
-            'description': 'Twitter User Profile',
+            'description': 'profile_description',
             'get_htmlcode': function (t) {
                 var to_link, content, user_url_html, htmlcode;
 
@@ -402,9 +493,9 @@ THE SOFTWARE.
             }
         },
         'tweet4kml': {
-            'description': 'Placemark\'s description of Google Maps',
+            'description': 'tweet4kml_description',
             'get_htmlcode': function (t) {
-                var link_style, to_link, content, entity_callback, htmlcode;
+                var link_style, to_link, content, entity_callback, source, htmlcode;
 
                 entity_callback = {
                     'hashtags': function (entity) {
@@ -496,15 +587,17 @@ THE SOFTWARE.
                     t.source = t.source.replace(/^<a href="([!#$%&'()*+,\-.\/0-9:;=?@A-Z\\_a-z~]+)" rel="nofollow">/, '<a href="$1"' + link_style + ' rel="nofollow">');
                 }
 
-                htmlcode = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + t.text_color + ';font-size:16px"><div>' + content + ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '"' + link_style + '>' + t.timestamp + '</a> ' + t.source + 'から </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #E6E6E6"><a href="http://twitter.com/' + t.screen_name + '"' + link_style + '><img src="' + t.profile_image_url + '" alt="' + t.user_name + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + t.screen_name + '"' + link_style + '>@' + t.screen_name + '</a></strong><span style="color:#999;font-size:14px"><br>' + t.user_name + ' </span></div></div>';
+                source = mes('format_source').replace('%s', t.source);
+
+                htmlcode = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + t.text_color + ';font-size:16px"><div>' + content + ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '"' + link_style + '>' + t.timestamp + '</a> ' + source + ' </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #E6E6E6"><a href="http://twitter.com/' + t.screen_name + '"' + link_style + '><img src="' + t.profile_image_url + '" alt="' + t.user_name + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + t.screen_name + '"' + link_style + '>@' + t.screen_name + '</a></strong><span style="color:#999;font-size:14px"><br>' + t.user_name + ' </span></div></div>';
 
                 return htmlcode;
             }
         },
         'tweet': {
-            'description': 'Tweet',
+            'description': 'tweet_description',
             'get_htmlcode': function (t) {
-                var to_link, content, entity_callback, background, htmlcode;
+                var to_link, content, entity_callback, background, source, htmlcode;
 
                 entity_callback = {
                     'hashtags': function (entity) {
@@ -588,9 +681,11 @@ THE SOFTWARE.
                     }
                 }
 
+                source = mes('format_source').replace('%s', t.source);
+
                 htmlcode = '<!-- http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + ' -->\n';
                 htmlcode += '<style type="text/css">.trtr_tweetid_' + t.tweet_id + ' a {text-decoration:none;color:#' + t.link_color + ' !important} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link span.trtr_link_symbol {opacity:0.5} .trtr_tweetid_' + t.tweet_id + ' a:hover {text-decoration:underline} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link:hover {text-decoration:none} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link:hover span.trtr_link_text {text-decoration:underline} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action span em {background:transparent url(http://si0.twimg.com/images/dev/cms/intents/icons/sprites/everything-spritev2.png) no-repeat;margin:0 3px -3.5px 3px;display:inline-block;vertical-align:baseline;position:relative;outline:none;width:15px;height:15px;} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_reply span em {background-position 0 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_reply:hover span em {background-position:-16px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_retweet span em {background-position:-80px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_retweet:hover span em {background-position:-96px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_favorite span em {background-position:-32px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_favorite:hover span em {background-position:-48px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_follow span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_blue/bird_16_blue.png)} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_follow:hover span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_black/bird_16_black.png)}</style>';
-                htmlcode += '<div class="trtr_tweetid_' + t.tweet_id + '" style="background:' + background + ';padding:20px"><div style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + t.text_color + ';font-size:16px !important;line-height:22px;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;word-wrap:break-word">' + content + ' <div class="trtr_actions" style="color:#999;font-size:12px;display:block"><a href="https://twitter.com/intent/user?user_id=' + t.user_id + '" class="trtr_action trtr_action_follow" title="Follow"><span><em></em></span></a> <span class="trtr_timestamp"><a title="' + t.timestamp + '" href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '">' + t.timestamp + '</a> via ' + t.source + ' </span><a href="https://twitter.com/intent/tweet?in_reply_to=' + t.tweet_id + '" class="trtr_action trtr_action_reply" title="Reply"><span><em></em>Reply</span></a> <a href="https://twitter.com/intent/retweet?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_retweet" title="Retweet"><span><em></em>Retweet</span></a> <a href="https://twitter.com/intent/favorite?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_favorite" title="Favorite"><span><em></em>Favorite</span></a> </div><span class="trtr_metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="trtr_author" style="color:#999;line-height:19px;"><a href="http://twitter.com/' + t.screen_name + '"><img src="' + t.profile_image_url + '" style="float:left;margin:0 7px 0 0;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + t.screen_name + '">' + t.user_name + '</a></strong><br/>@' + t.screen_name + '</span></span></div></div>\n';
+                htmlcode += '<div class="trtr_tweetid_' + t.tweet_id + '" style="background:' + background + ';padding:20px"><div style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + t.text_color + ';font-size:16px !important;line-height:22px;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;word-wrap:break-word">' + content + ' <div class="trtr_actions" style="color:#999;font-size:12px;display:block"><a href="https://twitter.com/intent/user?user_id=' + t.user_id + '" class="trtr_action trtr_action_follow" title="' + mes('action_follow') + '"><span><em></em></span></a> <span class="trtr_timestamp"><a title="' + t.timestamp + '" href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '">' + t.timestamp + '</a> ' + source + ' </span><a href="https://twitter.com/intent/tweet?in_reply_to=' + t.tweet_id + '" class="trtr_action trtr_action_reply" title="' + mes('action_reply') + '"><span><em></em>' + mes('action_reply') + '</span></a> <a href="https://twitter.com/intent/retweet?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_retweet" title="' + mes('action_retweet') + '"><span><em></em>' + mes('action_retweet') + '</span></a> <a href="https://twitter.com/intent/favorite?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_favorite" title="' + mes('action_favorite') + '"><span><em></em>' + mes('action_favorite') + '</span></a> </div><span class="trtr_metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="trtr_author" style="color:#999;line-height:19px;"><a href="http://twitter.com/' + t.screen_name + '"><img src="' + t.profile_image_url + '" style="float:left;margin:0 7px 0 0;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + t.screen_name + '">' + t.user_name + '</a></strong><br/>@' + t.screen_name + '</span></span></div></div>\n';
                 htmlcode += '<!-- end of tweet -->\n';
 
                 return htmlcode;
