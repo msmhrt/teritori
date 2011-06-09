@@ -232,33 +232,33 @@ THE SOFTWARE.
             trtr.load_jsonp('repeat');
         });
 
-        trtr_preview_checkbox = trtr_dialog.find(".trtr-dialog-preview-checkbox");
+        trtr_preview_checkbox = trtr_dialog.find('.trtr-dialog-preview-checkbox');
         if (trtr.option.preview) {
-            trtr_preview_checkbox.attr("checked", "checked");
-            trtr_dialog.find(".trtr-dialog-previewarea").append('<div class="trtr-dialog-preview" style="margin-top:5px">' + htmlcode + '</div>');
+            trtr_preview_checkbox.attr('checked', 'checked');
+            trtr_dialog.find('.trtr-dialog-previewarea').append('<div class="trtr-dialog-preview" style="margin-top:5px">' + htmlcode + '</div>');
         } else {
-            trtr_preview_checkbox.attr("checked", "");
+            trtr_preview_checkbox.attr('checked', '');
         }
 
         trtr_preview_checkbox.click(function () {
-            if (trtr_preview_checkbox.is(":checked")) {
-                trtr_dialog.find(".trtr-dialog-previewarea").append('<div class="trtr-dialog-preview" style="margin-top:5px">' + htmlcode + '</div>');
+            if (trtr_preview_checkbox.is(':checked')) {
+                trtr_dialog.find('.trtr-dialog-previewarea').append('<div class="trtr-dialog-preview" style="margin-top:5px">' + htmlcode + '</div>');
                 trtr.option.preview = true;
             } else {
-                trtr_dialog.find(".trtr-dialog-preview").remove();
+                trtr_dialog.find('.trtr-dialog-preview').remove();
                 trtr.option.preview = false;
             }
         });
 
-        trtr_showtco_checkbox = trtr_dialog.find(".trtr-dialog-showtco-checkbox");
+        trtr_showtco_checkbox = trtr_dialog.find('.trtr-dialog-showtco-checkbox');
         if (trtr.option.showtco) {
-            trtr_showtco_checkbox.attr("checked", "checked");
+            trtr_showtco_checkbox.attr('checked', 'checked');
         } else {
-            trtr_showtco_checkbox.attr("checked", "");
+            trtr_showtco_checkbox.attr('checked', '');
         }
 
         trtr_showtco_checkbox.click(function () {
-            trtr.option.showtco = trtr_showtco_checkbox.is(":checked") ? true : false;
+            trtr.option.showtco = trtr_showtco_checkbox.is(':checked') ? true : false;
             trtr.load_jsonp('repeat');
         });
 
@@ -331,7 +331,7 @@ THE SOFTWARE.
         for (i = 0; i < entity_list.length; i += 1) {
             entity = entity_list[i];
             if (entity_callback.hasOwnProperty(entity[0]) !== true) {
-                alert("teritori: Unknown parameter '" + entity[0] + "' in entity");
+                alert('teritori: Unknown parameter \'' + entity[0] + '\' in entity');
                 return text;
             }
 
@@ -402,7 +402,7 @@ THE SOFTWARE.
         var fgcolor_array, bgcolor_array, color_str;
 
         if (bgcolor_str === undefined) {
-            bgcolor_str = "FFFFFF";
+            bgcolor_str = 'FFFFFF';
         }
 
         if (opacity === undefined) {
@@ -411,17 +411,17 @@ THE SOFTWARE.
 
         fgcolor_array = trtr.get_color_array(fgcolor_str);
         if (fgcolor_array === undefined) {
-            alert("teritori: fgcolor_str has unknown color format '" + fgcolor_str + "'");
+            alert('teritori: fgcolor_str has unknown color format \'' + fgcolor_str + '\'');
             return undefined;
         }
 
         bgcolor_array = trtr.get_color_array(bgcolor_str);
         if (bgcolor_array === undefined) {
-            alert("teritori: bgcolor_str has unknown color format '" + bgcolor_str + "'");
+            alert('teritori: bgcolor_str has unknown color format \'' + bgcolor_str + '\'');
             return undefined;
         }
 
-        color_str = "";
+        color_str = '';
         color_str += trtr.get_color_str_blended(fgcolor_array[0], bgcolor_array[0], opacity);
         color_str += trtr.get_color_str_blended(fgcolor_array[1], bgcolor_array[1], opacity);
         color_str += trtr.get_color_str_blended(fgcolor_array[2], bgcolor_array[2], opacity);
@@ -559,7 +559,7 @@ THE SOFTWARE.
                 } else if (trtr.option.link === 'auto') {
                     content = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
                 } else {
-                    alert("teritori: Unknown link option '" + trtr.option.link + "'");
+                    alert('teritori: Unknown link option \'' + trtr.option.link + '\'');
                     return;
                 }
 
@@ -642,7 +642,7 @@ THE SOFTWARE.
                     } else if (a[3]) {
                         return '<a class="trtr_link" href="http://twitter.com/' + a[3] + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + a[3] + '</span></a>';
                     } else {
-                        alert("teritori: Unknown link error");
+                        alert('teritori: Unknown link error');
                     }
                 };
 
@@ -651,7 +651,7 @@ THE SOFTWARE.
                 } else if (trtr.option.link === 'auto') {
                     content = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
                 } else {
-                    alert("teritori: Unknown link option '" + trtr.option.link + "'");
+                    alert('teritori: Unknown link option \'' + trtr.option.link + '\'');
                     return;
                 }
 
@@ -679,7 +679,7 @@ THE SOFTWARE.
                 if (t.background_image) {
                     background += ' url(' + t.background_image_url + ')';
                     if (!t.background_tile) {
-                        background += " no-repeat";
+                        background += ' no-repeat';
                     }
                 }
 
@@ -711,8 +711,8 @@ THE SOFTWARE.
         t.screen_name = tweet.user.screen_name;
         t.user_name = tweet.user.name;
         t.user_id = tweet.user.id_str;
-        t.user_description = (tweet.user.description === null) ? "" : tweet.user.description;
-        t.user_location = (tweet.user.location === null) ? "" : tweet.user.location;
+        t.user_description = (tweet.user.description === null) ? '' : tweet.user.description;
+        t.user_location = (tweet.user.location === null) ? '' : tweet.user.location;
         t.user_url = tweet.user.url;
         t.background_image = tweet.user.profile_use_background_image;
         t.background_image_url = tweet.user.profile_background_image_url;
@@ -729,7 +729,7 @@ THE SOFTWARE.
         if (trtr.mode.hasOwnProperty(trtr.option.mode)) {
             htmlcode = trtr.mode[trtr.option.mode].get_htmlcode(t);
         } else {
-            alert("teritori: Unknown mode '" + trtr.option.mode + "'");
+            alert('teritori: Unknown mode \'' + trtr.option.mode + '\'');
             return;
         }
 
