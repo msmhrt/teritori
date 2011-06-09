@@ -23,6 +23,8 @@ THE SOFTWARE.
 */
 
 (function () {
+    'use strict';
+
     var trtr, mes;
 
     trtr = window.teritori;
@@ -159,7 +161,7 @@ THE SOFTWARE.
     };
 
     trtr.display_dialog = function (htmlcode) {
-        var i, close_dialog, select_text, trtr_dialog, mode_list, lang_list, dialog_position, trtr_dialog_header, trtr_mode_select_menu, trtr_lang_select_menu, trtr_preview_checkbox, trtr_showtco_checkbox;
+        var i, key, close_dialog, select_text, trtr_dialog, mode_list, lang_list, dialog_position, trtr_dialog_header, trtr_mode_select_menu, trtr_lang_select_menu, trtr_preview_checkbox, trtr_showtco_checkbox;
 
         close_dialog = function () {
             $('.trtr-dialog').remove();
@@ -175,9 +177,9 @@ THE SOFTWARE.
         trtr_dialog = $('<div class="trtr-dialog" style="position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><span style="margin-right:0.5em"><strong>' + mes('option_mode') + '</strong></span><select style="margin-bottom:10px" class="trtr-mode-select-menu"></select><span style="margin-left:2em;margin-right:0.5em"><strong>' + mes('option_lang') + '</strong></span><select style="margin-bottom:10px" class="trtr-lang-select-menu"></select><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div><div><input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>' + mes('option_preview') + '</strong><input class="trtr-dialog-showtco-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + mes('option_showtco') + '</strong></div><div class="trtr-dialog-previewarea"></div></div></div>').appendTo('body');
 
         mode_list = [];
-        for (i in trtr.mode) {
-            if (trtr.mode.hasOwnProperty(i)) {
-                mode_list.push([i, mes(trtr.mode[i].description)]);
+        for (key in trtr.mode) {
+            if (trtr.mode.hasOwnProperty(key)) {
+                mode_list.push([key, mes(trtr.mode[key].description)]);
             }
         }
 
@@ -203,9 +205,9 @@ THE SOFTWARE.
         });
 
         lang_list = [];
-        for (i in trtr.lang) {
-            if (trtr.lang.hasOwnProperty(i)) {
-                lang_list.push([i, mes('lang_' + i.toString())]);
+        for (key in trtr.lang) {
+            if (trtr.lang.hasOwnProperty(key)) {
+                lang_list.push([key, mes('lang_' + key)]);
             }
         }
 
@@ -305,13 +307,13 @@ THE SOFTWARE.
     };
 
     trtr.apply_entities = function (text, entities, entity_callback) {
-        var i, j, index, start, end, linked_text, entity_list, entity;
+        var i, j, key, index, start, end, linked_text, entity_list, entity;
 
         entity_list = [];
-        for (i in entities) {
-            if ((typeof entities[i] !== 'function') && (entities[i].length !== 0)) {
-                for (j = 0; j < entities[i].length; j += 1) {
-                    entity_list.push([i, entities[i][j]]);
+        for (key in entities) {
+            if ((typeof entities[key] !== 'function') && (entities[key].length !== 0)) {
+                for (j = 0; j < entities[key].length; j += 1) {
+                    entity_list.push([key, entities[key][j]]);
                 }
             }
         }
