@@ -161,7 +161,7 @@ THE SOFTWARE.
     };
 
     trtr.display_dialog = function (htmlcode) {
-        var i, key, close_dialog, select_text, trtr_dialog, mode_list, lang_list, dialog_position, trtr_dialog_header, trtr_mode_select_menu, trtr_lang_select_menu, trtr_preview_checkbox, trtr_showtco_checkbox;
+        var i, key, close_dialog, trtr_dialog, mode_list, lang_list, dialog_position, trtr_dialog_header, trtr_mode_select_menu, trtr_lang_select_menu, trtr_preview_checkbox, trtr_showtco_checkbox;
 
         close_dialog = function () {
             $('.trtr-dialog').remove();
@@ -242,11 +242,11 @@ THE SOFTWARE.
 
         trtr_preview_checkbox.click(function () {
             if (trtr_preview_checkbox.is(':checked')) {
-                trtr_dialog.find('.trtr-dialog-previewarea').append('<div class="trtr-dialog-preview">' + htmlcode + '</div>');
                 trtr.option.preview = true;
+                trtr.load_jsonp('repeat');
             } else {
-                trtr_dialog.find('.trtr-dialog-preview').remove();
                 trtr.option.preview = false;
+                trtr.load_jsonp('repeat');
             }
         });
 
@@ -274,19 +274,13 @@ THE SOFTWARE.
             });
         }
 
-        select_text = function () {
-            trtr_dialog.find('.trtr-textarea').focus().select();
-        };
-
-        select_text();
-
         trtr_dialog_header = trtr_dialog.find('.trtr-dialog-header');
 
         if (trtr_dialog.draggable) {
             trtr_dialog.draggable({
                 handle: trtr_dialog_header,
                 stop: function () {
-                    select_text();
+                    trtr.load_jsonp('repeat');
                 }
             });
         } else {
@@ -302,6 +296,8 @@ THE SOFTWARE.
                 close_dialog();
             }
         });
+
+        trtr_dialog.find('.trtr-textarea').focus().select();
 
         trtr.dialog_loaded = true;
     };
