@@ -330,7 +330,7 @@ THE SOFTWARE.
         linked_text = '';
         for (i = 0; i < entity_list.length; i += 1) {
             entity = entity_list[i];
-            if (entity_callback.hasOwnProperty(entity[0]) !== true) {
+            if (!entity_callback.hasOwnProperty(entity[0])) {
                 alert('teritori: Unknown parameter \'' + entity[0] + '\' in entity');
                 return text;
             }
