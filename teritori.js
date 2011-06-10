@@ -235,7 +235,8 @@ THE SOFTWARE.
         trtr_preview_checkbox = trtr_dialog.find('.trtr-dialog-preview-checkbox');
         if (trtr.option.preview) {
             trtr_preview_checkbox.attr('checked', 'checked');
-            trtr_dialog.find('.trtr-dialog-previewarea').append('<div class="trtr-dialog-preview">' + htmlcode + '</div>');
+            trtr_dialog.find('.trtr-dialog-previewarea').append(trtr.mode[trtr.option.mode].preview_box);
+            trtr_dialog.find('.trtr-dialog-previewbox').append(htmlcode);
         } else {
             trtr_preview_checkbox.attr('checked', '');
         }
@@ -488,7 +489,8 @@ THE SOFTWARE.
                 htmlcode += '<!-- end of profile -->\n';
 
                 return htmlcode;
-            }
+            },
+            'preview_box': '<div class="trtr-dialog-previewbox"></div>'
         },
         'tweet4kml': {
             'description': 'tweet4kml_description',
@@ -590,7 +592,8 @@ THE SOFTWARE.
                 htmlcode = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + t.text_color + ';font-size:16px"><div>' + content + ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '"' + link_style + '>' + t.timestamp + '</a> ' + source + ' </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #E6E6E6"><a href="http://twitter.com/' + t.screen_name + '"' + link_style + '><img src="' + t.profile_image_url + '" alt="' + t.user_name + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + t.screen_name + '"' + link_style + '>@' + t.screen_name + '</a></strong><span style="color:#999;font-size:14px"><br>' + t.user_name + ' </span></div></div>';
 
                 return htmlcode;
-            }
+            },
+            'preview_box': '<div style="background-color:#99B3CC;padding-top:10px;padding-bottom:10px"><div style="-webkit-border-radius:20px;-moz-border-radius:20px;border-radius:20px;background-color:#FFFFFF;margin:0 auto;padding-top:16px;padding-bottom:16px;width:335px"><div class="trtr-dialog-previewbox" style="font-family:arial,helvetica,sans-serif;line-height:normal;margin:0 auto;width:303px;word-wrap:break-word"></div></div></div>'
         },
         'tweet': {
             'description': 'tweet_description',
@@ -687,7 +690,8 @@ THE SOFTWARE.
                 htmlcode += '<!-- end of tweet -->\n';
 
                 return htmlcode;
-            }
+            },
+            'preview_box': '<div class="trtr-dialog-previewbox"></div>'
         }
     };
 
