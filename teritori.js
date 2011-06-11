@@ -201,7 +201,7 @@ THE SOFTWARE.
 
         trtr_mode_select_menu.bind('change', function () {
             trtr.option.mode = $(this).find('option:selected').val();
-            trtr.load_jsonp('repeat');
+            trtr.reload();
         });
 
         lang_list = [];
@@ -229,7 +229,7 @@ THE SOFTWARE.
 
         trtr_lang_select_menu.bind('change', function () {
             trtr.option.lang = $(this).find('option:selected').val();
-            trtr.load_jsonp('repeat');
+            trtr.reload();
         });
 
         trtr_preview_checkbox = trtr_dialog.find('.trtr-dialog-preview-checkbox');
@@ -243,7 +243,7 @@ THE SOFTWARE.
 
         trtr_preview_checkbox.click(function () {
             trtr.option.preview = $(this).is(':checked') ? true : false;
-            trtr.load_jsonp('repeat');
+            trtr.reload();
         });
 
         trtr_showtco_checkbox = trtr_dialog.find('.trtr-dialog-showtco-checkbox');
@@ -255,7 +255,7 @@ THE SOFTWARE.
 
         trtr_showtco_checkbox.click(function () {
             trtr.option.showtco = $(this).is(':checked') ? true : false;
-            trtr.load_jsonp('repeat');
+            trtr.reload();
         });
 
         if (dialog_position) {
@@ -276,7 +276,7 @@ THE SOFTWARE.
             trtr_dialog.draggable({
                 handle: trtr_dialog_header,
                 stop: function () {
-                    trtr.load_jsonp('repeat');
+                    trtr.reload();
                 }
             });
         } else {
@@ -756,6 +756,10 @@ THE SOFTWARE.
             jsonp.src = 'http://api.twitter.com/1/statuses/show.json?include_entities=true&contributor_details=true&callback=teritori.display_htmlcode&id=' + id;
             document.getElementsByTagName('head')[0].appendChild(jsonp);
         }
+    };
+
+    trtr.reload = function () {
+        trtr.load_jsonp('repeat');
     };
 
     trtr.main = function () {
