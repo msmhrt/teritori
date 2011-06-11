@@ -200,7 +200,7 @@ THE SOFTWARE.
         trtr_mode_select_menu.val(trtr.option.mode);
 
         trtr_mode_select_menu.bind('change', function () {
-            trtr.option.mode = trtr_dialog.find('.trtr-mode-select-menu option:selected').val();
+            trtr.option.mode = $(this).find('option:selected').val();
             trtr.load_jsonp('repeat');
         });
 
@@ -228,7 +228,7 @@ THE SOFTWARE.
         trtr_lang_select_menu.val(trtr.option.lang);
 
         trtr_lang_select_menu.bind('change', function () {
-            trtr.option.lang = trtr_dialog.find('.trtr-lang-select-menu option:selected').val();
+            trtr.option.lang = $(this).find('option:selected').val();
             trtr.load_jsonp('repeat');
         });
 
@@ -242,13 +242,8 @@ THE SOFTWARE.
         }
 
         trtr_preview_checkbox.click(function () {
-            if (trtr_preview_checkbox.is(':checked')) {
-                trtr.option.preview = true;
-                trtr.load_jsonp('repeat');
-            } else {
-                trtr.option.preview = false;
-                trtr.load_jsonp('repeat');
-            }
+            trtr.option.preview = $(this).is(':checked') ? true : false;
+            trtr.load_jsonp('repeat');
         });
 
         trtr_showtco_checkbox = trtr_dialog.find('.trtr-dialog-showtco-checkbox');
@@ -259,7 +254,7 @@ THE SOFTWARE.
         }
 
         trtr_showtco_checkbox.click(function () {
-            trtr.option.showtco = trtr_showtco_checkbox.is(':checked') ? true : false;
+            trtr.option.showtco = $(this).is(':checked') ? true : false;
             trtr.load_jsonp('repeat');
         });
 
