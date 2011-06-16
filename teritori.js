@@ -724,7 +724,7 @@ THE SOFTWARE.
         if (trtr.mode.hasOwnProperty(trtr.option.mode)) {
             htmlcode = trtr.mode[trtr.option.mode].get_htmlcode(t);
         } else {
-            alert('teritori: Unknown mode \'' + trtr.option.mode + '\'');
+            alert('teritori: Unknown mode \'' + trtr.option.mode.toString() + '\'');
             return;
         }
 
