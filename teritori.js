@@ -88,7 +88,7 @@ THE SOFTWARE.
         var i, newconfig_table, config_list, config, option;
 
         option = {
-            'mode': 'tweet',
+            'mode': 'tweet-mode',
             'debug': false,
             'link': 'entity',
             'showtco': true,
@@ -115,8 +115,8 @@ THE SOFTWARE.
             config = config_list[i].split(':');
             switch (config[0]) {
             case 'mode':
-                if (trtr.mode.hasOwnProperty(config[1])) {
-                    option.mode = config[1];
+                if (trtr.templates.hasOwnProperty(config[1] + '-mode')) {
+                    option.mode = config[1] + '-mode';
                 }
                 break;
             case 'debug':
@@ -177,9 +177,9 @@ THE SOFTWARE.
         trtr_dialog = $('<div class="trtr-dialog" style="position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><div style="margin-bottom:10px"><span style="margin-right:0.5em"><strong>' + mes('option_mode') + '</strong></span><select class="trtr-mode-select-menu"></select><span style="margin-left:1em;margin-right:0.5em"><strong>' + mes('option_lang') + '</strong></span><select class="trtr-lang-select-menu"></select></div><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div><div><input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>' + mes('option_preview') + '</strong><input class="trtr-dialog-showtco-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + mes('option_showtco') + '</strong></div><div class="trtr-dialog-previewarea" style="margin-top:5px"></div></div></div>').appendTo('body');
 
         mode_list = [];
-        for (key in trtr.mode) {
-            if (trtr.mode.hasOwnProperty(key)) {
-                mode_list.push([key, mes(trtr.mode[key].description)]);
+        for (key in trtr.templates) {
+            if (trtr.templates.hasOwnProperty(key)) {
+                mode_list.push([key, mes(trtr.templates[key].description)]);
             }
         }
 
@@ -235,7 +235,7 @@ THE SOFTWARE.
         trtr_preview_checkbox = trtr_dialog.find('.trtr-dialog-preview-checkbox');
         if (trtr.option.preview) {
             trtr_preview_checkbox.attr('checked', 'checked');
-            trtr_dialog.find('.trtr-dialog-previewarea').append(trtr.mode[trtr.option.mode].preview_box);
+            trtr_dialog.find('.trtr-dialog-previewarea').append(trtr.templates[trtr.option.mode].preview_box);
             trtr_dialog.find('.trtr-dialog-previewbox').append(htmlcode);
         } else {
             trtr_preview_checkbox.attr('checked', '');
@@ -442,8 +442,8 @@ THE SOFTWARE.
     };
 
 
-    trtr.mode = {
-        'profile': {
+    trtr.templates = {
+        'profile-mode': {
             'description': 'profile_description',
             'get_htmlcode': function (t) {
                 var to_link, content, user_url_html, htmlcode;
@@ -487,7 +487,7 @@ THE SOFTWARE.
             },
             'preview_box': '<div class="trtr-dialog-previewbox"></div>'
         },
-        'tweet4kml': {
+        'tweet4kml-mode': {
             'description': 'tweet4kml_description',
             'get_htmlcode': function (t) {
                 var link_style, to_link, content, entity_callback, source, htmlcode;
@@ -590,7 +590,7 @@ THE SOFTWARE.
             },
             'preview_box': '<div style="background-color:#99B3CC;padding-top:10px;padding-bottom:10px"><div style="-webkit-border-radius:20px;-moz-border-radius:20px;border-radius:20px;background-color:#FFFFFF;margin:0 auto;padding-top:16px;padding-bottom:16px;width:335px"><div class="trtr-dialog-previewbox" style="font-family:arial,helvetica,sans-serif;line-height:normal;margin:0 auto;width:303px;word-wrap:break-word"></div></div></div>'
         },
-        'tweet': {
+        'tweet-mode': {
             'description': 'tweet_description',
             'get_htmlcode': function (t) {
                 var to_link, content, entity_callback, background, source, htmlcode;
@@ -721,8 +721,8 @@ THE SOFTWARE.
         t.text = tweet.text;
         t.entities = tweet.entities;
 
-        if (trtr.mode.hasOwnProperty(trtr.option.mode)) {
-            htmlcode = trtr.mode[trtr.option.mode].get_htmlcode(t);
+        if (trtr.templates.hasOwnProperty(trtr.option.mode)) {
+            htmlcode = trtr.templates[trtr.option.mode].get_htmlcode(t);
         } else {
             alert('teritori: Unknown mode \'' + trtr.option.mode.toString() + '\'');
             return;
