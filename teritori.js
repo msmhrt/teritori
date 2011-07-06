@@ -588,7 +588,7 @@ THE SOFTWARE.
 
                 return htmlcode;
             },
-            'preview_box': '<div style="background-color:#99B3CC;padding-top:10px;padding-bottom:10px"><div style="-webkit-border-radius:20px;-moz-border-radius:20px;border-radius:20px;background-color:#FFFFFF;margin:0 auto;padding-top:16px;padding-bottom:16px;width:335px"><div class="trtr-dialog-previewbox" style="font-family:arial,helvetica,sans-serif;line-height:normal;margin:0 auto;width:303px;word-wrap:break-word"></div></div></div>'
+            'preview_box': '<div style="background-color:#99B3CC;padding-top:10px;padding-bottom:10px"><div style="background-color:#FFFFFF;border:1px solid #ababab;margin:0 auto;padding-top:16px;padding-bottom:16px;width:339px"><div class="trtr-dialog-previewbox" style="font-family:arial,helvetica,sans-serif;line-height:normal;margin:0 auto;width:303px;word-wrap:break-word"></div></div></div>'
         },
         'tweet-mode': {
             'description': 'tweet_description',
