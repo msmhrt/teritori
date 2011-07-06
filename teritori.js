@@ -772,14 +772,14 @@ THE SOFTWARE.
         }
 
         url = document.location.href;
-        matches = url.match(/^https?:\/\/twitter\.com(\/#\!)?(\/([a-zA-Z0-9_]{1,15})(\/status(es)?\/([1-9][0-9]+))?)?/);
+        matches = url.match(/^https?:\/\/twitter\.com(\/#(\!|%21))?(\/([a-zA-Z0-9_]{1,15})(\/status(es)?\/([1-9][0-9]+))?)?/);
         if (!matches) {
             alert('teritori can use only twitter.com.');
             return;
         }
 
-        if (matches[6]) {
-            trtr.load_jsonp(matches[6]);
+        if (matches[7]) {
+            trtr.load_jsonp(matches[7]);
         } else {
             $('.stream-tweet').live('hover', function () {
                 var actions, tweet_link, tweet_id, action_gethtml;
