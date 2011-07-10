@@ -75,7 +75,15 @@ THE SOFTWARE.
     };
 
     trtr.get_lang = function () {
-        var lang = window.twttr.pageLocale;
+        var lang;
+
+        if (window.twttr && window.twttr.pageLocale) {
+            lang = window.twttr.pageLocale;
+            trtr.new_twitter = true;
+        } else {
+            lang = $('html').attr('lang');
+            trtr.new_twitter = false;
+        }
 
         if (!trtr.lang.hasOwnProperty(lang)) {
             lang = 'en';
@@ -174,7 +182,7 @@ THE SOFTWARE.
             close_dialog();
         }
 
-        trtr_dialog = $('<div class="trtr-dialog" style="position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><div style="margin-bottom:10px"><span style="margin-right:0.5em"><strong>' + mes('option_mode') + '</strong></span><select class="trtr-mode-select-menu"></select><span style="margin-left:1em;margin-right:0.5em"><strong>' + mes('option_lang') + '</strong></span><select class="trtr-lang-select-menu"></select></div><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div><div><input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>' + mes('option_preview') + '</strong><input class="trtr-dialog-showtco-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + mes('option_showtco') + '</strong></div><div class="trtr-dialog-previewarea" style="margin-top:5px"></div></div></div>').appendTo('body');
+        trtr_dialog = $('<div class="trtr-dialog" style="text-align:left;position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><div style="margin-bottom:10px"><span style="margin-right:0.5em"><strong>' + mes('option_mode') + '</strong></span><select class="trtr-mode-select-menu"></select><span style="margin-left:1em;margin-right:0.5em"><strong>' + mes('option_lang') + '</strong></span><select class="trtr-lang-select-menu"></select></div><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div><div><input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>' + mes('option_preview') + '</strong><input class="trtr-dialog-showtco-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + mes('option_showtco') + '</strong></div><div class="trtr-dialog-previewarea" style="margin-top:5px"></div></div></div>').appendTo('body');
 
         mode_list = [];
         for (key in trtr.templates) {
@@ -780,7 +788,7 @@ THE SOFTWARE.
 
         if (matches[7]) {
             trtr.load_jsonp(matches[7]);
-        } else {
+        } else if (trtr.new_twitter) {
             $('.stream-tweet').live('hover', function () {
                 var actions, tweet_link, tweet_id, action_gethtml;
 
@@ -792,6 +800,24 @@ THE SOFTWARE.
                     actions.append(action_gethtml);
                     action_gethtml.click(function () {
                         trtr.load_jsonp(tweet_id);
+                    });
+                }
+            });
+        } else {
+            console.info('#');
+            $('.hentry').live('mouseover', function () {
+                var actions, tweet_link, tweet_id, action_gethtml;
+
+                actions = $(this).children('.status-body').children('.actions-hover');
+                if (actions && actions.find('.trtr_gethtml').length === 0) {
+                    tweet_link = actions.siblings('.entry-meta').children('.entry-date').attr('href');
+                    console.info(tweet_link);
+                    tweet_id = (tweet_link.match(/^https?:\/\/twitter\.com\/(#\!\/)?([a-zA-Z0-9_]{1,15})\/status(es)?\/([1-9][0-9]+)/))[4];
+                    action_gethtml = $('<li style="line-height:16px"><span><a href="#" class="trtr_gethtml" style="padding-left:18px"><span>GetHTML</span></a></span></li>');
+                    actions.prepend(action_gethtml);
+                    action_gethtml.click(function () {
+                        trtr.load_jsonp(tweet_id);
+                        return false;
                     });
                 }
             });
