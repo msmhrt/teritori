@@ -804,14 +804,12 @@ THE SOFTWARE.
                 }
             });
         } else {
-            console.info('#');
             $('.hentry').live('mouseover', function () {
                 var actions, tweet_link, tweet_id, action_gethtml;
 
                 actions = $(this).children('.status-body').children('.actions-hover');
                 if (actions && actions.find('.trtr_gethtml').length === 0) {
                     tweet_link = actions.siblings('.entry-meta').children('.entry-date').attr('href');
-                    console.info(tweet_link);
                     tweet_id = (tweet_link.match(/^https?:\/\/twitter\.com\/(#\!\/)?([a-zA-Z0-9_]{1,15})\/status(es)?\/([1-9][0-9]+)/))[4];
                     action_gethtml = $('<li style="line-height:16px"><span><a href="#" class="trtr_gethtml" style="padding-left:18px"><span>GetHTML</span></a></span></li>');
                     actions.prepend(action_gethtml);
