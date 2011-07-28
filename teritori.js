@@ -502,7 +502,7 @@ THE SOFTWARE.
 
                 entity_callback = {
                     'hashtags': function (entity) {
-                        return '<span style="color:#' + t.symbol_color + '">#</span><a href="http://search.twitter.com/search?q=%23' + entity.text + '" style="color:#' + t.link_color + '">' + entity.text + '</a>';
+                        return '<span style="color:#' + t.symbol_color + '">#</span><a href="http://search.twitter.com/search?q=%23' + encodeURIComponent(entity.text) + '" style="color:#' + t.link_color + '">' + entity.text + '</a>';
                     },
                     'urls': function (entity) {
                         var linktext;
@@ -605,7 +605,7 @@ THE SOFTWARE.
 
                 entity_callback = {
                     'hashtags': function (entity) {
-                        return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + entity.text + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + entity.text + '</span></a>';
+                        return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + encodeURIComponent(entity.text) + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + entity.text + '</span></a>';
                     },
                     'urls': function (entity) {
                         var linktext;
