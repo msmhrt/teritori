@@ -62,7 +62,7 @@ THE SOFTWARE.
             'option_mode': '種類',
             'option_lang': '言語',
             'option_preview': 'プレビュー',
-            'option_showtco': 'http: //t.co/... を表示',
+            'option_showtco': 'http://t.co/... を表示',
             'action_favorite': 'お気に入り',
             'action_follow': 'フォロー',
             'action_reply': '返信',
