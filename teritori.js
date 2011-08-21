@@ -40,6 +40,7 @@ THE SOFTWARE.
             'tweet_description': 'Tweet',
             'profile_description': 'Twitter User Profile',
             'tweet4kml_description': 'Placemark\'s description of Google Maps',
+            'option_media': 'Display media',
             'option_mode': 'Mode',
             'option_lang': 'Lang',
             'option_preview': 'Preview',
@@ -59,6 +60,7 @@ THE SOFTWARE.
             'tweet_description': 'ツイート',
             'profile_description': 'ユーザープロフィール',
             'tweet4kml_description': 'ツイート（Googleマップ用）',
+            'option_media': 'メディアを表示',
             'option_mode': '種類',
             'option_lang': '言語',
             'option_preview': 'プレビュー',
@@ -100,6 +102,7 @@ THE SOFTWARE.
             'debug': false,
             'link': 'entity',
             'showtco': true,
+            'media': true,
             'preview': true,
             'lang': trtr.get_lang() || 'en'
         };
@@ -146,6 +149,13 @@ THE SOFTWARE.
                     option.showtco = false;
                 }
                 break;
+            case 'media':
+                if (config[1] === 'true') {
+                    option.media = true;
+                } else if (config[1] === 'false') {
+                    option.media = false;
+                }
+                break;
             case 'preview':
                 if (config[1] === 'true') {
                     option.preview = true;
@@ -169,7 +179,7 @@ THE SOFTWARE.
     };
 
     trtr.display_dialog = function (htmlcode) {
-        var i, key, close_dialog, trtr_dialog, mode_list, lang_list, dialog_position, trtr_dialog_header, trtr_mode_select_menu, trtr_lang_select_menu, trtr_preview_checkbox, trtr_showtco_checkbox;
+        var i, key, close_dialog, dialog_html, trtr_dialog, mode_list, lang_list, dialog_position, trtr_dialog_header, trtr_mode_select_menu, trtr_lang_select_menu, trtr_preview_checkbox, trtr_showtco_checkbox, trtr_media_checkbox;
 
         close_dialog = function () {
             $('.trtr-dialog').remove();
@@ -182,7 +192,12 @@ THE SOFTWARE.
             close_dialog();
         }
 
-        trtr_dialog = $('<div class="trtr-dialog" style="text-align:left;position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><div style="margin-bottom:10px"><span style="margin-right:0.5em"><strong>' + mes('option_mode') + '</strong></span><select class="trtr-mode-select-menu"></select><span style="margin-left:1em;margin-right:0.5em"><strong>' + mes('option_lang') + '</strong></span><select class="trtr-lang-select-menu"></select></div><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div><div><input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>' + mes('option_preview') + '</strong><input class="trtr-dialog-showtco-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + mes('option_showtco') + '</strong></div><div class="trtr-dialog-previewarea" style="margin-top:5px"></div></div></div>').appendTo('body');
+        dialog_html = '<div class="trtr-dialog" style="text-align:left;position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><div style="margin-bottom:10px"><span style="margin-right:0.5em"><strong>' + mes('option_mode') + '</strong></span><select class="trtr-mode-select-menu"></select><span style="margin-left:1em;margin-right:0.5em"><strong>' + mes('option_lang') + '</strong></span><select class="trtr-lang-select-menu"></select></div><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + htmlcode + '</textarea></div><div>';
+        dialog_html += '<input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>' + mes('option_preview') + '</strong>';
+        dialog_html += '<input class="trtr-dialog-showtco-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + mes('option_showtco') + '</strong>';
+        dialog_html += '<input class="trtr-dialog-media-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + mes('option_media') + '</strong>';
+        dialog_html += '</div><div class="trtr-dialog-previewarea" style="margin-top:5px"></div></div></div>';
+        trtr_dialog = $(dialog_html).appendTo('body');
 
         mode_list = [];
         for (key in trtr.templates) {
@@ -274,6 +289,23 @@ THE SOFTWARE.
         } else {
             trtr_showtco_checkbox.attr('disabled', 'disabled');
             trtr_showtco_checkbox.next().css('color', '#7F7F7F');
+        }
+
+        trtr_media_checkbox = trtr_dialog.find('.trtr-dialog-media-checkbox');
+        if (trtr.option.media) {
+            trtr_media_checkbox.attr('checked', 'checked');
+        } else {
+            trtr_media_checkbox.attr('checked', '');
+        }
+
+        if (trtr.templates[trtr.option.mode].uses_option.media) {
+            trtr_media_checkbox.click(function () {
+                trtr.option.media = $(this).is(':checked') ? true : false;
+                trtr.reload();
+            });
+        } else {
+            trtr_media_checkbox.attr('disabled', 'disabled');
+            trtr_media_checkbox.next().css('color', '#7F7F7F');
         }
 
         if (dialog_position) {
@@ -459,6 +491,102 @@ THE SOFTWARE.
         return mes('get_format_date')(dt_tweeted);
     };
 
+    trtr.get_media_htmlcode_middle = function (url) {
+        return '<div style="margin:.75em 0 .75em 0;font-size:12px"><a href="' + url + '"><img src="' + this.get_middle_thumbnail_url(url) + '"></a><br><a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span></div>';
+    };
+
+    trtr.get_media_htmlcode_large = function (url) {
+        return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><a href="' + url + '"><img src="' + this.get_large_thumbnail_url(url) + '"></a><br><a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="16" height="16" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span></div>';
+    };
+
+    trtr.media = [{
+        'provider_name': 'YFrog',
+        'provider_url': 'http://yfrog.com/',
+        'provider_icon_url': 'http://yfrog.com/favicon.ico',
+        'regexp_media_url': /^http:\/\/yfrog\.(?:com|us)\/([0-9a-zA-Z]+[jpbtgsdfzx])$/,
+        'get_middle_thumbnail_url': function (url) {
+            return 'http://yfrog.com/' + url.match(this.regexp_media_url)[1] + ':small';
+        },
+        'get_large_thumbnail_url': function (url) {
+            return 'http://yfrog.com/' + url.match(this.regexp_media_url)[1] + ':iphone';
+        },
+        'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
+        'get_htmlcode_large': trtr.get_media_htmlcode_large,
+        'get_htmlcode_kml': trtr.get_media_htmlcode_middle
+    }, {
+        'provider_name': 'TwitPic',
+        'provider_url': 'http://twitpic.com/',
+        'provider_icon_url': 'http://twitpic.com/favicon.ico',
+        'regexp_media_url': /^http:\/\/twitpic\.com\/([0-9a-zA-Z]+)$/,
+        'get_middle_thumbnail_url': function (url) {
+            return 'http://twitpic.com/show/thumb/' + url.match(this.regexp_media_url)[1];
+        },
+        'get_large_thumbnail_url': function (url) {
+            return 'http://twitpic.com/show/thumb/' + url.match(this.regexp_media_url)[1];
+        },
+        'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
+        'get_htmlcode_large': trtr.get_media_htmlcode_large,
+        'get_htmlcode_kml': trtr.get_media_htmlcode_middle
+    }, {
+        'provider_name': 'フォト蔵',
+        'provider_url': 'http://photozou.jp/',
+        'provider_icon_url': 'http://photozou.jp/favicon.ico',
+        'regexp_media_url': /^http:\/\/photozou\.jp\/photo\/show\/[0-9]+\/([0-9]+)$/,
+        'get_middle_thumbnail_url': function (url) {
+            return 'http://photozou.jp/p/thumb/' + url.match(this.regexp_media_url)[1];
+        },
+        'get_large_thumbnail_url': function (url) {
+            return 'http://photozou.jp/p/img/' + url.match(this.regexp_media_url)[1];
+        },
+        'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
+        'get_htmlcode_large': trtr.get_media_htmlcode_large,
+        'get_htmlcode_kml': trtr.get_media_htmlcode_middle
+    }, {
+        'provider_name': 'ニコニコ静画',
+        'provider_url': 'http://seiga.nicovideo.jp/',
+        'provider_icon_url': 'http://seiga.nicovideo.jp/favicon.ico',
+        'regexp_media_url': /^http:\/\/(?:seiga\.nicovideo\.jp\/seiga|nico\.ms)\/im([1-9][0-9]+)/,
+        'get_middle_thumbnail_url': function (url) {
+            return 'http://lohas.nicoseiga.jp/thumb/' + url.match(this.regexp_media_url)[1] + 'q?';
+        },
+        'get_large_thumbnail_url': function (url) {
+            return 'http://lohas.nicoseiga.jp/thumb/' + url.match(this.regexp_media_url)[1] + 'i?';
+        },
+        'get_htmlcode_middle': function (url) {
+            return '<div style="margin:5px 0 5px 0;font-size:12px"><iframe width="312" height="176" src="http://ext.seiga.nicovideo.jp/thumb/im' + url.match(this.regexp_media_url)[1] + '" scrolling="no" style="border:solid 1px #888;" frameborder="0"></iframe><br><img src="' + this.provider_icon_url + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"><span style="color:#999">' + this.provider_name + '</span></div>';
+        },
+        'get_htmlcode_large': trtr.get_media_htmlcode_large,
+        'get_htmlcode_kml': trtr.get_media_htmlcode_middle
+    }];
+
+    trtr.get_media_htmlcode = function (tweet_entities, media_mode) {
+        var i, j, urls_entities, media_htmlcode, url, match;
+
+        if (!tweet_entities.hasOwnProperty('urls')) {
+            return '';
+        }
+
+        urls_entities = tweet_entities.urls;
+        media_htmlcode = '';
+        for (i = 0; i < urls_entities.length; i += 1) {
+            url = urls_entities[i].expanded_url;
+
+            if (url === null) {
+                url = urls_entities[i].url;
+            }
+
+            if (url) {
+                for (j = 0; j < trtr.media.length; j += 1) {
+                    match = url.match(trtr.media[j].regexp_media_url);
+                    if (match) {
+                        media_htmlcode += trtr.media[j]['get_htmlcode_' + media_mode](url);
+                    }
+                }
+            }
+        }
+
+        return media_htmlcode;
+    };
 
     trtr.templates = {
         'profile-mode': {
@@ -504,6 +632,7 @@ THE SOFTWARE.
                 return htmlcode;
             },
             'uses_option': {
+                'media': false,
                 'preview': true,
                 'showtco': false
             },
@@ -606,15 +735,22 @@ THE SOFTWARE.
 
                 source = mes('format_source').replace('%s', t.source);
 
-                htmlcode = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + t.text_color + ';font-size:16px"><div>' + content + ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '"' + link_style + '>' + t.timestamp + '</a> ' + source + ' </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #E6E6E6"><a href="http://twitter.com/' + t.screen_name + '"' + link_style + '><img src="' + t.profile_image_url + '" alt="' + t.user_name + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + t.screen_name + '"' + link_style + '>@' + t.screen_name + '</a></strong><span style="color:#999;font-size:14px"><br>' + t.user_name + ' </span></div></div>';
+                htmlcode = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + t.text_color + ';font-size:16px"><div>' + content;
+
+                if (trtr.option.media) {
+                    htmlcode += trtr.get_media_htmlcode(t.entities, 'kml');
+                }
+
+                htmlcode += ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '"' + link_style + '>' + t.timestamp + '</a> ' + source + ' </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #E6E6E6"><a href="http://twitter.com/' + t.screen_name + '"' + link_style + '><img src="' + t.profile_image_url + '" alt="' + t.user_name + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + t.screen_name + '"' + link_style + '>@' + t.screen_name + '</a></strong><span style="color:#999;font-size:14px"><br>' + t.user_name + ' </span></div></div>';
 
                 return htmlcode;
             },
             'uses_option': {
+                'media': true,
                 'preview': true,
                 'showtco': true
             },
-            'preview_box': '<div style="background-color:#99B3CC;padding-top:10px;padding-bottom:10px"><div style="background-color:#FFFFFF;border:1px solid #ababab;margin:0 auto;padding-top:16px;padding-bottom:16px;width:339px"><div class="trtr-dialog-previewbox" style="color:black;font-size:13px;font-family:arial,sans-serif;padding-bottom:.7em;line-height:normal;margin:0 auto;width:303px;word-wrap:break-word"></div></div></div>'
+            'preview_box': '<div style="background-color:#99B3CC;padding-top:10px;padding-bottom:10px;max-height:500px;overflow:auto"><div style="background-color:#FFFFFF;border:1px solid #ababab;margin:0 auto;padding-top:16px;padding-bottom:16px;width:339px"><div class="trtr-dialog-previewbox" style="color:black;font-size:13px;font-family:arial,sans-serif;padding-bottom:.7em;max-height:400px;overflow-y:auto;line-height:normal;margin:0 auto;width:303px;word-wrap:break-word"></div></div></div>'
         },
         'tweet-mode': {
             'description': 'tweet_description',
@@ -707,16 +843,23 @@ THE SOFTWARE.
 
                 htmlcode = '<!-- http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + ' -->\n';
                 htmlcode += '<style type="text/css">.trtr_tweetid_' + t.tweet_id + ' a {text-decoration:none;color:#' + t.link_color + ' !important} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link span.trtr_link_symbol {opacity:0.5} .trtr_tweetid_' + t.tweet_id + ' a:hover {text-decoration:underline} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link:hover {text-decoration:none} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link:hover span.trtr_link_text {text-decoration:underline} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action span em {background:transparent url(http://si0.twimg.com/images/dev/cms/intents/icons/sprites/everything-spritev2.png) no-repeat;margin:0 3px -3.5px 3px;display:inline-block;vertical-align:baseline;position:relative;outline:none;width:15px;height:15px;} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_reply span em {background-position 0 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_reply:hover span em {background-position:-16px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_retweet span em {background-position:-80px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_retweet:hover span em {background-position:-96px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_favorite span em {background-position:-32px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_favorite:hover span em {background-position:-48px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_follow span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_blue/bird_16_blue.png)} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_follow:hover span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_black/bird_16_black.png)}</style>';
-                htmlcode += '<div class="trtr_tweetid_' + t.tweet_id + '" style="background:' + background + ';padding:20px"><div style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + t.text_color + ';font-size:16px !important;line-height:22px;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;word-wrap:break-word">' + content + ' <div class="trtr_actions" style="color:#999;font-size:12px;display:block"><a href="https://twitter.com/intent/user?user_id=' + t.user_id + '" class="trtr_action trtr_action_follow" title="' + mes('action_follow') + '"><span><em></em></span></a> <span class="trtr_timestamp"><a title="' + t.timestamp + '" href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '">' + t.timestamp + '</a> ' + source + ' </span><a href="https://twitter.com/intent/tweet?in_reply_to=' + t.tweet_id + '" class="trtr_action trtr_action_reply" title="' + mes('action_reply') + '"><span><em></em>' + mes('action_reply') + '</span></a> <a href="https://twitter.com/intent/retweet?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_retweet" title="' + mes('action_retweet') + '"><span><em></em>' + mes('action_retweet') + '</span></a> <a href="https://twitter.com/intent/favorite?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_favorite" title="' + mes('action_favorite') + '"><span><em></em>' + mes('action_favorite') + '</span></a> </div><span class="trtr_metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="trtr_author" style="color:#999;line-height:19px;"><a href="http://twitter.com/' + t.screen_name + '"><img src="' + t.profile_image_url + '" style="float:left;margin:0 7px 0 0;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + t.screen_name + '">' + t.user_name + '</a></strong><br/>@' + t.screen_name + '</span></span></div></div>\n';
+                htmlcode += '<div class="trtr_tweetid_' + t.tweet_id + '" style="background:' + background + ';padding:20px"><div style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + t.text_color + ';font-size:16px !important;line-height:22px;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;word-wrap:break-word">' + content;
+
+                if (trtr.option.media) {
+                    htmlcode += trtr.get_media_htmlcode(t.entities, 'large');
+                }
+
+                htmlcode += ' <div class="trtr_actions" style="color:#999;font-size:12px;display:block"><a href="https://twitter.com/intent/user?user_id=' + t.user_id + '" class="trtr_action trtr_action_follow" title="' + mes('action_follow') + '"><span><em></em></span></a> <span class="trtr_timestamp"><a title="' + t.timestamp + '" href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '">' + t.timestamp + '</a> ' + source + ' </span><a href="https://twitter.com/intent/tweet?in_reply_to=' + t.tweet_id + '" class="trtr_action trtr_action_reply" title="' + mes('action_reply') + '"><span><em></em>' + mes('action_reply') + '</span></a> <a href="https://twitter.com/intent/retweet?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_retweet" title="' + mes('action_retweet') + '"><span><em></em>' + mes('action_retweet') + '</span></a> <a href="https://twitter.com/intent/favorite?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_favorite" title="' + mes('action_favorite') + '"><span><em></em>' + mes('action_favorite') + '</span></a> </div><span class="trtr_metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="trtr_author" style="color:#999;line-height:19px;"><a href="http://twitter.com/' + t.screen_name + '"><img src="' + t.profile_image_url + '" style="float:left;margin:0 7px 0 0;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + t.screen_name + '">' + t.user_name + '</a></strong><br/>@' + t.screen_name + '</span></span></div></div>\n';
                 htmlcode += '<!-- end of tweet -->\n';
 
                 return htmlcode;
             },
             'uses_option': {
+                'media': true,
                 'preview': true,
                 'showtco': true
             },
-            'preview_box': '<div class="trtr-dialog-previewbox"></div>'
+            'preview_box': '<div class="trtr-dialog-previewbox" style="max-height:400px;overflow:auto"></div>'
         }
     };
 
