@@ -585,9 +585,9 @@ THE SOFTWARE.
                 }
 
                 if (t.source === 'web') {
-                    t.source = '<a href="http://twitter.com/"' + link_style + ' rel="nofollow">Twitter</a>';
+                    t.source = '<a href="http://twitter.com/" rel="nofollow"' + link_style + '>Twitter</a>';
                 } else {
-                    t.source = t.source.replace(/^<a href="([!#$%&'()*+,\-.\/0-9:;=?@A-Z\\_a-z~]+)" rel="nofollow">/, '<a href="$1"' + link_style + ' rel="nofollow">');
+                    t.source = t.source.replace(/^<a href="([!#$%&'()*+,\-.\/0-9:;=?@A-Z\\_a-z~]+)" rel="nofollow">/, '<a href="$1" rel="nofollow"' + link_style + '>');
                 }
 
                 source = mes('format_source').replace('%s', t.source);
