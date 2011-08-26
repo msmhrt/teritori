@@ -249,10 +249,16 @@ THE SOFTWARE.
             trtr_preview_checkbox.attr('checked', '');
         }
 
-        trtr_preview_checkbox.click(function () {
-            trtr.option.preview = $(this).is(':checked') ? true : false;
-            trtr.reload();
-        });
+
+        if (trtr.templates[trtr.option.mode].uses_option.preview) {
+            trtr_preview_checkbox.click(function () {
+                trtr.option.preview = $(this).is(':checked') ? true : false;
+                trtr.reload();
+            });
+        } else {
+            trtr_preview_checkbox.attr('disabled', 'disabled');
+            trtr_preview_checkbox.next().css('color', '#7F7F7F');
+        }
 
         trtr_showtco_checkbox = trtr_dialog.find('.trtr-dialog-showtco-checkbox');
         if (trtr.option.showtco) {
@@ -261,10 +267,15 @@ THE SOFTWARE.
             trtr_showtco_checkbox.attr('checked', '');
         }
 
-        trtr_showtco_checkbox.click(function () {
-            trtr.option.showtco = $(this).is(':checked') ? true : false;
-            trtr.reload();
-        });
+        if (trtr.templates[trtr.option.mode].uses_option.showtco) {
+            trtr_showtco_checkbox.click(function () {
+                trtr.option.showtco = $(this).is(':checked') ? true : false;
+                trtr.reload();
+            });
+        } else {
+            trtr_showtco_checkbox.attr('disabled', 'disabled');
+            trtr_showtco_checkbox.next().css('color', '#7F7F7F');
+        }
 
         if (dialog_position) {
             trtr_dialog.css({
@@ -493,6 +504,10 @@ THE SOFTWARE.
 
                 return htmlcode;
             },
+            'uses_option': {
+                'preview': true,
+                'showtco': false
+            },
             'preview_box': '<div class="trtr-dialog-previewbox"></div>'
         },
         'tweet4kml-mode': {
@@ -596,6 +611,10 @@ THE SOFTWARE.
 
                 return htmlcode;
             },
+            'uses_option': {
+                'preview': true,
+                'showtco': true
+            },
             'preview_box': '<div style="background-color:#99B3CC;padding-top:10px;padding-bottom:10px"><div style="background-color:#FFFFFF;border:1px solid #ababab;margin:0 auto;padding-top:16px;padding-bottom:16px;width:339px"><div class="trtr-dialog-previewbox" style="color:black;font-size:13px;font-family:arial,sans-serif;padding-bottom:.7em;line-height:normal;margin:0 auto;width:303px;word-wrap:break-word"></div></div></div>'
         },
         'tweet-mode': {
@@ -693,6 +712,10 @@ THE SOFTWARE.
                 htmlcode += '<!-- end of tweet -->\n';
 
                 return htmlcode;
+            },
+            'uses_option': {
+                'preview': true,
+                'showtco': true
             },
             'preview_box': '<div class="trtr-dialog-previewbox"></div>'
         }
