@@ -49,7 +49,7 @@ THE SOFTWARE.
             'action_reply': 'Reply',
             'action_retweet': 'Retweet',
             'format_source': 'via %s',
-            'format_date': function (dt) {
+            'get_format_date': function (dt) {
                 return ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'][dt.getMonth()] + ' ' + ('0' + dt.getDate().toString()).slice(-2) + ', ' + dt.getFullYear().toString() + ' ' + (dt.getHours() % 12 || 12).toString() + ':' + ('0' + dt.getMinutes().toString()).slice(-2) + ' ' + ((dt.getHours() < 12) ? 'am' : 'pm');
             }
         },
@@ -68,7 +68,7 @@ THE SOFTWARE.
             'action_reply': '返信',
             'action_retweet': 'リツイート',
             'format_source': '%sから',
-            'format_date': function (dt) {
+            'get_format_date': function (dt) {
                 return dt.getFullYear().toString() + '年' + (dt.getMonth() + 1).toString() + '月' + dt.getDate().toString() + '日 ' + dt.getHours().toString() + ':' + ('0' + dt.getMinutes().toString()).slice(-2);
             }
         }
@@ -446,7 +446,7 @@ THE SOFTWARE.
         dt_tweeted = new Date();
         dt_delta = dt_tweeted.getTimezoneOffset() * 60 * 1000;
         dt_tweeted.setTime(parsed_dt - dt_delta);
-        return mes('format_date')(dt_tweeted);
+        return mes('get_format_date')(dt_tweeted);
     };
 
 
