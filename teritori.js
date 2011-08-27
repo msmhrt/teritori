@@ -249,7 +249,6 @@ THE SOFTWARE.
             trtr_preview_checkbox.attr('checked', '');
         }
 
-
         if (trtr.templates[trtr.option.mode].uses_option.preview) {
             trtr_preview_checkbox.click(function () {
                 trtr.option.preview = $(this).is(':checked') ? true : false;
