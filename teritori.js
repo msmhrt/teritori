@@ -926,7 +926,7 @@ THE SOFTWARE.
         } else {
             jsonp = document.createElement('script');
             jsonp.type = 'text/javascript';
-            jsonp.src = 'http://api.twitter.com/1/statuses/show.json?include_entities=true&contributor_details=true&callback=teritori.display_htmlcode&id=' + id;
+            jsonp.src = 'https://api.twitter.com/1/statuses/show.json?include_entities=true&contributor_details=true&callback=teritori.display_htmlcode&id=' + id;
             document.getElementsByTagName('head')[0].appendChild(jsonp);
         }
     };
