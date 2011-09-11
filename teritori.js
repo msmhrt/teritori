@@ -556,6 +556,26 @@ THE SOFTWARE.
         'get_provider_signature_middle': trtr.get_media_provider_signature_middle,
         'get_provider_signature_large': trtr.get_media_provider_signature_large
     }, {
+        'provider_name': '携帯百景',
+        'provider_url': 'http://movapic.com/',
+        'provider_icon_url': 'http://movapic.com/favicon.ico',
+        'regexp_media_url': /^http:\/\/movapic\.com\/pic\/([0-9a-zA-Z]+)$/,
+        'get_middle_thumbnail_url': function (url) {
+            return 'http://image.movapic.com/pic/s_' + url.match(this.regexp_media_url)[1] + '.jpeg';
+        },
+        'get_large_thumbnail_url': function (url) {
+            return 'http://image.movapic.com/pic/m_' + url.match(this.regexp_media_url)[1] + '.jpeg';
+        },
+        'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
+        'get_htmlcode_large': trtr.get_media_htmlcode_large,
+        'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
+        'get_provider_signature_middle': function () {
+            return '<a href="' + this.provider_url + '"><span style="color:#999">' + this.provider_name + '</span></a>';
+        },
+        'get_provider_signature_large': function () {
+            return '<a href="' + this.provider_url + '"><span style="color:#999">' + this.provider_name + '</span></a>';
+        }
+    }, {
         'provider_name': 'ニコニコ静画',
         'provider_url': 'http://seiga.nicovideo.jp/',
         'provider_icon_url': 'http://seiga.nicovideo.jp/favicon.ico',
