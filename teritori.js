@@ -537,7 +537,7 @@ THE SOFTWARE.
             return 'http://twitpic.com/show/thumb/' + url.match(this.regexp_media_url)[1];
         },
         'get_large_thumbnail_url': function (url) {
-            return 'http://twitpic.com/show/thumb/' + url.match(this.regexp_media_url)[1];
+            return 'http://twitpic.com/show/large/' + url.match(this.regexp_media_url)[1];
         }
     }, {
         'provider_name': 'Instagram',
