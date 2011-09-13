@@ -540,6 +540,28 @@ THE SOFTWARE.
             return 'http://twitpic.com/show/thumb/' + url.match(this.regexp_media_url)[1];
         }
     }, {
+        'provider_name': 'Instagram',
+        'provider_url': 'http://instagr.am/',
+        'provider_icon_url': 'http://instagr.am/favicon.ico',
+        'regexp_media_url': /^https?:\/\/instagr(?:\.am|am\.com)\/p\/([0-9a-zA-Z]+)\/$/,
+        'get_middle_thumbnail_url': function (url) {
+            return 'http://instagr.am/p/' + url.match(this.regexp_media_url)[1] + '/media?size=t';
+        },
+        'get_large_thumbnail_url': function (url) {
+            return 'http://instagr.am/p/' + url.match(this.regexp_media_url)[1] + '/media';
+        }
+    }, {
+        'provider_name': 'Mobypicture',
+        'provider_url': 'http://www.mobypicture.com/',
+        'provider_icon_url': null,
+        'regexp_media_url': /^http:\/\/moby\.to\/([a-z0-9]+)$/,
+        'get_middle_thumbnail_url': function (url) {
+            return 'http://moby.to/' + url.match(this.regexp_media_url)[1] + ':thumb';
+        },
+        'get_large_thumbnail_url': function (url) {
+            return 'http://moby.to/' + url.match(this.regexp_media_url)[1] + ':medium';
+        }
+    }, {
         'provider_name': 'フォト蔵',
         'provider_url': 'http://photozou.jp/',
         'provider_icon_url': 'http://photozou.jp/favicon.ico',
