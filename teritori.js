@@ -517,12 +517,7 @@ THE SOFTWARE.
         },
         'get_large_thumbnail_url': function (url) {
             return 'http://yfrog.com/' + url.match(this.regexp_media_url)[1] + ':iphone';
-        },
-        'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
-        'get_htmlcode_large': trtr.get_media_htmlcode_large,
-        'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
-        'get_attribution_middle': trtr.get_media_attribution_middle,
-        'get_attribution_large': trtr.get_media_attribution_large
+        }
     }, {
         'provider_name': 'TwitPic',
         'provider_url': 'http://twitpic.com/',
@@ -533,12 +528,7 @@ THE SOFTWARE.
         },
         'get_large_thumbnail_url': function (url) {
             return 'http://twitpic.com/show/thumb/' + url.match(this.regexp_media_url)[1];
-        },
-        'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
-        'get_htmlcode_large': trtr.get_media_htmlcode_large,
-        'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
-        'get_attribution_middle': trtr.get_media_attribution_middle,
-        'get_attribution_large': trtr.get_media_attribution_large
+        }
     }, {
         'provider_name': 'フォト蔵',
         'provider_url': 'http://photozou.jp/',
@@ -549,12 +539,7 @@ THE SOFTWARE.
         },
         'get_large_thumbnail_url': function (url) {
             return 'http://photozou.jp/p/img/' + url.match(this.regexp_media_url)[1];
-        },
-        'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
-        'get_htmlcode_large': trtr.get_media_htmlcode_large,
-        'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
-        'get_attribution_middle': trtr.get_media_attribution_middle,
-        'get_attribution_large': trtr.get_media_attribution_large
+        }
     }, {
         'provider_name': '携帯百景',
         'provider_url': 'http://movapic.com/',
@@ -566,9 +551,6 @@ THE SOFTWARE.
         'get_large_thumbnail_url': function (url) {
             return 'http://image.movapic.com/pic/m_' + url.match(this.regexp_media_url)[1] + '.jpeg';
         },
-        'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
-        'get_htmlcode_large': trtr.get_media_htmlcode_large,
-        'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
         'get_attribution_middle': function () {
             return '<a href="' + this.provider_url + '"><span style="color:#999">' + this.provider_name + '</span></a>';
         },
@@ -588,12 +570,28 @@ THE SOFTWARE.
         },
         'get_htmlcode_middle': function (url) {
             return '<div style="margin:5px 0 5px 0;font-size:12px"><iframe width="312" height="176" src="http://ext.seiga.nicovideo.jp/thumb/im' + url.match(this.regexp_media_url)[1] + '" scrolling="no" style="border:solid 1px #888;" frameborder="0"></iframe><br><img src="' + this.provider_icon_url + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"><span style="color:#999">' + this.provider_name + '</span></div>';
-        },
-        'get_htmlcode_large': trtr.get_media_htmlcode_large,
-        'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
-        'get_attribution_middle': trtr.get_media_attribution_middle,
-        'get_attribution_large': trtr.get_media_attribution_large
+        }
     }];
+
+    trtr.set_media_property = function (media) {
+        var key, property_default;
+
+        property_default = {
+            'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
+            'get_htmlcode_large': trtr.get_media_htmlcode_large,
+            'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
+            'get_attribution_middle': trtr.get_media_attribution_middle,
+            'get_attribution_large': trtr.get_media_attribution_large
+        };
+
+        for (key in property_default) {
+            if (property_default.hasOwnProperty(key)) {
+                if (media[key] === undefined) {
+                    media[key] = property_default[key];
+                }
+            }
+        }
+    };
 
     trtr.get_media_htmlcode = function (tweet_entities, media_mode) {
         var i, j, urls_entities, media_htmlcode, url, match;
@@ -615,6 +613,7 @@ THE SOFTWARE.
                 for (j = 0; j < trtr.media.length; j += 1) {
                     match = url.match(trtr.media[j].regexp_media_url);
                     if (match) {
+                        trtr.set_media_property(trtr.media[j]);
                         media_htmlcode += trtr.media[j]['get_htmlcode_' + media_mode](url);
                     }
                 }
