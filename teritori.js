@@ -492,18 +492,18 @@ THE SOFTWARE.
     };
 
     trtr.get_media_htmlcode_middle = function (url) {
-        return '<div style="margin:.75em 0 .75em 0;font-size:12px"><a href="' + url + '"><img src="' + this.get_middle_thumbnail_url(url) + '" style="max-height:244px;max-width:244px"></a><br>' + this.get_provider_signature_middle() + '</div>';
+        return '<div style="margin:.75em 0 .75em 0;font-size:12px"><a href="' + url + '"><img src="' + this.get_middle_thumbnail_url(url) + '" style="max-height:244px;max-width:244px"></a><br>' + this.get_attribution_middle() + '</div>';
     };
 
     trtr.get_media_htmlcode_large = function (url) {
-        return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><a href="' + url + '"><img src="' + this.get_large_thumbnail_url(url) + '" style="max-height:700px;max-width:317px"></a><br>' + this.get_provider_signature_large() + '</div>';
+        return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><a href="' + url + '"><img src="' + this.get_large_thumbnail_url(url) + '" style="max-height:700px;max-width:317px"></a><br>' + this.get_attribution_large() + '</div>';
     };
 
-    trtr.get_media_provider_signature_middle = function () {
+    trtr.get_media_attribution_middle = function () {
         return '<a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span>';
     };
 
-    trtr.get_media_provider_signature_large = function () {
+    trtr.get_media_attribution_large = function () {
         return '<a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="16" height="16" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span>';
     };
 
@@ -521,8 +521,8 @@ THE SOFTWARE.
         'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
         'get_htmlcode_large': trtr.get_media_htmlcode_large,
         'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
-        'get_provider_signature_middle': trtr.get_media_provider_signature_middle,
-        'get_provider_signature_large': trtr.get_media_provider_signature_large
+        'get_attribution_middle': trtr.get_media_attribution_middle,
+        'get_attribution_large': trtr.get_media_attribution_large
     }, {
         'provider_name': 'TwitPic',
         'provider_url': 'http://twitpic.com/',
@@ -537,8 +537,8 @@ THE SOFTWARE.
         'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
         'get_htmlcode_large': trtr.get_media_htmlcode_large,
         'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
-        'get_provider_signature_middle': trtr.get_media_provider_signature_middle,
-        'get_provider_signature_large': trtr.get_media_provider_signature_large
+        'get_attribution_middle': trtr.get_media_attribution_middle,
+        'get_attribution_large': trtr.get_media_attribution_large
     }, {
         'provider_name': 'フォト蔵',
         'provider_url': 'http://photozou.jp/',
@@ -553,8 +553,8 @@ THE SOFTWARE.
         'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
         'get_htmlcode_large': trtr.get_media_htmlcode_large,
         'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
-        'get_provider_signature_middle': trtr.get_media_provider_signature_middle,
-        'get_provider_signature_large': trtr.get_media_provider_signature_large
+        'get_attribution_middle': trtr.get_media_attribution_middle,
+        'get_attribution_large': trtr.get_media_attribution_large
     }, {
         'provider_name': '携帯百景',
         'provider_url': 'http://movapic.com/',
@@ -569,10 +569,10 @@ THE SOFTWARE.
         'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
         'get_htmlcode_large': trtr.get_media_htmlcode_large,
         'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
-        'get_provider_signature_middle': function () {
+        'get_attribution_middle': function () {
             return '<a href="' + this.provider_url + '"><span style="color:#999">' + this.provider_name + '</span></a>';
         },
-        'get_provider_signature_large': function () {
+        'get_attribution_large': function () {
             return '<a href="' + this.provider_url + '"><span style="color:#999">' + this.provider_name + '</span></a>';
         }
     }, {
@@ -591,8 +591,8 @@ THE SOFTWARE.
         },
         'get_htmlcode_large': trtr.get_media_htmlcode_large,
         'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
-        'get_provider_signature_middle': trtr.get_media_provider_signature_middle,
-        'get_provider_signature_large': trtr.get_media_provider_signature_large
+        'get_attribution_middle': trtr.get_media_attribution_middle,
+        'get_attribution_large': trtr.get_media_attribution_large
     }];
 
     trtr.get_media_htmlcode = function (tweet_entities, media_mode) {
