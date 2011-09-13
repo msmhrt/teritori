@@ -499,11 +499,21 @@ THE SOFTWARE.
         return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><a href="' + url + '"><img src="' + this.get_large_thumbnail_url(url) + '" style="max-height:700px;max-width:317px"></a><br>' + this.get_attribution_large() + '</div>';
     };
 
+    trtr.get_media_attribution_textonly = function () {
+        return '<a href="' + this.provider_url + '"><span style="color:#999">' + this.provider_name + '</span></a>';
+    };
+
     trtr.get_media_attribution_middle = function () {
+        if (this.provider_icon_url === null) {
+            return this.get_attribution_textonly();
+        }
         return '<a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span>';
     };
 
     trtr.get_media_attribution_large = function () {
+        if (this.provider_icon_url === null) {
+            return this.get_attribution_textonly();
+        }
         return '<a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="16" height="16" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span>';
     };
 
@@ -543,19 +553,13 @@ THE SOFTWARE.
     }, {
         'provider_name': '携帯百景',
         'provider_url': 'http://movapic.com/',
-        'provider_icon_url': 'http://movapic.com/favicon.ico',
+        'provider_icon_url': null,
         'regexp_media_url': /^http:\/\/movapic\.com\/pic\/([0-9a-zA-Z]+)$/,
         'get_middle_thumbnail_url': function (url) {
             return 'http://image.movapic.com/pic/s_' + url.match(this.regexp_media_url)[1] + '.jpeg';
         },
         'get_large_thumbnail_url': function (url) {
             return 'http://image.movapic.com/pic/m_' + url.match(this.regexp_media_url)[1] + '.jpeg';
-        },
-        'get_attribution_middle': function () {
-            return '<a href="' + this.provider_url + '"><span style="color:#999">' + this.provider_name + '</span></a>';
-        },
-        'get_attribution_large': function () {
-            return '<a href="' + this.provider_url + '"><span style="color:#999">' + this.provider_name + '</span></a>';
         }
     }, {
         'provider_name': 'ニコニコ静画',
@@ -581,7 +585,8 @@ THE SOFTWARE.
             'get_htmlcode_large': trtr.get_media_htmlcode_large,
             'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
             'get_attribution_middle': trtr.get_media_attribution_middle,
-            'get_attribution_large': trtr.get_media_attribution_large
+            'get_attribution_large': trtr.get_media_attribution_large,
+            'get_attribution_textonly': trtr.get_media_attribution_textonly
         };
 
         for (key in property_default) {
