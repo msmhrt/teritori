@@ -348,8 +348,11 @@ THE SOFTWARE.
         trtr.dialog_loaded = true;
     };
 
-    trtr.apply_entities = function (text, entities, entity_callback) {
-        var i, j, key, index, start, end, linked_text, entity_list, entity;
+    trtr.apply_entities = function (t, entity_callback) {
+        var i, j, text, entities, key, index, start, end, linked_text, entity_list, entity;
+
+        text = t.text;
+        entities = t.entities;
 
         entity_list = [];
         for (key in entities) {
@@ -761,7 +764,7 @@ THE SOFTWARE.
                 };
 
                 if (trtr.option.link === 'entity') {
-                    content = trtr.apply_entities(t.text, t.entities, entity_callback);
+                    content = trtr.apply_entities(t, entity_callback);
                 } else if (trtr.option.link === 'auto') {
                     content = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
                 } else {
@@ -777,7 +780,7 @@ THE SOFTWARE.
                             link_entity = content;
                             link_auto = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
                         } else if (trtr.option.link === 'auto') {
-                            link_entity = trtr.apply_entities(t.text, t.entities, entity_callback);
+                            link_entity = trtr.apply_entities(t, entity_callback);
                             link_auto = content;
                         }
 
@@ -865,7 +868,7 @@ THE SOFTWARE.
                 };
 
                 if (trtr.option.link === 'entity') {
-                    content = trtr.apply_entities(t.text, t.entities, entity_callback);
+                    content = trtr.apply_entities(t, entity_callback);
                 } else if (trtr.option.link === 'auto') {
                     content = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
                 } else {
@@ -881,7 +884,7 @@ THE SOFTWARE.
                             link_entity = content;
                             link_auto = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
                         } else if (trtr.option.link === 'auto') {
-                            link_entity = trtr.apply_entities(t.text, t.entities, entity_callback);
+                            link_entity = trtr.apply_entities(t, entity_callback);
                             link_auto = content;
                         }
 
