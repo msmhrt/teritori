@@ -494,32 +494,6 @@ THE SOFTWARE.
         return mes('get_format_date')(dt_tweeted);
     };
 
-    trtr.get_media_htmlcode_middle = function (url) {
-        return '<div style="margin:.75em 0 .75em 0;font-size:12px"><a href="' + url + '"><img src="' + this.get_middle_thumbnail_url(url) + '" style="max-height:244px;max-width:244px"></a><br>' + this.get_attribution_middle() + '</div>';
-    };
-
-    trtr.get_media_htmlcode_large = function (url) {
-        return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><a href="' + url + '"><img src="' + this.get_large_thumbnail_url(url) + '" style="max-height:700px;max-width:317px"></a><br>' + this.get_attribution_large() + '</div>';
-    };
-
-    trtr.get_media_attribution_textonly = function () {
-        return '<a href="' + this.provider_url + '"><span style="color:#999">' + this.provider_name + '</span></a>';
-    };
-
-    trtr.get_media_attribution_middle = function () {
-        if (this.provider_icon_url === null) {
-            return this.get_attribution_textonly();
-        }
-        return '<a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span>';
-    };
-
-    trtr.get_media_attribution_large = function () {
-        if (this.provider_icon_url === null) {
-            return this.get_attribution_textonly();
-        }
-        return '<a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="16" height="16" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span>';
-    };
-
     trtr.media = [{
         'provider_name': 'YFrog',
         'provider_url': 'http://yfrog.com/',
@@ -602,16 +576,40 @@ THE SOFTWARE.
         }
     }];
 
+    trtr.media_methods = {
+        'get_htmlcode_middle': function (url) {
+            return '<div style="margin:.75em 0 .75em 0;font-size:12px"><a href="' + url + '"><img src="' + this.get_middle_thumbnail_url(url) + '" style="max-height:244px;max-width:244px"></a><br>' + this.get_attribution_middle() + '</div>';
+        },
+        'get_htmlcode_large': function (url) {
+            return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><a href="' + url + '"><img src="' + this.get_large_thumbnail_url(url) + '" style="max-height:700px;max-width:317px"></a><br>' + this.get_attribution_large() + '</div>';
+        },
+        'get_attribution_middle': function () {
+            if (this.provider_icon_url === null) {
+                return this.get_attribution_textonly();
+            }
+            return '<a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span>';
+        },
+        'get_attribution_large': function () {
+            if (this.provider_icon_url === null) {
+                return this.get_attribution_textonly();
+            }
+            return '<a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="16" height="16" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span>';
+        },
+        'get_attribution_textonly': function () {
+            return '<a href="' + this.provider_url + '"><span style="color:#999">' + this.provider_name + '</span></a>';
+        }
+    };
+
     trtr.set_media_property = function (media) {
         var key, property_default;
 
         property_default = {
-            'get_htmlcode_middle': trtr.get_media_htmlcode_middle,
-            'get_htmlcode_large': trtr.get_media_htmlcode_large,
-            'get_htmlcode_kml': trtr.get_media_htmlcode_middle,
-            'get_attribution_middle': trtr.get_media_attribution_middle,
-            'get_attribution_large': trtr.get_media_attribution_large,
-            'get_attribution_textonly': trtr.get_media_attribution_textonly
+            'get_htmlcode_middle': trtr.media_methods.get_htmlcode_middle,
+            'get_htmlcode_large': trtr.media_methods.get_htmlcode_large,
+            'get_htmlcode_kml': trtr.media_methods.get_htmlcode_middle,
+            'get_attribution_middle': trtr.media_methods.get_attribution_middle,
+            'get_attribution_large': trtr.media_methods.get_attribution_large,
+            'get_attribution_textonly': trtr.media_methods.get_attribution_textonly
         };
 
         for (key in property_default) {
