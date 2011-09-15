@@ -600,10 +600,10 @@ THE SOFTWARE.
         }
     };
 
-    trtr.set_media_property = function (media) {
-        var key, property_default;
+    trtr.set_media_default_methods = function (media) {
+        var key, default_methods;
 
-        property_default = {
+        default_methods = {
             'get_htmlcode_middle': trtr.media_methods.get_htmlcode_middle,
             'get_htmlcode_large': trtr.media_methods.get_htmlcode_large,
             'get_htmlcode_kml': trtr.media_methods.get_htmlcode_middle,
@@ -612,10 +612,10 @@ THE SOFTWARE.
             'get_attribution_textonly': trtr.media_methods.get_attribution_textonly
         };
 
-        for (key in property_default) {
-            if (property_default.hasOwnProperty(key)) {
+        for (key in default_methods) {
+            if (default_methods.hasOwnProperty(key)) {
                 if (media[key] === undefined) {
-                    media[key] = property_default[key];
+                    media[key] = default_methods[key];
                 }
             }
         }
@@ -644,7 +644,7 @@ THE SOFTWARE.
                     match = url.match(trtr.media[j].regexp_media_url);
                     if (match) {
                         has_media = true;
-                        trtr.set_media_property(trtr.media[j]);
+                        trtr.set_media_default_methods(trtr.media[j]);
                         t.media_htmlcode += trtr.media[j]['get_htmlcode_' + media_mode](url);
                     }
                 }
