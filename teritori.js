@@ -621,37 +621,32 @@ THE SOFTWARE.
         }
     };
 
-    trtr.set_media_htmlcode = function (t, media_mode) {
-        var i, j, urls_entities, url, match, has_media;
+    trtr.add_media_htmlcode = function (t, entity, media_mode) {
+        var j, url, match;
 
-        has_media = false;
-        t.media_htmlcode = '';
+        console.info('teritori: entity = ', entity);
 
-        if (!t.entities.hasOwnProperty('urls')) {
-            return has_media;
+        if (entity.expanded_url !== null) {
+            url = entity.expanded_url;
+        } else if (entity.url !== null) {
+            url = entity.url;
+        } else {
+            return;
         }
 
-        urls_entities = t.entities.urls;
-        for (i = 0; i < urls_entities.length; i += 1) {
-            url = urls_entities[i].expanded_url;
+        for (j = 0; j < trtr.media.length; j += 1) {
+            match = url.match(trtr.media[j].regexp_media_url);
+            if (match) {
+                trtr.set_media_default_methods(trtr.media[j]);
+                t.media_htmlcode += trtr.media[j]['get_htmlcode_' + media_mode](url);
 
-            if (url === null) {
-                url = urls_entities[i].url;
-            }
-
-            if (url) {
-                for (j = 0; j < trtr.media.length; j += 1) {
-                    match = url.match(trtr.media[j].regexp_media_url);
-                    if (match) {
-                        has_media = true;
-                        trtr.set_media_default_methods(trtr.media[j]);
-                        t.media_htmlcode += trtr.media[j]['get_htmlcode_' + media_mode](url);
-                    }
+                if (t.media_htmlcode.length > 0) {
+                    t.needs_option.media = true;
                 }
+
+                break;
             }
         }
-
-        return has_media;
     };
 
     trtr.templates = {
@@ -716,6 +711,8 @@ THE SOFTWARE.
                     'urls': function (entity) {
                         var linktext;
 
+                        trtr.add_media_htmlcode(t, entity, 'kml');
+
                         linktext = entity.url;
                         if (entity.hasOwnProperty('display_url')) {
                             t.needs_option.showtco = true;
@@ -731,6 +728,8 @@ THE SOFTWARE.
                     },
                     'media': function (entity) {
                         var linktext;
+
+                        trtr.add_media_htmlcode(t, entity, 'kml');
 
                         linktext = entity.url;
                         if (entity.hasOwnProperty('display_url')) {
@@ -807,7 +806,6 @@ THE SOFTWARE.
 
                 htmlcode = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + t.text_color + ';font-size:16px"><div>' + content;
 
-                t.needs_option.media = trtr.set_media_htmlcode(t, 'kml');
                 if (trtr.option.media) {
                     htmlcode += t.media_htmlcode;
                 }
@@ -835,6 +833,8 @@ THE SOFTWARE.
                     'urls': function (entity) {
                         var linktext;
 
+                        trtr.add_media_htmlcode(t, entity, 'large');
+
                         linktext = entity.url;
                         if (entity.hasOwnProperty('display_url')) {
                             t.needs_option.showtco = true;
@@ -850,6 +850,8 @@ THE SOFTWARE.
                     },
                     'media': function (entity) {
                         var linktext;
+
+                        trtr.add_media_htmlcode(t, entity, 'large');
 
                         linktext = entity.url;
                         if (entity.hasOwnProperty('display_url')) {
@@ -920,7 +922,6 @@ THE SOFTWARE.
                 htmlcode += '<style type="text/css">.trtr_tweetid_' + t.tweet_id + ' a {text-decoration:none;color:#' + t.link_color + ' !important} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link span.trtr_link_symbol {opacity:0.5} .trtr_tweetid_' + t.tweet_id + ' a:hover {text-decoration:underline} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link:hover {text-decoration:none} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link:hover span.trtr_link_text {text-decoration:underline} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action span em {background:transparent url(http://si0.twimg.com/images/dev/cms/intents/icons/sprites/everything-spritev2.png) no-repeat;margin:0 3px -3.5px 3px;display:inline-block;vertical-align:baseline;position:relative;outline:none;width:15px;height:15px;} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_reply span em {background-position 0 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_reply:hover span em {background-position:-16px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_retweet span em {background-position:-80px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_retweet:hover span em {background-position:-96px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_favorite span em {background-position:-32px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_favorite:hover span em {background-position:-48px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_follow span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_blue/bird_16_blue.png)} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_follow:hover span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_black/bird_16_black.png)}</style>';
                 htmlcode += '<div class="trtr_tweetid_' + t.tweet_id + '" style="background:' + background + ';padding:20px"><div style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + t.text_color + ';font-size:16px !important;line-height:22px;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;word-wrap:break-word">' + content;
 
-                t.needs_option.media = trtr.set_media_htmlcode(t, 'large');
                 if (trtr.option.media) {
                     htmlcode += t.media_htmlcode;
                 }
@@ -974,6 +975,8 @@ THE SOFTWARE.
             'preview': true,
             'showtco': false
         };
+
+        t.media_htmlcode = '';
 
         if (trtr.templates.hasOwnProperty(trtr.option.mode)) {
             trtr.templates[trtr.option.mode].set_htmlcode(t);
