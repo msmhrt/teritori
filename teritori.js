@@ -389,7 +389,7 @@ THE SOFTWARE.
             }
 
             linked_text += text.substring(index, start);
-            linked_text += entity_callback[entity[0]](entity[1], text.substring(start, end));
+            linked_text += entity_callback[entity[0]](entity, text.substring(start, end));
             index = end;
 
         }
@@ -622,14 +622,15 @@ THE SOFTWARE.
     };
 
     trtr.add_media_htmlcode = function (t, entity, media_mode) {
-        var j, url, match;
+        var e, j, url, match;
 
         console.info('teritori: entity = ', entity);
 
-        if (entity.expanded_url !== null) {
-            url = entity.expanded_url;
-        } else if (entity.url !== null) {
-            url = entity.url;
+        e = entity[1];
+        if (e.expanded_url !== null) {
+            url = e.expanded_url;
+        } else if (e.url !== null) {
+            url = e.url;
         } else {
             return;
         }
@@ -706,40 +707,49 @@ THE SOFTWARE.
 
                 entity_callback = {
                     'hashtags': function (entity) {
-                        return '<span style="color:#' + t.symbol_color + '">#</span><a href="http://search.twitter.com/search?q=%23' + encodeURIComponent(entity.text) + '" style="color:#' + t.link_color + '">' + entity.text + '</a>';
+                        var e;
+
+                        e = entity[1];
+                        return '<span style="color:#' + t.symbol_color + '">#</span><a href="http://search.twitter.com/search?q=%23' + encodeURIComponent(e.text) + '" style="color:#' + t.link_color + '">' + e.text + '</a>';
                     },
                     'urls': function (entity) {
-                        var linktext;
+                        var e, linktext;
 
                         trtr.add_media_htmlcode(t, entity, 'kml');
 
-                        linktext = entity.url;
-                        if (entity.hasOwnProperty('display_url')) {
+                        e = entity[1];
+                        linktext = e.url;
+                        if (e.hasOwnProperty('display_url')) {
                             t.needs_option.showtco = true;
                             if (!trtr.option.showtco) {
-                                linktext = entity.display_url;
+                                linktext = e.display_url;
                             }
                         }
 
-                        return '<a href="' + entity.url + '" style="color:#' + t.link_color + '">' + linktext + '</a>';
+                        return '<a href="' + e.url + '" style="color:#' + t.link_color + '">' + linktext + '</a>';
                     },
                     'user_mentions': function (entity, string) {
-                        return '<span style="color:#' + t.symbol_color + '">@</span><a href="http://twitter.com/' + entity.screen_name + '" style="color:#' + t.link_color + '">' + string.substring(1) + '</a>';
+                        var e;
+
+
+                        e = entity[1];
+                        return '<span style="color:#' + t.symbol_color + '">@</span><a href="http://twitter.com/' + e.screen_name + '" style="color:#' + t.link_color + '">' + string.substring(1) + '</a>';
                     },
                     'media': function (entity) {
-                        var linktext;
+                        var e, linktext;
 
                         trtr.add_media_htmlcode(t, entity, 'kml');
 
-                        linktext = entity.url;
-                        if (entity.hasOwnProperty('display_url')) {
+                        e = entity[1];
+                        linktext = e.url;
+                        if (e.hasOwnProperty('display_url')) {
                             t.needs_option.showtco = true;
                             if (!trtr.option.showtco) {
-                                linktext = entity.display_url;
+                                linktext = e.display_url;
                             }
                         }
 
-                        return '<a href="' + entity.url + '" style="color:#' + t.link_color + '">' + linktext + '</a>';
+                        return '<a href="' + e.url + '" style="color:#' + t.link_color + '">' + linktext + '</a>';
                     }
                 };
 
@@ -828,40 +838,48 @@ THE SOFTWARE.
 
                 entity_callback = {
                     'hashtags': function (entity) {
-                        return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + encodeURIComponent(entity.text) + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + entity.text + '</span></a>';
+                        var e;
+
+                        e = entity[1];
+                        return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + encodeURIComponent(e.text) + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + e.text + '</span></a>';
                     },
                     'urls': function (entity) {
-                        var linktext;
+                        var e, linktext;
 
                         trtr.add_media_htmlcode(t, entity, 'large');
 
-                        linktext = entity.url;
-                        if (entity.hasOwnProperty('display_url')) {
+                        e = entity[1];
+                        linktext = e.url;
+                        if (e.hasOwnProperty('display_url')) {
                             t.needs_option.showtco = true;
                             if (!trtr.option.showtco) {
-                                linktext = entity.display_url;
+                                linktext = e.display_url;
                             }
                         }
 
-                        return '<a href="' + entity.url + '" target="_new"><span class="trtr_link_text">' + linktext + '</span></a>';
+                        return '<a href="' + e.url + '" target="_new"><span class="trtr_link_text">' + linktext + '</span></a>';
                     },
                     'user_mentions': function (entity, string) {
-                        return '<a class="trtr_link" href="http://twitter.com/' + entity.screen_name + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + string.substring(1) + '</span></a>';
+                        var e;
+
+                        e = entity[1];
+                        return '<a class="trtr_link" href="http://twitter.com/' + e.screen_name + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + string.substring(1) + '</span></a>';
                     },
                     'media': function (entity) {
-                        var linktext;
+                        var e, linktext;
 
                         trtr.add_media_htmlcode(t, entity, 'large');
 
-                        linktext = entity.url;
-                        if (entity.hasOwnProperty('display_url')) {
+                        e = entity[1];
+                        linktext = e.url;
+                        if (e.hasOwnProperty('display_url')) {
                             t.needs_option.showtco = true;
                             if (!trtr.option.showtco) {
-                                linktext = entity.display_url;
+                                linktext = e.display_url;
                             }
                         }
 
-                        return '<a href="' + entity.url + '" target="_new"><span class="trtr_link_text">' + linktext + '</span></a>';
+                        return '<a href="' + e.url + '" target="_new"><span class="trtr_link_text">' + linktext + '</span></a>';
                     }
                 };
 
