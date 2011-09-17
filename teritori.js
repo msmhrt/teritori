@@ -495,6 +495,25 @@ THE SOFTWARE.
     };
 
     trtr.media = [{
+        'provider_name': 'Photobucket',
+        'provider_url': 'http://photobucket.com/twitter',
+        'provider_icon_url': 'http://twitter.com/phoenix/img/turkey-icon.png',
+        'regexp_media_url': /^http:\/\/twitter\.com\/[a-zA-Z0-9_]{1,15}\/status\/[1-9][0-9]*\/photo\/[1-9][0-9]*$/,
+        'get_middle_thumbnail_url': function (url, entity) { //
+            if (!url || !entity || (entity[0] !== 'media')) {
+                return '';
+            }
+
+            return entity[1].media_url + ':thumb';
+        },
+        'get_large_thumbnail_url': function (url, entity) { //
+            if (!url || !entity || (entity[0] !== 'media')) {
+                return '';
+            }
+
+            return entity[1].media_url;
+        }
+    }, {
         'provider_name': 'YFrog',
         'provider_url': 'http://yfrog.com/',
         'provider_icon_url': 'http://yfrog.com/favicon.ico',
@@ -577,11 +596,23 @@ THE SOFTWARE.
     }];
 
     trtr.media_methods = {
-        'get_htmlcode_middle': function (url) {
-            return '<div style="margin:.75em 0 .75em 0;font-size:12px"><a href="' + url + '"><img src="' + this.get_middle_thumbnail_url(url) + '" style="max-height:244px;max-width:244px"></a><br>' + this.get_attribution_middle() + '</div>';
+        'get_htmlcode_middle': function (url, entity) {
+            var thumbnail_url;
+
+            thumbnail_url = this.get_middle_thumbnail_url(url, entity);
+            if ((typeof thumbnail_url !== 'string') || (thumbnail_url === '')) {
+                return '';
+            }
+            return '<div style="margin:.75em 0 .75em 0;font-size:12px"><a href="' + url + '"><img src="' + thumbnail_url + '" style="max-height:244px;max-width:244px"></a><br>' + this.get_attribution_middle() + '</div>';
         },
-        'get_htmlcode_large': function (url) {
-            return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><a href="' + url + '"><img src="' + this.get_large_thumbnail_url(url) + '" style="max-height:700px;max-width:317px"></a><br>' + this.get_attribution_large() + '</div>';
+        'get_htmlcode_large': function (url, entity) {
+            var thumbnail_url;
+
+            thumbnail_url = this.get_large_thumbnail_url(url, entity);
+            if ((typeof thumbnail_url !== 'string') || (thumbnail_url === '')) {
+                return '';
+            }
+            return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><a href="' + url + '"><img src="' + thumbnail_url + '" style="max-height:700px;max-width:317px"></a><br>' + this.get_attribution_large() + '</div>';
         },
         'get_attribution_middle': function () {
             if (this.provider_icon_url === null) {
@@ -639,7 +670,7 @@ THE SOFTWARE.
             match = url.match(trtr.media[j].regexp_media_url);
             if (match) {
                 trtr.set_media_default_methods(trtr.media[j]);
-                t.media_htmlcode += trtr.media[j]['get_htmlcode_' + media_mode](url);
+                t.media_htmlcode += trtr.media[j]['get_htmlcode_' + media_mode](url, entity);
 
                 if (t.media_htmlcode.length > 0) {
                     t.needs_option.media = true;
