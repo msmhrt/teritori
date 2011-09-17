@@ -539,7 +539,7 @@ THE SOFTWARE.
         'provider_name': 'Instagram',
         'provider_url': 'http://instagr.am/',
         'provider_icon_url': 'http://instagr.am/favicon.ico',
-        'regexp_media_url': /^https?:\/\/instagr(?:\.am|am\.com)\/p\/([0-9a-zA-Z]+)\/$/,
+        'regexp_media_url': /^https?:\/\/instagr(?:\.am|am\.com)\/p\/([0-9a-zA-Z_\-]+)\/$/,
         'get_middle_thumbnail_url': function (url) {
             return 'http://instagr.am/p/' + url.match(this.regexp_media_url)[1] + '/media?size=t';
         },
