@@ -49,7 +49,7 @@ THE SOFTWARE.
             'action_follow': 'Follow',
             'action_reply': 'Reply',
             'action_retweet': 'Retweet',
-            'format_source': 'via %s',
+            'format_source_html': 'via %s',
             'get_format_date': function (dt) {
                 return ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'][dt.getMonth()] + ' ' + ('0' + dt.getDate().toString()).slice(-2) + ', ' + dt.getFullYear().toString() + ' ' + (dt.getHours() % 12 || 12).toString() + ':' + ('0' + dt.getMinutes().toString()).slice(-2) + ' ' + ((dt.getHours() < 12) ? 'am' : 'pm');
             }
@@ -69,7 +69,7 @@ THE SOFTWARE.
             'action_follow': 'フォロー',
             'action_reply': '返信',
             'action_retweet': 'リツイート',
-            'format_source': '%sから',
+            'format_source_html': '%sから',
             'get_format_date': function (dt) {
                 return dt.getFullYear().toString() + '年' + (dt.getMonth() + 1).toString() + '月' + dt.getDate().toString() + '日 ' + dt.getHours().toString() + ':' + ('0' + dt.getMinutes().toString()).slice(-2);
             }
@@ -192,7 +192,7 @@ THE SOFTWARE.
             close_dialog();
         }
 
-        dialog_html = '<div class="trtr-dialog" style="text-align:left;position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><div style="margin-bottom:10px"><span style="margin-right:0.5em"><strong>' + mes('option_mode') + '</strong></span><select class="trtr-mode-select-menu"></select><span style="margin-left:1em;margin-right:0.5em"><strong>' + mes('option_lang') + '</strong></span><select class="trtr-lang-select-menu"></select></div><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + t.htmlcode + '</textarea></div><div>';
+        dialog_html = '<div class="trtr-dialog" style="text-align:left;position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><div style="margin-bottom:10px"><span style="margin-right:0.5em"><strong>' + mes('option_mode') + '</strong></span><select class="trtr-mode-select-menu"></select><span style="margin-left:1em;margin-right:0.5em"><strong>' + mes('option_lang') + '</strong></span><select class="trtr-lang-select-menu"></select></div><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + t.tweet_html + '</textarea></div><div>';
         dialog_html += '<input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>' + mes('option_preview') + '</strong>';
         dialog_html += '<input class="trtr-dialog-showtco-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + mes('option_showtco') + '</strong>';
         dialog_html += '<input class="trtr-dialog-media-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + mes('option_media') + '</strong>';
@@ -259,7 +259,7 @@ THE SOFTWARE.
         if (trtr.option.preview) {
             trtr_preview_checkbox.attr('checked', 'checked');
             trtr_dialog.find('.trtr-dialog-previewarea').append(trtr.templates[trtr.option.mode].preview_box);
-            trtr_dialog.find('.trtr-dialog-previewbox').append(t.htmlcode);
+            trtr_dialog.find('.trtr-dialog-previewbox').append(t.tweet_html);
         } else {
             trtr_preview_checkbox.attr('checked', '');
         }
@@ -590,43 +590,43 @@ THE SOFTWARE.
         'get_large_thumbnail_url': function (url) {
             return 'http://lohas.nicoseiga.jp/thumb/' + url.match(this.regexp_media_url)[1] + 'i?';
         },
-        'get_htmlcode_middle': function (url) {
+        'get_html_middle': function (url) {
             return '<div style="margin:5px 0 5px 0;font-size:12px"><iframe width="312" height="176" src="http://ext.seiga.nicovideo.jp/thumb/im' + url.match(this.regexp_media_url)[1] + '" scrolling="no" style="border:solid 1px #888;" frameborder="0"></iframe><br><img src="' + this.provider_icon_url + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"><span style="color:#999">' + this.provider_name + '</span></div>';
         }
     }];
 
     trtr.media_methods = {
-        'get_htmlcode_middle': function (url, entity) {
+        'get_html_middle': function (url, entity) {
             var thumbnail_url;
 
             thumbnail_url = this.get_middle_thumbnail_url(url, entity);
             if ((typeof thumbnail_url !== 'string') || (thumbnail_url === '')) {
                 return '';
             }
-            return '<div style="margin:.75em 0 .75em 0;font-size:12px"><a href="' + url + '"><img src="' + thumbnail_url + '" style="max-height:244px;max-width:244px"></a><br>' + this.get_attribution_middle() + '</div>';
+            return '<div style="margin:.75em 0 .75em 0;font-size:12px"><a href="' + url + '"><img src="' + thumbnail_url + '" style="max-height:244px;max-width:244px"></a><br>' + this.get_attribution_html_middle() + '</div>';
         },
-        'get_htmlcode_large': function (url, entity) {
+        'get_html_large': function (url, entity) {
             var thumbnail_url;
 
             thumbnail_url = this.get_large_thumbnail_url(url, entity);
             if ((typeof thumbnail_url !== 'string') || (thumbnail_url === '')) {
                 return '';
             }
-            return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><a href="' + url + '"><img src="' + thumbnail_url + '" style="max-height:700px;max-width:317px"></a><br>' + this.get_attribution_large() + '</div>';
+            return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><a href="' + url + '"><img src="' + thumbnail_url + '" style="max-height:700px;max-width:317px"></a><br>' + this.get_attribution_html_large() + '</div>';
         },
-        'get_attribution_middle': function () {
+        'get_attribution_html_middle': function () {
             if (this.provider_icon_url === null) {
-                return this.get_attribution_textonly();
+                return this.get_attribution_html_textonly();
             }
             return '<a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span>';
         },
-        'get_attribution_large': function () {
+        'get_attribution_html_large': function () {
             if (this.provider_icon_url === null) {
-                return this.get_attribution_textonly();
+                return this.get_attribution_html_textonly();
             }
             return '<a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="16" height="16" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span>';
         },
-        'get_attribution_textonly': function () {
+        'get_attribution_html_textonly': function () {
             return '<a href="' + this.provider_url + '"><span style="color:#999">' + this.provider_name + '</span></a>';
         }
     };
@@ -635,12 +635,12 @@ THE SOFTWARE.
         var key, default_methods;
 
         default_methods = {
-            'get_htmlcode_middle': trtr.media_methods.get_htmlcode_middle,
-            'get_htmlcode_large': trtr.media_methods.get_htmlcode_large,
-            'get_htmlcode_kml': trtr.media_methods.get_htmlcode_middle,
-            'get_attribution_middle': trtr.media_methods.get_attribution_middle,
-            'get_attribution_large': trtr.media_methods.get_attribution_large,
-            'get_attribution_textonly': trtr.media_methods.get_attribution_textonly
+            'get_html_middle': trtr.media_methods.get_html_middle,
+            'get_html_large': trtr.media_methods.get_html_large,
+            'get_html_kml': trtr.media_methods.get_html_middle,
+            'get_attribution_html_middle': trtr.media_methods.get_attribution_html_middle,
+            'get_attribution_html_large': trtr.media_methods.get_attribution_html_large,
+            'get_attribution_html_textonly': trtr.media_methods.get_attribution_html_textonly
         };
 
         for (key in default_methods) {
@@ -652,7 +652,7 @@ THE SOFTWARE.
         }
     };
 
-    trtr.add_media_htmlcode = function (t, entity, media_mode) {
+    trtr.add_media_html = function (t, entity, media_mode) {
         var e, j, url, match;
 
         console.info('teritori: entity = ', entity);
@@ -670,9 +670,9 @@ THE SOFTWARE.
             match = url.match(trtr.media[j].regexp_media_url);
             if (match) {
                 trtr.set_media_default_methods(trtr.media[j]);
-                t.media_htmlcode += trtr.media[j]['get_htmlcode_' + media_mode](url, entity);
+                t.media_html += trtr.media[j]['get_html_' + media_mode](url, entity);
 
-                if (t.media_htmlcode.length > 0) {
+                if (t.media_html.length > 0) {
                     t.needs_option.media = true;
                 }
 
@@ -684,10 +684,10 @@ THE SOFTWARE.
     trtr.templates = {
         'profile-mode': {
             'description': 'profile_description',
-            'set_htmlcode': function (t) {
-                var to_link, content, user_url_html, htmlcode;
+            'set_tweet_html': function (t) {
+                var to_linked_html, body_html, user_url_html, tweet_html;
 
-                to_link = function () {
+                to_linked_html = function () {
                     var a = arguments,
                         url = '',
                         text = '',
@@ -708,7 +708,7 @@ THE SOFTWARE.
                     return pre_text + '<a href="' + url + '" target="_new">' + text + '</a>';
                 };
 
-                content = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
+                body_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                 t.profile_image_url = t.profile_image_url.replace(/_normal\.([a-zA-Z]+)$/, '_reasonably_small.$1');
 
                 if (t.user_url) {
@@ -717,12 +717,12 @@ THE SOFTWARE.
                     user_url_html = '<div><a target="_blank" rel="me nofollow"></a></div>';
                 }
 
-                htmlcode = '<!-- http://twitter.com/' + t.screen_name + ' -->\n';
-                htmlcode += '<style type="text/css">.trtr_userid_' + t.user_id + ' a {text-decoration:none;color:#' + t.link_color + ' !important;} .trtr_userid_' + t.user_id + ' a:hover {text-decoration:underline;}</style>\n';
-                htmlcode += '<div class="trtr_userid_' + t.user_id + '" style="display:block;-webkit-font-smoothing:antialiased;color:#444;font:13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-sefif"><div style="display:inline-block;padding:20px 20px 16px 20px;width:510px;background-color#fff"><div style="float:left"><a href="http://twitter.com/' + t.screen_name + '" target="_blank"><img src="' + t.profile_image_url + '" alt="' + t.user_name + '"></a></div><div style="margin-left:15px;display:inline-block;width:367px"><div style="font-weight:bold"><h2 style="line-height:36px;font-size:30px;margin:0">' + t.user_name + '</h2></div><div style="font-size:13px;line-height:22px;padding:0"><span style="font-size:18px;font-weight:bold"><a href="http://twitter.com/' + t.screen_name + '" target="_blank">@' + t.screen_name + '</a></span> ' + t.user_location + ' </div><div style="overflow:hidden;text-overflow:ellipsis;color:#777;font-family:Georgia,serif;font-size:14px;font-style:italic;">' + t.user_description + '</div>' + user_url_html + '</div></div></div>\n';
-                htmlcode += '<!-- end of profile -->\n';
+                tweet_html = '<!-- http://twitter.com/' + t.screen_name + ' -->\n';
+                tweet_html += '<style type="text/css">.trtr_userid_' + t.user_id + ' a {text-decoration:none;color:#' + t.link_color + ' !important;} .trtr_userid_' + t.user_id + ' a:hover {text-decoration:underline;}</style>\n';
+                tweet_html += '<div class="trtr_userid_' + t.user_id + '" style="display:block;-webkit-font-smoothing:antialiased;color:#444;font:13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-sefif"><div style="display:inline-block;padding:20px 20px 16px 20px;width:510px;background-color#fff"><div style="float:left"><a href="http://twitter.com/' + t.screen_name + '" target="_blank"><img src="' + t.profile_image_url + '" alt="' + t.user_name + '"></a></div><div style="margin-left:15px;display:inline-block;width:367px"><div style="font-weight:bold"><h2 style="line-height:36px;font-size:30px;margin:0">' + t.user_name + '</h2></div><div style="font-size:13px;line-height:22px;padding:0"><span style="font-size:18px;font-weight:bold"><a href="http://twitter.com/' + t.screen_name + '" target="_blank">@' + t.screen_name + '</a></span> ' + t.user_location + ' </div><div style="overflow:hidden;text-overflow:ellipsis;color:#777;font-family:Georgia,serif;font-size:14px;font-style:italic;">' + t.user_description + '</div>' + user_url_html + '</div></div></div>\n';
+                tweet_html += '<!-- end of profile -->\n';
 
-                t.htmlcode = htmlcode;
+                t.tweet_html = tweet_html;
             },
             'uses_option': {
                 'media': false,
@@ -733,8 +733,8 @@ THE SOFTWARE.
         },
         'tweet4kml-mode': {
             'description': 'tweet4kml_description',
-            'set_htmlcode': function (t) {
-                var link_style, to_link, content, entity_callback, source, htmlcode;
+            'set_tweet_html': function (t) {
+                var link_style_html, to_linked_html, body_html, entity_callback, source_html, tweet_html;
 
                 entity_callback = {
                     'hashtags': function (entity) {
@@ -746,7 +746,7 @@ THE SOFTWARE.
                     'urls': function (entity) {
                         var e, linktext;
 
-                        trtr.add_media_htmlcode(t, entity, 'kml');
+                        trtr.add_media_html(t, entity, 'kml');
 
                         e = entity[1];
                         linktext = e.url;
@@ -769,7 +769,7 @@ THE SOFTWARE.
                     'media': function (entity) {
                         var e, linktext;
 
-                        trtr.add_media_htmlcode(t, entity, 'kml');
+                        trtr.add_media_html(t, entity, 'kml');
 
                         e = entity[1];
                         linktext = e.url;
@@ -784,9 +784,9 @@ THE SOFTWARE.
                     }
                 };
 
-                link_style = ' style="color:#' + t.link_color + '"';
+                link_style_html = ' style="color:#' + t.link_color + '"';
 
-                to_link = function () {
+                to_linked_html = function () {
                     var a = arguments,
                         url = '',
                         text = '',
@@ -805,13 +805,13 @@ THE SOFTWARE.
                         text = a[3];
                     }
 
-                    return pre_text + '<a href="' + url + '"' + link_style + '>' + text + '</a>';
+                    return pre_text + '<a href="' + url + '"' + link_style_html + '>' + text + '</a>';
                 };
 
                 if (trtr.option.link === 'entity') {
-                    content = trtr.apply_entities(t, entity_callback);
+                    body_html = trtr.apply_entities(t, entity_callback);
                 } else if (trtr.option.link === 'auto') {
-                    content = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
+                    body_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                 } else {
                     alert('teritori: Unknown link option \'' + trtr.option.link + '\'');
                     return;
@@ -819,41 +819,41 @@ THE SOFTWARE.
 
                 if (trtr.option.debug) {
                     (function () {
-                        var link_entity, link_auto;
+                        var link_entity_html, link_auto_html;
 
                         if (trtr.option.link === 'entity') {
-                            link_entity = content;
-                            link_auto = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
+                            link_entity_html = body_html;
+                            link_auto_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                         } else if (trtr.option.link === 'auto') {
-                            link_entity = trtr.apply_entities(t, entity_callback);
-                            link_auto = content;
+                            link_entity_html = trtr.apply_entities(t, entity_callback);
+                            link_auto_html = body_html;
                         }
 
-                        if (link_entity !== link_auto) {
-                            alert('teritori: link_entity !== link_auto');
-                            console.info('teritori: link_entity = ', link_entity);
-                            console.info('teritori: link_auto =   ', link_auto);
+                        if (link_entity_html !== link_auto_html) {
+                            alert('teritori: link_entity_html !== link_auto_html');
+                            console.info('teritori: link_entity_html = ', link_entity_html);
+                            console.info('teritori: link_auto_html =   ', link_auto_html);
                         }
                     }());
                 }
 
-                if (t.source === 'web') {
-                    t.source = '<a href="http://twitter.com/" rel="nofollow"' + link_style + '>Twitter</a>';
+                if (t.source_html === 'web') {
+                    t.source_html = '<a href="http://twitter.com/" rel="nofollow"' + link_style_html + '>Twitter</a>';
                 } else {
-                    t.source = t.source.replace(/^<a href="([!#$%&'()*+,\-.\/0-9:;=?@A-Z\\_a-z~]+)" rel="nofollow">/, '<a href="$1" rel="nofollow"' + link_style + '>');
+                    t.source_html = t.source_html.replace(/^<a href="([!#$%&'()*+,\-.\/0-9:;=?@A-Z\\_a-z~]+)" rel="nofollow">/, '<a href="$1" rel="nofollow"' + link_style_html + '>');
                 }
 
-                source = mes('format_source').replace('%s', t.source);
+                source_html = mes('format_source_html').replace('%s', t.source_html);
 
-                htmlcode = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + t.text_color + ';font-size:16px"><div>' + content;
+                tweet_html = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + t.text_color + ';font-size:16px"><div>' + body_html;
 
                 if (trtr.option.media) {
-                    htmlcode += t.media_htmlcode;
+                    tweet_html += t.media_html;
                 }
 
-                htmlcode += ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '"' + link_style + '>' + t.timestamp + '</a> ' + source + ' </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #E6E6E6"><a href="http://twitter.com/' + t.screen_name + '"' + link_style + '><img src="' + t.profile_image_url + '" alt="' + t.user_name + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + t.screen_name + '"' + link_style + '>@' + t.screen_name + '</a></strong><span style="color:#999;font-size:14px"><br>' + t.user_name + ' </span></div></div>';
+                tweet_html += ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '"' + link_style_html + '>' + t.timestamp + '</a> ' + source_html + ' </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #E6E6E6"><a href="http://twitter.com/' + t.screen_name + '"' + link_style_html + '><img src="' + t.profile_image_url + '" alt="' + t.user_name + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + t.screen_name + '"' + link_style_html + '>@' + t.screen_name + '</a></strong><span style="color:#999;font-size:14px"><br>' + t.user_name + ' </span></div></div>';
 
-                t.htmlcode = htmlcode;
+                t.tweet_html = tweet_html;
             },
             'uses_option': {
                 'media': true,
@@ -864,8 +864,8 @@ THE SOFTWARE.
         },
         'tweet-mode': {
             'description': 'tweet_description',
-            'set_htmlcode': function (t) {
-                var to_link, content, entity_callback, background, source, htmlcode;
+            'set_tweet_html': function (t) {
+                var to_linked_html, body_html, entity_callback, background_html, source_html, tweet_html;
 
                 entity_callback = {
                     'hashtags': function (entity) {
@@ -877,7 +877,7 @@ THE SOFTWARE.
                     'urls': function (entity) {
                         var e, linktext;
 
-                        trtr.add_media_htmlcode(t, entity, 'large');
+                        trtr.add_media_html(t, entity, 'large');
 
                         e = entity[1];
                         linktext = e.url;
@@ -899,7 +899,7 @@ THE SOFTWARE.
                     'media': function (entity) {
                         var e, linktext;
 
-                        trtr.add_media_htmlcode(t, entity, 'large');
+                        trtr.add_media_html(t, entity, 'large');
 
                         e = entity[1];
                         linktext = e.url;
@@ -914,7 +914,7 @@ THE SOFTWARE.
                     }
                 };
 
-                to_link = function () {
+                to_linked_html = function () {
                     var a = arguments;
 
                     if (a[1]) {
@@ -929,9 +929,9 @@ THE SOFTWARE.
                 };
 
                 if (trtr.option.link === 'entity') {
-                    content = trtr.apply_entities(t, entity_callback);
+                    body_html = trtr.apply_entities(t, entity_callback);
                 } else if (trtr.option.link === 'auto') {
-                    content = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
+                    body_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                 } else {
                     alert('teritori: Unknown link option \'' + trtr.option.link + '\'');
                     return;
@@ -939,46 +939,46 @@ THE SOFTWARE.
 
                 if (trtr.option.debug) {
                     (function () {
-                        var link_entity, link_auto;
+                        var link_entity_html, link_auto_html;
 
                         if (trtr.option.link === 'entity') {
-                            link_entity = content;
-                            link_auto = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_link);
+                            link_entity_html = body_html;
+                            link_auto_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                         } else if (trtr.option.link === 'auto') {
-                            link_entity = trtr.apply_entities(t, entity_callback);
-                            link_auto = content;
+                            link_entity_html = trtr.apply_entities(t, entity_callback);
+                            link_auto_html = body_html;
                         }
 
-                        if (link_entity !== link_auto) {
-                            alert('teritori: link_entity !== link_auto');
-                            console.info('teritori: link_entity = ', link_entity);
-                            console.info('teritori: link_auto =   ', link_auto);
+                        if (link_entity_html !== link_auto_html) {
+                            alert('teritori: link_entity_html !== link_auto_html');
+                            console.info('teritori: link_entity_html = ', link_entity_html);
+                            console.info('teritori: link_auto_html =   ', link_auto_html);
                         }
                     }());
                 }
 
-                background = '#' + t.background_color;
+                background_html = '#' + t.background_color;
                 if (t.background_image) {
-                    background += ' url(' + t.background_image_url + ')';
+                    background_html += ' url(' + t.background_image_url + ')';
                     if (!t.background_tile) {
-                        background += ' no-repeat';
+                        background_html += ' no-repeat';
                     }
                 }
 
-                source = mes('format_source').replace('%s', t.source);
+                source_html = mes('format_source_html').replace('%s', t.source_html);
 
-                htmlcode = '<!-- http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + ' -->\n';
-                htmlcode += '<style type="text/css">.trtr_tweetid_' + t.tweet_id + ' a {text-decoration:none;color:#' + t.link_color + ' !important} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link span.trtr_link_symbol {opacity:0.5} .trtr_tweetid_' + t.tweet_id + ' a:hover {text-decoration:underline} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link:hover {text-decoration:none} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link:hover span.trtr_link_text {text-decoration:underline} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action span em {background:transparent url(http://si0.twimg.com/images/dev/cms/intents/icons/sprites/everything-spritev2.png) no-repeat;margin:0 3px -3.5px 3px;display:inline-block;vertical-align:baseline;position:relative;outline:none;width:15px;height:15px;} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_reply span em {background-position 0 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_reply:hover span em {background-position:-16px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_retweet span em {background-position:-80px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_retweet:hover span em {background-position:-96px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_favorite span em {background-position:-32px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_favorite:hover span em {background-position:-48px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_follow span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_blue/bird_16_blue.png)} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_follow:hover span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_black/bird_16_black.png)}</style>';
-                htmlcode += '<div class="trtr_tweetid_' + t.tweet_id + '" style="background:' + background + ';padding:20px"><div style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + t.text_color + ';font-size:16px !important;line-height:22px;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;word-wrap:break-word">' + content;
+                tweet_html = '<!-- http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + ' -->\n';
+                tweet_html += '<style type="text/css">.trtr_tweetid_' + t.tweet_id + ' a {text-decoration:none;color:#' + t.link_color + ' !important} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link span.trtr_link_symbol {opacity:0.5} .trtr_tweetid_' + t.tweet_id + ' a:hover {text-decoration:underline} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link:hover {text-decoration:none} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link:hover span.trtr_link_text {text-decoration:underline} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action span em {background:transparent url(http://si0.twimg.com/images/dev/cms/intents/icons/sprites/everything-spritev2.png) no-repeat;margin:0 3px -3.5px 3px;display:inline-block;vertical-align:baseline;position:relative;outline:none;width:15px;height:15px;} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_reply span em {background-position 0 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_reply:hover span em {background-position:-16px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_retweet span em {background-position:-80px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_retweet:hover span em {background-position:-96px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_favorite span em {background-position:-32px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_favorite:hover span em {background-position:-48px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_follow span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_blue/bird_16_blue.png)} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_follow:hover span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_black/bird_16_black.png)}</style>';
+                tweet_html += '<div class="trtr_tweetid_' + t.tweet_id + '" style="background:' + background_html + ';padding:20px"><div style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + t.text_color + ';font-size:16px !important;line-height:22px;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;word-wrap:break-word">' + body_html;
 
                 if (trtr.option.media) {
-                    htmlcode += t.media_htmlcode;
+                    tweet_html += t.media_html;
                 }
 
-                htmlcode += ' <div class="trtr_actions" style="color:#999;font-size:12px;display:block"><a href="https://twitter.com/intent/user?user_id=' + t.user_id + '" class="trtr_action trtr_action_follow" title="' + mes('action_follow') + '"><span><em></em></span></a> <span class="trtr_timestamp"><a title="' + t.timestamp + '" href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '">' + t.timestamp + '</a> ' + source + ' </span><a href="https://twitter.com/intent/tweet?in_reply_to=' + t.tweet_id + '" class="trtr_action trtr_action_reply" title="' + mes('action_reply') + '"><span><em></em>' + mes('action_reply') + '</span></a> <a href="https://twitter.com/intent/retweet?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_retweet" title="' + mes('action_retweet') + '"><span><em></em>' + mes('action_retweet') + '</span></a> <a href="https://twitter.com/intent/favorite?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_favorite" title="' + mes('action_favorite') + '"><span><em></em>' + mes('action_favorite') + '</span></a> </div><span class="trtr_metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="trtr_author" style="color:#999;line-height:19px;"><a href="http://twitter.com/' + t.screen_name + '"><img src="' + t.profile_image_url + '" style="float:left;margin:0 7px 0 0;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + t.screen_name + '">' + t.user_name + '</a></strong><br/>@' + t.screen_name + '</span></span></div></div>\n';
-                htmlcode += '<!-- end of tweet -->\n';
+                tweet_html += ' <div class="trtr_actions" style="color:#999;font-size:12px;display:block"><a href="https://twitter.com/intent/user?user_id=' + t.user_id + '" class="trtr_action trtr_action_follow" title="' + mes('action_follow') + '"><span><em></em></span></a> <span class="trtr_timestamp"><a title="' + t.timestamp + '" href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '">' + t.timestamp + '</a> ' + source_html + ' </span><a href="https://twitter.com/intent/tweet?in_reply_to=' + t.tweet_id + '" class="trtr_action trtr_action_reply" title="' + mes('action_reply') + '"><span><em></em>' + mes('action_reply') + '</span></a> <a href="https://twitter.com/intent/retweet?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_retweet" title="' + mes('action_retweet') + '"><span><em></em>' + mes('action_retweet') + '</span></a> <a href="https://twitter.com/intent/favorite?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_favorite" title="' + mes('action_favorite') + '"><span><em></em>' + mes('action_favorite') + '</span></a> </div><span class="trtr_metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="trtr_author" style="color:#999;line-height:19px;"><a href="http://twitter.com/' + t.screen_name + '"><img src="' + t.profile_image_url + '" style="float:left;margin:0 7px 0 0;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + t.screen_name + '">' + t.user_name + '</a></strong><br/>@' + t.screen_name + '</span></span></div></div>\n';
+                tweet_html += '<!-- end of tweet -->\n';
 
-                t.htmlcode = htmlcode;
+                t.tweet_html = tweet_html;
             },
             'uses_option': {
                 'media': true,
@@ -989,7 +989,7 @@ THE SOFTWARE.
         }
     };
 
-    trtr.display_htmlcode = function (tweet) {
+    trtr.display_html = function (tweet) {
         var t;
 
         trtr.cached_json['statuses/show/' + tweet.id_str] = tweet;
@@ -1000,7 +1000,7 @@ THE SOFTWARE.
 
         t = {};
         t.tweet_id = tweet.id_str;
-        t.source = tweet.source;
+        t.source_html = tweet.source;
 
         t.screen_name = tweet.user.screen_name;
         t.user_name = tweet.user.name;
@@ -1025,17 +1025,17 @@ THE SOFTWARE.
             'showtco': false
         };
 
-        t.media_htmlcode = '';
+        t.media_html = '';
 
         if (trtr.templates.hasOwnProperty(trtr.option.mode)) {
-            trtr.templates[trtr.option.mode].set_htmlcode(t);
+            trtr.templates[trtr.option.mode].set_tweet_html(t);
         } else {
             alert('teritori: Unknown mode \'' + trtr.option.mode.toString() + '\'');
             return;
         }
 
-        if (t.htmlcode === undefined) {
-            t.htmlcode = '';
+        if (t.tweet_html === undefined) {
+            t.tweet_html = '';
         }
 
         trtr.display_dialog(t);
@@ -1052,14 +1052,14 @@ THE SOFTWARE.
 
         cache_key = 'statuses/show/' + id;
         if (trtr.cached_json.hasOwnProperty(cache_key)) {
-            trtr.display_htmlcode(trtr.cached_json[cache_key]);
+            trtr.display_html(trtr.cached_json[cache_key]);
             if (trtr.option.debug) {
                 console.info('teritori: cache_key = ', cache_key);
             }
         } else {
             jsonp = document.createElement('script');
             jsonp.type = 'text/javascript';
-            jsonp.src = 'https://api.twitter.com/1/statuses/show.json?include_entities=true&contributor_details=true&callback=teritori.display_htmlcode&id=' + id;
+            jsonp.src = 'https://api.twitter.com/1/statuses/show.json?include_entities=true&contributor_details=true&callback=teritori.display_html&id=' + id;
             document.getElementsByTagName('head')[0].appendChild(jsonp);
         }
     };
