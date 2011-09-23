@@ -1076,6 +1076,10 @@ THE SOFTWARE.
             tweet = tweet.retweeted_status;
         }
 
+        if (trtr.option.debug) {
+            console.info('teritori: tweet = ', tweet);
+        }
+
         t = {};
         t.tweet_id = tweet.id_str;
         t.source_html = tweet.source;
