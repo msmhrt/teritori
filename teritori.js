@@ -731,7 +731,9 @@ THE SOFTWARE.
     trtr.add_media_html = function (t, entity, media_mode) {
         var e, j, url, match;
 
-        console.info('teritori: entity = ', entity);
+        if (trtr.option.debug) {
+            console.info('teritori: entity = ', entity);
+        }
 
         e = entity[1];
         if (e.expanded_url !== null) {
