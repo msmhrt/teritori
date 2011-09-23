@@ -25,13 +25,61 @@ THE SOFTWARE.
 (function () {
     'use strict';
 
-    var trtr, mes;
+    var trtr, mes, escape_html, re_escape_html;
 
     trtr = window.teritori;
 
     mes = function (key) {
         return trtr.lang[trtr.option.lang][key];
     };
+
+    trtr.escape_html = function (text) {
+        if (text === null || text === undefined) {
+            return '';
+        }
+
+        return text.toString().replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;');
+    };
+
+    escape_html = trtr.escape_html;
+
+    trtr.re_escape_html = function (text) {
+        var escaped_text, strings, i, match;
+
+        if (text === null || text === undefined) {
+            return '';
+        }
+
+        strings = text.toString().split('&');
+
+        if (trtr.option.debug) {
+            console.info('teritori: strings = ', strings);
+        }
+
+        escaped_text = strings[0];
+        for (i = 1; i < strings.length; i += 1) {
+            match = strings[i].match(/^(?:((?:l(?:e(?:ft(?:right(?:squigarrow|harpoons|arrows?)|(?:leftarrow|threetime)s|harpoon(?:down|up)|arrow(?:tail)?)|s(?:s(?:(?:eq?q)?gtr|approx|dot|sim)|dot(?:or?)?|g(?:es)?|cc)?|q(?:slant|q)?|g)?|o(?:ng(?:(?:lef(?:trigh)?|righ)tarrow|mapsto)|oparrow(?:righ|lef)t|p(?:lus|ar|f)|w(?:ast|bar)|z(?:enge|f)?|a(?:ng|rr)|times|brk)|a(?:rr(?:b(?:fs)?|[pt]l|sim|fs|hk|lp)?|t(?:ail|es?)?|ng(?:le|d)?|emptyv|cute|gran|mbda|quo|p)|t(?:r(?:i[ef]?|Par)|(?:ques|do)t|c(?:ir|c)|hree|imes|larr)?|s(?:q(?:uor?|b)|im[eg]?|aquo|trok|cr|h)|b(?:r(?:k(?:sl[du]|e)|ac[ek])|arr|brk)|n(?:ap(?:prox)?|e(?:q?q)?|sim|E)|r(?:(?:corne|ar)r|hard?|tri|m)|d(?:r(?:us|d)har|quor?|ca|sh)|l(?:(?:corne|ar)r|hard|tri)?|(?:(?:ur(?:ds|u)h|H)a|Bar)r|m(?:oust(?:ache)?|idot)|c(?:ed?il|aron|ub|y)|h(?:ar(?:ul?|d)|blk)|f(?:(?:loo)?r|isht)|v(?:ertneqq|nE)|A(?:a?rr|tail)|par(?:lt)?|Eg?|gE?|jcy)|n(?:s(?:u(?:[bp](?:[Ee]|set(?:eq?q)?)?|cc(?:eq)?)|hort(?:parallel|mid)|c(?:(?:cu)?e|r)?|im(?:eq?)?|qsu[bp]e|mid|par)|l(?:e(?:f(?:trigh)?tarrow|q(?:slant|q)?|s?s)?|(?:[Aa]r|d)r|t(?:rie?)?|sim|E)|v(?:l(?:t(?:rie)?|Arr|e)|r(?:trie|Arr)|[Dd]ash|g[et]|infin|Harr|sim|ap)|p(?:r(?:e(?:c(?:eq)?)?|cue)?|ar(?:(?:alle|s)l|t)?|olint)|e(?:ar(?:r(?:ow)?|hk)|s(?:ear|im)|xists?|quiv|Arr|dot)?|a(?:p(?:prox|id|os|E)?|tur(?:als?)?|cute|bla|ng)|o(?:t(?:in(?:v[abc]|dot|E)?|ni(?:v[abc])?)?|pf)|t(?:riangle(?:righ|lef)t(?:eq)?|ilde|gl|lg)|c(?:ong(?:dot)?|a(?:ron|p)|edil|up|y)|g(?:e(?:q(?:slant|q)?|s)?|sim|tr?|E)|w(?:ar(?:r(?:ow)?|hk)|(?:nea|Ar)r)|r(?:ightarrow|arr[cw]?|trie?|Arr)|L(?:ef(?:trigh)?tarrow|tv?|l)|(?:h(?:[Aa]r|pa)|f)r|u(?:m(?:ero|sp)?)?|(?:V[Dd]|d)ash|b(?:umpe?|sp)|i(?:sd?|v)?|G(?:tv?|g)|Rightarrow|jcy|mid)|s(?:u(?:p(?:[123E]|s(?:et(?:n?eq?q)?|u[bp]|im)|d(?:sub|ot)|hs(?:ol|ub)|e(?:dot)?|n[Ee]|larr|mult|plus)?|b(?:s(?:et(?:n?eq?q)?|u[bp]|im)|(?:mul|do)t|e(?:dot)?|n[Ee]|plus|rarr|E)?|cc(?:n(?:approx|eqq|sim)|(?:curly)?eq|approx|sim)?|ng|m)|c(?:[Ey]|n(?:sim|ap|E)|a(?:ron|p)|e(?:dil)?|polint|cue|irc|sim)?|e(?:ar(?:r(?:ow)?|hk)|tm(?:inus|n)|(?:swa|Ar)r|[cx]t|mi)|q(?:su[bp](?:set(?:eq)?|e)?|u(?:ar[ef]|f)?|c[au]ps?)|m(?:a(?:llsetminus|shp)|i(?:le|d)|t(?:es?)?|eparsl)|i(?:m(?:[gl]E?|plus|rarr|dot|eq?|ne)?|gma[fv]?)|h(?:ort(?:parallel|mid)|(?:(?:ch)?c)?y|arp)|t(?:r(?:aight(?:epsilon|phi)|ns)|arf?)|w(?:ar(?:r(?:ow)?|hk)|(?:nwa|Ar)r)|o(?:l(?:b(?:ar)?)?|ftcy|pf)|s(?:etmn|mile|tarf|cr)|pa(?:des(?:uit)?|r)|fr(?:own)?|dot[be]?|[lr]arr|acute|bquo|zlig)|N(?:o(?:t(?:S(?:u(?:cceeds(?:(?:Slant)?Equal|Tilde)?|(?:per|b)set(?:Equal)?)|quareSu(?:per|b)set(?:Equal)?)|Le(?:ss(?:(?:Slant)?Equal|Greater|Tilde|Less)?|ftTriangle(?:Equal|Bar)?)|Greater(?:(?:Slant|Full)?Equal|Greater|Tilde|Less)?|R(?:ightTriangle(?:Equal|Bar)?|everseElement)|Nested(?:GreaterGreater|LessLess)|E(?:qual(?:Tilde)?|lement|xists)|Tilde(?:(?:Full)?Equal|Tilde)?|Precedes(?:(?:Slant)?Equal)?|(?:Double)?VerticalBar|Hump(?:DownHump|Equal)|C(?:ongruent|upCap))?|nBreakingSpace|Break|pf)|e(?:(?:gative(?:Thi(?:ck|n)|VeryThin|Medium)Spac|wLin)e|sted(?:GreaterGreater|LessLess))|c(?:aron|edil|y)|(?:acut|tild)e|(?:sc|f)r|Jcy|u)|r(?:i(?:ght(?:(?:left(?:harpoon|arrow)|rightarrow|threetime)s|harpoon(?:down|up)|arrow(?:tail)?|squigarrow)|singdotseq|ng)|a(?:rr(?:[cw]|b(?:fs)?|[al]p|[pt]l|sim|fs|hk)?|t(?:io(?:nals)?|ail)|ng(?:l?e|d)?|c(?:ut)?e|emptyv|dic|quo)|o(?:p(?:lus|ar|f)|a(?:ng|rr)|times|brk)|b(?:r(?:k(?:sl[du]|e)|ac[ek])|arr|brk)|t(?:ri(?:[ef]|ltri)?|hree|imes)|e(?:al(?:part|ine|s)?|ct|g)|s(?:q(?:uor?|b)|aquo|cr|h)|(?:(?:uluh|H)a|[Br]ar)r|d(?:ldhar|quor?|ca|sh)|p(?:ar(?:gt)?|polint)|c(?:ed?il|aron|ub|y)|h(?:ar(?:ul?|d)|ov?)|f(?:(?:loo)?r|isht)|l(?:(?:ar|ha)r|m)|A(?:a?rr|tail)|moust(?:ache)?|nmid|x)|c(?:u(?:r(?:ly(?:eq(?:pre|suc)c|(?:wedg|ve)e)|vearrow(?:righ|lef)t|arrm?|ren)|p(?:(?:c[au]|brca)p|dot|or|s)?|e(?:pr|sc)|darr[lr]|larrp?|vee|wed)|o(?:m(?:p(?:le(?:ment|xes)|fn)?|mat?)|p(?:y(?:sr)?|rod|f)|n(?:g(?:dot)?|int)|lon(?:eq?)?)|ir(?:[Ee]|c(?:le(?:d(?:[RS]|circ|dash|ast)|arrow(?:righ|lef)t)|eq)?|fnint|scir|mid)?|a(?:p(?:(?:c[au]|brcu)p|and|dot|s)?|r(?:et|on)|cute)|c(?:a(?:ron|ps)|ups(?:sm)?|edil|irc)|e(?:n(?:terdo)?t|mptyv|dil)|h(?:ec(?:kmar)?k|cy|i)|(?:w(?:con)?in|t?do)t|s(?:u[bp]e?|cr)|lubs(?:uit)?|r(?:arr|oss)|ylcty|fr)|b(?:ig(?:o(?:(?:time|plu)s|dot)|triangle(?:down|up)|c(?:[au]p|irc)|s(?:qcup|tar)|(?:wedg|ve)e|uplus)|o(?:x(?:(?:(?:min|pl)u|time)s|[Vv][HLRhlr]?|[DUdu][LRlr]|[Hh][DUdu]?|box)|t(?:tom)?|wtie|pf)|l(?:a(?:ck(?:triangle(?:(?:righ|lef)t|down)?|(?:lozeng|squar)e)|nk)|k(?:1[24]|34)|ock)|a(?:ck(?:sim(?:eq)?|epsilon|prime|cong)|r(?:wed(?:ge)?|vee))|e(?:t(?:[ah]|ween)|cause?|mptyv|rnou|psi)|s(?:ol(?:(?:hsu)?b)?|ime?|emi|cr)|u(?:mp(?:eq?|E)?|ll(?:et)?)|n(?:e(?:quiv)?|ot)|r(?:vbar|eve)|(?:brkt)?brk|c(?:ong|y)|karow|prime|dquo|Not|fr)|L(?:e(?:ft(?:(?:Up(?:(?:Down|Tee)Vecto|Vecto(?:rBa)?)|Vecto(?:rBa)?|Floo)r|Do(?:wn(?:Vecto(?:rBa)?|TeeVecto)r|ubleBracket)|T(?:riangle(?:Equal|Bar)?|ee(?:Vector|Arrow)?)|A(?:rrow(?:RightArrow|Bar)?|ngleBracket)|Right(?:Vector|Arrow)|(?:right)?arrow|Ceiling)|ss(?:(?:Slant|Full)Equal|(?:Equal)?Greater|Tilde|Less))|o(?:(?:ng(?:(?:Lef(?:tRigh)?|Righ)tA|(?:lef(?:trigh)?|righ)ta)|wer(?:Righ|Lef)tA)rrow|pf)|a(?:placetrf|cute|mbda|ng|rr)|c(?:aron|edil|y)|l(?:eftarrow)?|s(?:trok|cr|h)|(?:mido)?t|Jcy|fr|T)|D(?:o(?:uble(?:L(?:ong(?:Lef(?:tRigh)?|Righ)tArrow|eft(?:(?:Right)?Arrow|Tee))|Right(?:Arrow|Tee)|Up(?:Down)?Arrow|ContourIntegral|Do(?:wnArrow|t)|VerticalBar)|wn(?:(?:Left(?:(?:Right|Tee)Vecto|Vecto(?:rBa)?)|Right(?:Vecto(?:rBa)?|TeeVecto))r|Arrow(?:UpArrow|Bar)?|Tee(?:Arrow)?|Breve|arrow)|t(?:Equal|Dot)?|pf)|i(?:a(?:critical(?:(?:Acut|Grav|Tild)e|Do(?:ubleAcute|t))|mond)|fferentialD)|a(?:(?:gge|r)r|shv)|D(?:otrahd)?|s(?:trok|cr)|c(?:aron|y)|el(?:ta)?|[JSZ]cy|fr)|d(?:o(?:wn(?:harpoon(?:righ|lef)t|downarrows|arrow)|t(?:(?:min|pl)us|eq(?:dot)?|square)?|ublebarwedge|llar|pf)|i(?:v(?:ide(?:ontimes)?|onx)?|am(?:ond(?:suit)?|s)?|gamma|sin|e)|a(?:(?:gge|r)r|leth|shv?)|r(?:c(?:orn|rop)|bkarow)|d(?:a(?:gge|r)r|otseq)?|(?:u(?:ar|ha)|Ar|Ha)r|s(?:c[ry]|trok|ol)|e(?:mptyv|lta|g)|b(?:karow|lac)|z(?:igrarr|cy)|lc(?:orn|rop)|t(?:rif?|dot)|c(?:aron|y)|f(?:isht|r)|har[lr]|wangle|jcy)|R(?:ight(?:(?:Up(?:(?:Down|Tee)Vecto|Vecto(?:rBa)?)|Vecto(?:rBa)?|Floo)r|Do(?:wn(?:Vecto(?:rBa)?|TeeVecto)r|ubleBracket)|T(?:riangle(?:Equal|Bar)?|ee(?:Vector|Arrow)?)|A(?:rrow(?:LeftArrow|Bar)?|ngleBracket)|Ceiling|arrow)|e(?:verse(?:E(?:quilibrium|lement)|UpEquilibrium))?|a(?:rr(?:tl)?|cute|ng)|o(?:undImplies|pf)|c(?:aron|edil|y)|(?:Bar|f)r|rightarrow|uleDelayed|s(?:cr|h)|EG|ho)|e(?:q(?:s(?:lant(?:less|gtr)|im)|u(?:iv(?:DD)?|als|est)|c(?:olon|irc)|vparsl)|m(?:pty(?:set|v)?|sp(?:1[34])?|acr)|x(?:p(?:onentiale|ectation)|ist|cl)|p(?:si(?:lon|v)?|ar(?:sl)?|lus)|l(?:s(?:dot)?|inters|l)?|c(?:(?:ar|ol)on|irc?|y)|g(?:s(?:dot)?|rave)?|a(?:cute|ster)|s(?:dot|cr|im)|r(?:Dot|arr)|(?:D?D|d)ot|o(?:gon|pf)|f(?:Dot|r)|u(?:ml|ro)|n(?:sp|g)|t[ah]|e)|t(?:r(?:i(?:angle(?:(?:righ|lef)t(?:eq)?|down|q)?|(?:min|pl)us|(?:tim)?e|dot|sb)|pezium|ade)|h(?:e(?:re(?:fore|4)|ta(?:sym|v)?)|i(?:ck(?:approx|sim)|nsp)|k(?:sim|ap)|orn)|o(?:p(?:f(?:ork)?|bot|cir)?|[es]a)|w(?:ohead(?:righ|lef)tarrow|ixt)|i(?:mes(?:b(?:ar)?|d)?|lde|nt)|s(?:c[ry]|trok|hcy)|c(?:aron|edil|y)|a(?:rget|u)|elrec|prime|brk|dot|fr)|p(?:r(?:e(?:c(?:n(?:approx|eqq|sim)|(?:curly)?eq|approx|sim)?)?|o(?:f(?:alar|line|surf)|p(?:to)?|d)|n(?:sim|ap|E)|imes?|urel|cue|sim|ap|E)?|l(?:us(?:[be]|a?cir|d[ou]|sim|two|mn)?|an(?:ckh?|kv))|ar(?:a(?:llel)?|s(?:im|l)|t)?|er(?:tenk|cnt|iod|mil|p)|o(?:intint|und|pf)|h(?:mmat|iv?|one)|i(?:tchfork|v)?|s(?:cr|i)|uncsp|cy|fr|m)|u(?:p(?:harpoon(?:righ|lef)t|(?:uparrow|lu)s|(?:down)?arrow|si(?:lon|h)?)|r(?:c(?:orn(?:er)?|rop)|ing|tri)|l(?:c(?:orn(?:er)?|rop)|tri)|d(?:(?:ar|ha)r|blac)|t(?:ilde|rif?|dot)|(?:wangl|grav)e|h(?:ar[lr]|blk)|(?:Ar|Ha|sc)r|a(?:cute|rr)|br(?:eve|cy)|f(?:isht|r)|o(?:gon|pf)|u(?:arr|ml)|c(?:irc|y)|m(?:acr|l))|C(?:o(?:n(?:(?:grue|i)nt|tourIntegral)|unterClockwiseContourIntegral|p(?:roduct|f)|lone?)|lo(?:seCurly(?:Double)?Quote|ckwiseContourIntegral)|a(?:p(?:italDifferentialD)?|yleys|cute)|ircle(?:(?:(?:Min|Pl)u|Time)s|Dot)|c(?:onint|aron|edil|irc)|e(?:nterDot|dilla)|u(?:pCa)?p|(?:sc|f)r|ross|Hcy|OPY|dot|hi)|S(?:u(?:c(?:ceeds(?:(?:Slant)?Equal|Tilde)?|hThat)|p(?:erset(?:Equal)?|set)?|b(?:set(?:Equal)?)?|m)|q(?:uare(?:Su(?:per|b)set(?:Equal)?|(?:Intersect|Un)ion)?|rt)|hort(?:(?:Righ|Lef)t|Down|Up)Arrow|c(?:aron|edil|irc|y)?|(?:mallCircl|acut)e|(?:(?:HC)?H|OFT)cy|(?:sc|ta|f)r|igma|opf)|U(?:p(?:(?:(?:per(?:Righ|Lef)t|Down)A|(?:down)?a)rrow|Arrow(?:DownArrow|Bar)?|Tee(?:Arrow)?|Equilibrium|si(?:lon)?)|n(?:der(?:B(?:rac(?:ket|e)|ar)|Parenthesis)|ion(?:Plus)?)|a(?:r(?:roci)?r|cute)|(?:(?:ma|s)c|f)r|(?:grav|tild)e|br(?:eve|cy)|o(?:gon|pf)|c(?:irc|y)|dblac|ring|uml)|a(?:n(?:g(?:msd(?:a[abcdefgh])?|rt(?:vbd?)?|s(?:ph|t)|zarr|l?e)?|d(?:(?:an)?d|slope|v)?)|p(?:[Ee]|prox(?:eq)?|acir|id|os)?|(?:(?:bre|gra)v|acut|tild)e|l(?:e(?:fsym|ph)|pha)|s(?:ymp(?:eq)?|cr|t)|c(?:[Edy]|irc|ute)?|m(?:a(?:cr|lg)|p)|(?:eli|rin)g|w(?:con)?int|o(?:gon|pf)|fr?|uml)|o(?:r(?:d(?:[fm]|er(?:of)?)?|(?:ar|o)r|slope|igof|v)?|m(?:i(?:cron|nus|d)|acr|ega)|l(?:c(?:ross|ir)|arr|ine|t)|d(?:blac|sold|ash|iv|ot)|ti(?:me(?:sa)?s|lde)|(?:f(?:ci)?|vba)r|p(?:erp|lus|ar)|s(?:lash|cr|ol)|g(?:rave|on|t)|a(?:cute|st)|c(?:irc?|y)|h(?:bar|m)|elig|int|opf|uml|S)|g(?:t(?:r(?:(?:eq?q)?less|a(?:pprox|rr)|dot|sim)|(?:ques|do)t|c(?:ir|c)|lPar)?|e(?:s(?:dot(?:ol?)?|l(?:es)?|cc)?|q(?:slant|q)?|l)?|n(?:ap(?:prox)?|e(?:q?q)?|sim|E)|a(?:mmad?|cute|p)|s(?:im[el]?|cr)|v(?:ertneqq|nE)|(?:bre|ra)ve|c(?:irc|y)|l[Eaj]?|imel|El?|dot|g?g|jcy|opf|fr)|i(?:n(?:t(?:e(?:gers|rcal)|larhk|prod|cal)?|fin(?:tie)?|care|odot)?|m(?:a(?:g(?:(?:lin)?e|part)|cr|th)|ped|of)|s(?:in(?:[Ev]|dot|sv?)?|cr)|i(?:i?int|nfin|ota)?|o(?:gon|cy|pf|ta)|(?:acut|grav)e|c(?:irc|y)?|e(?:xcl|cy)|u(?:kcy|ml)|t(?:ilde)?|f[fr]|quest|jlig|prod)|v(?:a(?:r(?:t(?:riangle(?:righ|lef)t|heta)|s(?:u[bp]setneq?q|igma)|p(?:ropto|h?i)|r(?:ho)?|epsilon|nothing|kappa)|ngrt)|e(?:e(?:bar|eq)?|r(?:bar|t)|llip)|s(?:u[bp]n[Ee]|cr)|(?:Ar|f)r|[Dd]ash|[lr]tri|nsu[bp]|zigzag|Barv?|prop|opf|cy)|m(?:a(?:p(?:sto(?:down|left|up)?)?|l(?:t(?:ese)?|e)|(?:rke|c)r)|i(?:d(?:(?:as|do)t|cir)?|nus(?:du?|b)?|cro)|u(?:(?:lti)?map)?|easuredangle|o(?:dels|pf)|s(?:tpos|cr)|c(?:omma|y)|l(?:cp|dr)|nplus|DDot|dash|fr|ho|p)|h(?:o(?:ok(?:righ|lef)tarrow|(?:rba|ar)r|mtht|pf)|a(?:r(?:r(?:cir|w)?|dcy)|irsp|milt|lf)|e(?:arts(?:uit)?|llip|rcon)|s(?:lash|trok|cr)|y(?:bull|phen)|(?:Ar|ba|f)r|ks[ew]arow|circ)|E(?:m(?:pt(?:yVer)?ySmallSquare|acr)|qu(?:al(?:Tilde)?|ilibrium)|x(?:ponentialE|ists)|c(?:aron|irc|y)|(?:acut|grav)e|(?:lemen|do)t|o(?:gon|pf)|s(?:cr|im)|psilon|uml|NG|TH|fr|ta)|I(?:n(?:t(?:e(?:rsection|gral))?|visible(?:Comma|Times))|m(?:a(?:ginaryI|cr)|plies)?|(?:acut|grav|tild)e|o(?:gon|pf|ta)|u(?:kcy|ml)|c(?:irc|y)|(?:sc|f)r|[EO]cy|Jlig|dot)|O(?:(?:(?:penCurly(?:Double)?Quo|acu)t|grav)e|ver(?:B(?:rac(?:ket|e)|ar)|Parenthesis)|m(?:icron|acr|ega)|ti(?:lde|mes)|s(?:lash|cr)|c(?:irc|y)|dblac|Elig|f?r|opf|uml)|f(?:r(?:a(?:c(?:1[234568]|3[458]|2[35]|5[68]|45|78)|sl)|own)|o(?:r(?:all|kv?)|pf)|f(?:(?:l?|i)lig|r)|l(?:lig|tns|at)|allingdotseq|[ij]lig|partint|emale|nof|scr|cy)|T(?:h(?:e(?:refore|ta)|i(?:ck|n)Space)|ilde(?:(?:Full)?Equal|Tilde)?|c(?:aron|edil|y)|s(?:trok|cr)|ripleDot|SH?cy|a[bu]|HORN|RADE|opf|fr)|G(?:[Tg]|reater(?:(?:Slant|Full)Equal|Equal(?:Less)?|Greater|Tilde|Less)|c(?:edil|irc|y)|(?:sc|f)r|(?:do)?t|ammad?|breve|Jcy|opf)|P(?:r(?:ecedes(?:(?:Slant)?Equal|Tilde)?|o(?:portion(?:al)?|duct)|ime)?|o(?:incareplane|pf)|s(?:cr|i)|lusMinus|artialD|h?i|cy|fr)|A(?:(?:(?:bre|gra)v|acut|tild)e|(?:Eli|rin)g|pplyFunction|s(?:sign|cr)|o(?:gon|pf)|(?:mac|f)r|c(?:irc|y)|lpha|uml|MP|nd)|x(?:o(?:p(?:lus|f)|time|dot)|(?:[hlr][Aa]r|f)r|c(?:[au]p|irc)|u(?:plus|tri)|(?:wedg|ve)e|s(?:qcup|cr)|(?:dtr)?i|map|nis)|V(?:e(?:r(?:t(?:ical(?:(?:Separato|Ba)r|(?:Tild|Lin)e))?|yThinSpace|bar)|e)|(?:ba|sc|f)r|(?:vd|D)ash|dashl?|opf|cy)|H(?:ump(?:DownHump|Equal)|o(?:rizontalLine|pf)|s(?:trok|cr)|ilbertSpace|a(?:cek|t)|ARDcy|circ|fr)|B(?:a(?:r(?:wed|v)|ckslash)|e(?:rnoullis|cause|ta)|(?:sc|f)r|umpeq|reve|opf|cy)|F(?:illed(?:Very)?SmallSquare|o(?:(?:uriertr|p)f|rAll)|(?:sc|f)r|cy)|z(?:(?:igrar|sc|f)r|e(?:etrf|ta)|c(?:aron|y)|acute|wn?j|dot|hcy|opf)|Z(?:e(?:roWidthSpace|ta)|c(?:aron|y)|(?:sc|f)r|acute|Hcy|dot|opf)|q(?:u(?:at(?:ernions|int)|est(?:eq)?|ot)|(?:sc|f)r|prime|int|opf)|w(?:e(?:d(?:geq?|bar)|ierp)|r(?:eath)?|(?:sc|f)r|circ|opf|p)|y(?:ac(?:ute|y)|c(?:irc|y)|u(?:cy|ml)|(?:sc|f)r|icy|opf|en)|M(?:e(?:diumSpace|llintrf)|(?:sc|f)r|inusPlus|opf|ap|cy|u)|k(?:c(?:edil|y)|(?:sc|f)r|[hj]cy|appav?|green|opf)|Y(?:c(?:irc|y)|(?:sc|f)r|[AIU]cy|acute|opf|uml)|j(?:s(?:ercy|cr)|c(?:irc|y)|math|ukcy|opf|fr)|K(?:c(?:edil|y)|(?:sc|f)r|[HJ]cy|appa|opf)|J(?:s(?:ercy|cr)|c(?:irc|y)|ukcy|opf|fr)|#(?:\d+|[Xx][\dABCDEFabcdef]+)|W(?:(?:sc|f)r|circ|edge|opf)|Q(?:(?:sc|f)r|UOT|opf)|X(?:(?:sc|f)r|opf|i));)|((?:a(?:(?:acut|grav|tild)e|(?:eli|rin)g|c(?:irc|ute)|uml|mp)|A(?:(?:acut|grav|tild)e|(?:Eli|rin)g|circ|uml|MP)|o(?:(?:acut|grav|tild)e|rd[fm]|slash|circ|uml)|i(?:(?:acut|grav)e|(?:exc|um)l|quest|circ)|O(?:(?:acut|grav|tild)e|slash|circ|uml)|c(?:e(?:dil|nt)|cedil|urren|opy)|E(?:(?:acut|grav)e|circ|uml|TH)|e(?:(?:acut|grav)e|circ|uml|th)|u(?:(?:acut|grav)e|circ|u?ml)|I(?:(?:acut|grav)e|circ|uml)|U(?:(?:acut|grav)e|circ|uml)|s(?:up[123]|zlig|ect|hy)|m(?:i(?:ddot|cro)|acr)|p(?:lusmn|ound|ara)|n(?:tilde|bsp|ot)|y(?:acute|uml|en)|(?:Ntild|Yacut)e|frac(?:1[24]|34)|C(?:cedil|OPY)|t(?:horn|imes)|(?:[GL]|QUO)T|d(?:ivide|eg)|r(?:aquo|eg)|l(?:aquo|t)|(?:quo|g)t|brvbar|THORN|REG)))/);
+            if (match) {
+                if (trtr.option.debug) {
+                    console.info('teritori: match = ', match);
+                }
+
+                if (match[1] !== undefined) {
+                    escaped_text += ('&' + strings[i]);
+                } else if (match[2] !== undefined) {
+                    escaped_text += ('&' + match[2] + ';' + strings[i].slice(match[2].length));
+                } else {
+                    alert('teritori: RegExp in trtr.re_escape_html() is corrputed.');
+                }
+            } else {
+                escaped_text += ('&amp;' + strings[i]);
+            }
+        }
+
+        return escaped_text.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;');
+    };
+
+    re_escape_html = trtr.re_escape_html;
 
     trtr.lang = {
         'en': {
@@ -192,10 +240,10 @@ THE SOFTWARE.
             close_dialog();
         }
 
-        dialog_html = '<div class="trtr-dialog" style="text-align:left;position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><div style="margin-bottom:10px"><span style="margin-right:0.5em"><strong>' + mes('option_mode') + '</strong></span><select class="trtr-mode-select-menu"></select><span style="margin-left:1em;margin-right:0.5em"><strong>' + mes('option_lang') + '</strong></span><select class="trtr-lang-select-menu"></select></div><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + t.tweet_html + '</textarea></div><div>';
-        dialog_html += '<input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>' + mes('option_preview') + '</strong>';
-        dialog_html += '<input class="trtr-dialog-showtco-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + mes('option_showtco') + '</strong>';
-        dialog_html += '<input class="trtr-dialog-media-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + mes('option_media') + '</strong>';
+        dialog_html = '<div class="trtr-dialog" style="text-align:left;position:fixed;z-index:21;font: 13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-serif;width:560px;height:auto;-webkit-box-shadow:0 3px 0 rgba(0,0,0,0.1);background-color:rgba(0,0,0,0.8);border-radius:5px;box-shadow:0 3px 0 rgba(0,0,0,0.1);display:block;margin:0;padding:6px;"><div class="trtr-dialog-header" style="position:relative;border-top-radius:4px;cursor:move;display:block;margin:0;padding:0"><h3 style="color:#fff;font-size:15px;font-weight:bold;margin:0;padding:2px 15px 7px 5px">teritori</h3><div class="trtr-dialog-close" style="position:absolute;cursor:pointer;top:3px;font:bold 16px Tahoma,sans-serif;right:0%;line-height: 18px;color:white;width:20px;height:20px;text-align:center;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;background: rgba(0, 0, 0, 0.3);margin:0;padding:0"><b>×</b></div></div><div class="trtr-dialog-content" style="-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;color:#333;background-color:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.2);padding:10px 15px 10px 15px"><div style="margin-bottom:10px"><span style="margin-right:0.5em"><strong>' + escape_html(mes('option_mode')) + '</strong></span><select class="trtr-mode-select-menu"></select><span style="margin-left:1em;margin-right:0.5em"><strong>' + escape_html(mes('option_lang')) + '</strong></span><select class="trtr-lang-select-menu"></select></div><div class="trtr-dialog-textarea" style="margin-bottom:5px"><textarea class="trtr-textarea" style="font: 14px/18px \'Helvetica Neue\',Arial,sans-serif;width:512px;height:106px;border:1px solid #CCC;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;padding:8px;-webkit-box-shadow:0 1px white;-moz-box-shadow:0 1px white;box-shadow:0 1px white;">' + escape_html(t.tweet_html) + '</textarea></div><div>';
+        dialog_html += '<input class="trtr-dialog-preview-checkbox" type="checkbox" > <strong>' + escape_html(mes('option_preview')) + '</strong>';
+        dialog_html += '<input class="trtr-dialog-showtco-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + escape_html(mes('option_showtco')) + '</strong>';
+        dialog_html += '<input class="trtr-dialog-media-checkbox" style="margin-left:1em" type="checkbox" > <strong>' + escape_html(mes('option_media')) + '</strong>';
         dialog_html += '</div><div class="trtr-dialog-previewarea" style="margin-top:5px"></div></div></div>';
         trtr_dialog = $(dialog_html).appendTo('body');
 
@@ -218,7 +266,7 @@ THE SOFTWARE.
 
         trtr_mode_select_menu = trtr_dialog.find('.trtr-mode-select-menu');
         for (i = 0; i < mode_list.length; i += 1) {
-            trtr_mode_select_menu.append($('<option value="' + mode_list[i][0] + '">' + mode_list[i][1] + '</option>'));
+            trtr_mode_select_menu.append($('<option value="' + escape_html(mode_list[i][0]) + '">' + escape_html(mode_list[i][1]) + '</option>'));
         }
         trtr_mode_select_menu.val(trtr.option.mode);
 
@@ -246,7 +294,7 @@ THE SOFTWARE.
 
         trtr_lang_select_menu = trtr_dialog.find('.trtr-lang-select-menu');
         for (i = 0; i < lang_list.length; i += 1) {
-            trtr_lang_select_menu.append($('<option value="' + lang_list[i][0] + '">' + lang_list[i][1] + '</option>'));
+            trtr_lang_select_menu.append($('<option value="' + escape_html(lang_list[i][0]) + '">' + escape_html(lang_list[i][1]) + '</option>'));
         }
         trtr_lang_select_menu.val(trtr.option.lang);
 
@@ -364,7 +412,7 @@ THE SOFTWARE.
         }
 
         if (entity_list.length === 0) {
-            return text;
+            return re_escape_html(text);
         }
 
         entity_list.sort(function (a, b) {
@@ -376,25 +424,25 @@ THE SOFTWARE.
         for (i = 0; i < entity_list.length; i += 1) {
             entity = entity_list[i];
             if (!entity_callback.hasOwnProperty(entity[0])) {
-                alert('teritori: Unknown parameter \'' + entity[0] + '\' in entity');
-                return text;
+                alert('teritori: Unknown parameter \'' + escape_html(entity[0]) + '\' in entity');
+                return re_escape_html(text);
             }
 
             start = entity[1].indices[0];
             end = entity[1].indices[1];
 
             if (index > start || start > end || end > text.length) {
-                alert('teritori: Unordered indices (' + index.toString() + ', ' + start.toString() + ', ' + end.toString() + ', ' + text.length.toString() + ')');
-                return text;
+                alert('teritori: Unordered indices (' + escape_html(index.toString()) + ', ' + escape_html(start.toString()) + ', ' + escape_html(end.toString()) + ', ' + escape_html(text.length.toString()) + ')');
+                return re_escape_html(text);
             }
 
-            linked_text += text.substring(index, start);
-            linked_text += entity_callback[entity[0]](entity, text.substring(start, end));
+            linked_text += re_escape_html(text.substring(index, start));
+            linked_text += entity_callback[entity[0]](entity, re_escape_html(text.substring(start, end)));
             index = end;
 
         }
         if (end < text.length) {
-            linked_text += text.substring(end, text.length);
+            linked_text += re_escape_html(text.substring(end, text.length));
         }
 
         return linked_text;
@@ -456,13 +504,13 @@ THE SOFTWARE.
 
         fgcolor_array = trtr.get_color_array(fgcolor_str);
         if (fgcolor_array === undefined) {
-            alert('teritori: fgcolor_str has unknown color format \'' + fgcolor_str + '\'');
+            alert('teritori: fgcolor_str has unknown color format \'' + escape_html(fgcolor_str) + '\'');
             return undefined;
         }
 
         bgcolor_array = trtr.get_color_array(bgcolor_str);
         if (bgcolor_array === undefined) {
-            alert('teritori: bgcolor_str has unknown color format \'' + bgcolor_str + '\'');
+            alert('teritori: bgcolor_str has unknown color format \'' + escape_html(bgcolor_str) + '\'');
             return undefined;
         }
 
@@ -591,7 +639,7 @@ THE SOFTWARE.
             return 'http://lohas.nicoseiga.jp/thumb/' + url.match(this.regexp_media_url)[1] + 'i?';
         },
         'get_html_middle': function (url) {
-            return '<div style="margin:5px 0 5px 0;font-size:12px"><iframe width="312" height="176" src="http://ext.seiga.nicovideo.jp/thumb/im' + url.match(this.regexp_media_url)[1] + '" scrolling="no" style="border:solid 1px #888;" frameborder="0"></iframe><br><img src="' + this.provider_icon_url + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"><span style="color:#999">' + this.provider_name + '</span></div>';
+            return '<div style="margin:5px 0 5px 0;font-size:12px"><iframe width="312" height="176" src="http://ext.seiga.nicovideo.jp/thumb/im' + escape_html(url.match(this.regexp_media_url)[1]) + '" scrolling="no" style="border:solid 1px #888;" frameborder="0"></iframe><br><img src="' + escape_html(this.provider_icon_url) + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"><span style="color:#999">' + escape_html(this.provider_name) + '</span></div>';
         }
     }];
 
@@ -603,7 +651,7 @@ THE SOFTWARE.
             if ((typeof thumbnail_url !== 'string') || (thumbnail_url === '')) {
                 return '';
             }
-            return '<div style="margin:.75em 0 .75em 0;font-size:12px"><a href="' + url + '"><img src="' + thumbnail_url + '" style="max-height:244px;max-width:244px"></a><br>' + this.get_attribution_html_middle() + '</div>';
+            return '<div style="margin:.75em 0 .75em 0;font-size:12px"><a href="' + escape_html(url) + '"><img src="' + escape_html(thumbnail_url) + '" style="max-height:244px;max-width:244px"></a><br>' + this.get_attribution_html_middle() + '</div>';
         },
         'get_html_large': function (url, entity) {
             var thumbnail_url;
@@ -612,22 +660,22 @@ THE SOFTWARE.
             if ((typeof thumbnail_url !== 'string') || (thumbnail_url === '')) {
                 return '';
             }
-            return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><a href="' + url + '"><img src="' + thumbnail_url + '" style="max-height:700px;max-width:317px"></a><br>' + this.get_attribution_html_large() + '</div>';
+            return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><a href="' + escape_html(url) + '"><img src="' + escape_html(thumbnail_url) + '" style="max-height:700px;max-width:317px"></a><br>' + this.get_attribution_html_large() + '</div>';
         },
         'get_attribution_html_middle': function () {
             if (this.provider_icon_url === null) {
                 return this.get_attribution_html_textonly();
             }
-            return '<a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span>';
+            return '<a href="' + escape_html(this.provider_url) + '"><img src="' + escape_html(this.provider_icon_url) + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + escape_html(this.provider_name) + '</span>';
         },
         'get_attribution_html_large': function () {
             if (this.provider_icon_url === null) {
                 return this.get_attribution_html_textonly();
             }
-            return '<a href="' + this.provider_url + '"><img src="' + this.provider_icon_url + '" width="16" height="16" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + this.provider_name + '</span>';
+            return '<a href="' + escape_html(this.provider_url) + '"><img src="' + escape_html(this.provider_icon_url) + '" width="16" height="16" style="vertical-align:middle;margin-right:3px"></a><span style="color:#999">' + escape_html(this.provider_name) + '</span>';
         },
         'get_attribution_html_textonly': function () {
-            return '<a href="' + this.provider_url + '"><span style="color:#999">' + this.provider_name + '</span></a>';
+            return '<a href="' + escape_html(this.provider_url) + '"><span style="color:#999">' + escape_html(this.provider_name) + '</span></a>';
         }
     };
 
@@ -691,7 +739,7 @@ THE SOFTWARE.
                     var a = arguments,
                         url = '',
                         text = '',
-                        pre_text = '';
+                        pre_text_html = '';
 
                     if (a[1]) {
                         url = a[1];
@@ -701,25 +749,25 @@ THE SOFTWARE.
                         text = '#' + a[2];
                     } else if (a[3]) {
                         url = 'http://twitter.com/' + a[3];
-                        pre_text = '@';
+                        pre_text_html = '@';
                         text = a[3];
                     }
 
-                    return pre_text + '<a href="' + url + '" target="_new">' + text + '</a>';
+                    return pre_text_html + '<a href="' + escape_html(url) + '" target="_new">' + re_escape_html(text) + '</a>';
                 };
 
                 body_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                 t.profile_image_url = t.profile_image_url.replace(/_normal\.([a-zA-Z]+)$/, '_reasonably_small.$1');
 
                 if (t.user_url) {
-                    user_url_html = '<div><a target="_blank" rel="me nofollow" href="' + t.user_url + '">' + t.user_url + '</a></div>';
+                    user_url_html = '<div><a target="_blank" rel="me nofollow" href="' + escape_html(t.user_url) + '">' + escape_html(t.user_url) + '</a></div>';
                 } else {
                     user_url_html = '<div><a target="_blank" rel="me nofollow"></a></div>';
                 }
 
-                tweet_html = '<!-- http://twitter.com/' + t.screen_name + ' -->\n';
-                tweet_html += '<style type="text/css">.trtr_userid_' + t.user_id + ' a {text-decoration:none;color:#' + t.link_color + ' !important;} .trtr_userid_' + t.user_id + ' a:hover {text-decoration:underline;}</style>\n';
-                tweet_html += '<div class="trtr_userid_' + t.user_id + '" style="display:block;-webkit-font-smoothing:antialiased;color:#444;font:13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-sefif"><div style="display:inline-block;padding:20px 20px 16px 20px;width:510px;background-color#fff"><div style="float:left"><a href="http://twitter.com/' + t.screen_name + '" target="_blank"><img src="' + t.profile_image_url + '" alt="' + t.user_name + '"></a></div><div style="margin-left:15px;display:inline-block;width:367px"><div style="font-weight:bold"><h2 style="line-height:36px;font-size:30px;margin:0">' + t.user_name + '</h2></div><div style="font-size:13px;line-height:22px;padding:0"><span style="font-size:18px;font-weight:bold"><a href="http://twitter.com/' + t.screen_name + '" target="_blank">@' + t.screen_name + '</a></span> ' + t.user_location + ' </div><div style="overflow:hidden;text-overflow:ellipsis;color:#777;font-family:Georgia,serif;font-size:14px;font-style:italic;">' + t.user_description + '</div>' + user_url_html + '</div></div></div>\n';
+                tweet_html = '<!-- http://twitter.com/' + escape_html(t.screen_name) + ' -->\n';
+                tweet_html += '<style type="text/css">.trtr_userid_' + escape_html(t.user_id) + ' a {text-decoration:none;color:#' + escape_html(t.link_color) + ' !important;} .trtr_userid_' + escape_html(t.user_id) + ' a:hover {text-decoration:underline;}</style>\n';
+                tweet_html += '<div class="trtr_userid_' + escape_html(t.user_id) + '" style="display:block;-webkit-font-smoothing:antialiased;color:#444;font:13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-sefif"><div style="display:inline-block;padding:20px 20px 16px 20px;width:510px;background-color#fff"><div style="float:left"><a href="http://twitter.com/' + escape_html(t.screen_name) + '" target="_blank"><img src="' + escape_html(t.profile_image_url) + '" alt="' + escape_html(t.user_name) + '"></a></div><div style="margin-left:15px;display:inline-block;width:367px"><div style="font-weight:bold"><h2 style="line-height:36px;font-size:30px;margin:0">' + escape_html(t.user_name) + '</h2></div><div style="font-size:13px;line-height:22px;padding:0"><span style="font-size:18px;font-weight:bold"><a href="http://twitter.com/' + escape_html(t.screen_name) + '" target="_blank">@' + escape_html(t.screen_name) + '</a></span> ' + escape_html(t.user_location) + ' </div><div style="overflow:hidden;text-overflow:ellipsis;color:#777;font-family:Georgia,serif;font-size:14px;font-style:italic;">' + re_escape_html(t.user_description) + '</div>' + user_url_html + '</div></div></div>\n';
                 tweet_html += '<!-- end of profile -->\n';
 
                 t.tweet_html = tweet_html;
@@ -741,7 +789,7 @@ THE SOFTWARE.
                         var e;
 
                         e = entity[1];
-                        return '<span style="color:#' + t.symbol_color + '">#</span><a href="http://search.twitter.com/search?q=%23' + encodeURIComponent(e.text) + '" style="color:#' + t.link_color + '">' + e.text + '</a>';
+                        return '<span style="color:#' + escape_html(t.symbol_color) + '">#</span><a href="http://search.twitter.com/search?q=%23' + escape_html(encodeURIComponent(e.text)) + '" style="color:#' + escape_html(t.link_color) + '">' + escape_html(e.text) + '</a>';
                     },
                     'urls': function (entity) {
                         var e, linktext;
@@ -757,14 +805,14 @@ THE SOFTWARE.
                             }
                         }
 
-                        return '<a href="' + e.url + '" style="color:#' + t.link_color + '">' + linktext + '</a>';
+                        return '<a href="' + escape_html(e.url) + '" style="color:#' + escape_html(t.link_color) + '">' + escape_html(linktext) + '</a>';
                     },
                     'user_mentions': function (entity, string) {
                         var e;
 
 
                         e = entity[1];
-                        return '<span style="color:#' + t.symbol_color + '">@</span><a href="http://twitter.com/' + e.screen_name + '" style="color:#' + t.link_color + '">' + string.substring(1) + '</a>';
+                        return '<span style="color:#' + escape_html(t.symbol_color) + '">@</span><a href="http://twitter.com/' + escape_html(e.screen_name) + '" style="color:#' + escape_html(t.link_color) + '">' + escape_html(string.substring(1)) + '</a>';
                     },
                     'media': function (entity) {
                         var e, linktext;
@@ -780,32 +828,32 @@ THE SOFTWARE.
                             }
                         }
 
-                        return '<a href="' + e.url + '" style="color:#' + t.link_color + '">' + linktext + '</a>';
+                        return '<a href="' + escape_html(e.url) + '" style="color:#' + escape_html(t.link_color) + '">' + escape_html(linktext) + '</a>';
                     }
                 };
 
-                link_style_html = ' style="color:#' + t.link_color + '"';
+                link_style_html = ' style="color:#' + escape_html(t.link_color) + '"';
 
                 to_linked_html = function () {
                     var a = arguments,
                         url = '',
                         text = '',
-                        pre_text = '';
+                        pre_text_html = '';
 
                     if (a[1]) {
                         url = a[1];
                         text = a[1];
                     } else if (a[2]) {
                         url = 'http://search.twitter.com/search?q=%23' + a[2];
-                        pre_text = '<span style="color:#' + t.symbol_color + '">#</span>';
+                        pre_text_html = '<span style="color:#' + escape_html(t.symbol_color) + '">#</span>';
                         text = a[2];
                     } else if (a[3]) {
                         url = 'http://twitter.com/' + a[3];
-                        pre_text = '<span style="color:#' + t.symbol_color + '">@</span>';
+                        pre_text_html = '<span style="color:#' + escape_html(t.symbol_color) + '">@</span>';
                         text = a[3];
                     }
 
-                    return pre_text + '<a href="' + url + '"' + link_style_html + '>' + text + '</a>';
+                    return pre_text_html + '<a href="' + escape_html(url) + '"' + link_style_html + '>' + escape_html(text) + '</a>';
                 };
 
                 if (trtr.option.link === 'entity') {
@@ -813,7 +861,7 @@ THE SOFTWARE.
                 } else if (trtr.option.link === 'auto') {
                     body_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                 } else {
-                    alert('teritori: Unknown link option \'' + trtr.option.link + '\'');
+                    alert('teritori: Unknown link option \'' + escape_html(trtr.option.link) + '\'');
                     return;
                 }
 
@@ -845,13 +893,13 @@ THE SOFTWARE.
 
                 source_html = mes('format_source_html').replace('%s', t.source_html);
 
-                tweet_html = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + t.text_color + ';font-size:16px"><div>' + body_html;
+                tweet_html = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + escape_html(t.text_color) + ';font-size:16px"><div>' + body_html;
 
                 if (trtr.option.media) {
                     tweet_html += t.media_html;
                 }
 
-                tweet_html += ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '"' + link_style_html + '>' + t.timestamp + '</a> ' + source_html + ' </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #E6E6E6"><a href="http://twitter.com/' + t.screen_name + '"' + link_style_html + '><img src="' + t.profile_image_url + '" alt="' + t.user_name + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + t.screen_name + '"' + link_style_html + '>@' + t.screen_name + '</a></strong><span style="color:#999;font-size:14px"><br>' + t.user_name + ' </span></div></div>';
+                tweet_html += ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + escape_html(t.screen_name) + '/status/' + escape_html(t.tweet_id) + '"' + link_style_html + '>' + escape_html(t.timestamp) + '</a> ' + source_html + ' </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #E6E6E6"><a href="http://twitter.com/' + escape_html(t.screen_name) + '"' + link_style_html + '><img src="' + escape_html(t.profile_image_url) + '" alt="' + escape_html(t.user_name) + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + escape_html(t.screen_name) + '"' + link_style_html + '>@' + escape_html(t.screen_name) + '</a></strong><span style="color:#999;font-size:14px"><br>' + escape_html(t.user_name) + ' </span></div></div>';
 
                 t.tweet_html = tweet_html;
             },
@@ -872,7 +920,7 @@ THE SOFTWARE.
                         var e;
 
                         e = entity[1];
-                        return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + encodeURIComponent(e.text) + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + e.text + '</span></a>';
+                        return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + escape_html(encodeURIComponent(e.text)) + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + escape_html(e.text) + '</span></a>';
                     },
                     'urls': function (entity) {
                         var e, linktext;
@@ -888,13 +936,13 @@ THE SOFTWARE.
                             }
                         }
 
-                        return '<a href="' + e.url + '" target="_new"><span class="trtr_link_text">' + linktext + '</span></a>';
+                        return '<a href="' + escape_html(e.url) + '" target="_new"><span class="trtr_link_text">' + escape_html(linktext) + '</span></a>';
                     },
                     'user_mentions': function (entity, string) {
                         var e;
 
                         e = entity[1];
-                        return '<a class="trtr_link" href="http://twitter.com/' + e.screen_name + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + string.substring(1) + '</span></a>';
+                        return '<a class="trtr_link" href="http://twitter.com/' + escape_html(e.screen_name) + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + escape_html(string.substring(1)) + '</span></a>';
                     },
                     'media': function (entity) {
                         var e, linktext;
@@ -910,7 +958,7 @@ THE SOFTWARE.
                             }
                         }
 
-                        return '<a href="' + e.url + '" target="_new"><span class="trtr_link_text">' + linktext + '</span></a>';
+                        return '<a href="' + escape_html(e.url) + '" target="_new"><span class="trtr_link_text">' + escape_html(linktext) + '</span></a>';
                     }
                 };
 
@@ -918,11 +966,11 @@ THE SOFTWARE.
                     var a = arguments;
 
                     if (a[1]) {
-                        return '<a href="' + a[1] + '" target="_new"><span class="trtr_link_text">' + a[1] + '</span></a>';
+                        return '<a href="' + escape_html(a[1]) + '" target="_new"><span class="trtr_link_text">' + escape_html(a[1]) + '</span></a>';
                     } else if (a[2]) {
-                        return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + a[2] + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + a[2] + '</span></a>';
+                        return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + escape_html(a[2]) + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + escape_html(a[2]) + '</span></a>';
                     } else if (a[3]) {
-                        return '<a class="trtr_link" href="http://twitter.com/' + a[3] + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + a[3] + '</span></a>';
+                        return '<a class="trtr_link" href="http://twitter.com/' + escape_html(a[3]) + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + escape_html(a[3]) + '</span></a>';
                     } else {
                         alert('teritori: Unknown link error');
                     }
@@ -933,7 +981,7 @@ THE SOFTWARE.
                 } else if (trtr.option.link === 'auto') {
                     body_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                 } else {
-                    alert('teritori: Unknown link option \'' + trtr.option.link + '\'');
+                    alert('teritori: Unknown link option \'' + escape_html(trtr.option.link) + '\'');
                     return;
                 }
 
@@ -957,9 +1005,9 @@ THE SOFTWARE.
                     }());
                 }
 
-                background_html = '#' + t.background_color;
+                background_html = '#' + escape_html(t.background_color);
                 if (t.background_image) {
-                    background_html += ' url(' + t.background_image_url + ')';
+                    background_html += ' url(' + escape_html(t.background_image_url) + ')';
                     if (!t.background_tile) {
                         background_html += ' no-repeat';
                     }
@@ -967,15 +1015,15 @@ THE SOFTWARE.
 
                 source_html = mes('format_source_html').replace('%s', t.source_html);
 
-                tweet_html = '<!-- http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + ' -->\n';
-                tweet_html += '<style type="text/css">.trtr_tweetid_' + t.tweet_id + ' a {text-decoration:none;color:#' + t.link_color + ' !important} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link span.trtr_link_symbol {opacity:0.5} .trtr_tweetid_' + t.tweet_id + ' a:hover {text-decoration:underline} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link:hover {text-decoration:none} .trtr_tweetid_' + t.tweet_id + ' a.trtr_link:hover span.trtr_link_text {text-decoration:underline} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action span em {background:transparent url(http://si0.twimg.com/images/dev/cms/intents/icons/sprites/everything-spritev2.png) no-repeat;margin:0 3px -3.5px 3px;display:inline-block;vertical-align:baseline;position:relative;outline:none;width:15px;height:15px;} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_reply span em {background-position 0 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_reply:hover span em {background-position:-16px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_retweet span em {background-position:-80px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_retweet:hover span em {background-position:-96px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_favorite span em {background-position:-32px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_favorite:hover span em {background-position:-48px 0} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_follow span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_blue/bird_16_blue.png)} .trtr_tweetid_' + t.tweet_id + ' a.trtr_action_follow:hover span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_black/bird_16_black.png)}</style>';
-                tweet_html += '<div class="trtr_tweetid_' + t.tweet_id + '" style="background:' + background_html + ';padding:20px"><div style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + t.text_color + ';font-size:16px !important;line-height:22px;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;word-wrap:break-word">' + body_html;
+                tweet_html = '<!-- http://twitter.com/' + escape_html(t.screen_name) + '/status/' + escape_html(t.tweet_id) + ' -->\n';
+                tweet_html += '<style type="text/css">.trtr_tweetid_' + escape_html(t.tweet_id) + ' a {text-decoration:none;color:#' + escape_html(t.link_color) + ' !important} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_link span.trtr_link_symbol {opacity:0.5} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a:hover {text-decoration:underline} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_link:hover {text-decoration:none} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_link:hover span.trtr_link_text {text-decoration:underline} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action span em {background:transparent url(http://si0.twimg.com/images/dev/cms/intents/icons/sprites/everything-spritev2.png) no-repeat;margin:0 3px -3.5px 3px;display:inline-block;vertical-align:baseline;position:relative;outline:none;width:15px;height:15px;} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_reply span em {background-position 0 0} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_reply:hover span em {background-position:-16px 0} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_retweet span em {background-position:-80px 0} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_retweet:hover span em {background-position:-96px 0} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_favorite span em {background-position:-32px 0} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_favorite:hover span em {background-position:-48px 0} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_follow span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_blue/bird_16_blue.png)} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_follow:hover span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_black/bird_16_black.png)}</style>';
+                tweet_html += '<div class="trtr_tweetid_' + escape_html(t.tweet_id) + '" style="background:' + background_html + ';padding:20px"><div style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + escape_html(t.text_color) + ';font-size:16px !important;line-height:22px;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;word-wrap:break-word">' + body_html;
 
                 if (trtr.option.media) {
                     tweet_html += t.media_html;
                 }
 
-                tweet_html += ' <div class="trtr_actions" style="color:#999;font-size:12px;display:block"><a href="https://twitter.com/intent/user?user_id=' + t.user_id + '" class="trtr_action trtr_action_follow" title="' + mes('action_follow') + '"><span><em></em></span></a> <span class="trtr_timestamp"><a title="' + t.timestamp + '" href="http://twitter.com/' + t.screen_name + '/status/' + t.tweet_id + '">' + t.timestamp + '</a> ' + source_html + ' </span><a href="https://twitter.com/intent/tweet?in_reply_to=' + t.tweet_id + '" class="trtr_action trtr_action_reply" title="' + mes('action_reply') + '"><span><em></em>' + mes('action_reply') + '</span></a> <a href="https://twitter.com/intent/retweet?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_retweet" title="' + mes('action_retweet') + '"><span><em></em>' + mes('action_retweet') + '</span></a> <a href="https://twitter.com/intent/favorite?tweet_id=' + t.tweet_id + '" class="trtr_action trtr_action_favorite" title="' + mes('action_favorite') + '"><span><em></em>' + mes('action_favorite') + '</span></a> </div><span class="trtr_metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="trtr_author" style="color:#999;line-height:19px;"><a href="http://twitter.com/' + t.screen_name + '"><img src="' + t.profile_image_url + '" style="float:left;margin:0 7px 0 0;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + t.screen_name + '">' + t.user_name + '</a></strong><br/>@' + t.screen_name + '</span></span></div></div>\n';
+                tweet_html += ' <div class="trtr_actions" style="color:#999;font-size:12px;display:block"><a href="https://twitter.com/intent/user?user_id=' + escape_html(t.user_id) + '" class="trtr_action trtr_action_follow" title="' + escape_html(mes('action_follow')) + '"><span><em></em></span></a> <span class="trtr_timestamp"><a title="' + escape_html(t.timestamp) + '" href="http://twitter.com/' + escape_html(t.screen_name) + '/status/' + escape_html(t.tweet_id) + '">' + escape_html(t.timestamp) + '</a> ' + source_html + ' </span><a href="https://twitter.com/intent/tweet?in_reply_to=' + escape_html(t.tweet_id) + '" class="trtr_action trtr_action_reply" title="' + escape_html(mes('action_reply')) + '"><span><em></em>' + escape_html(mes('action_reply')) + '</span></a> <a href="https://twitter.com/intent/retweet?tweet_id=' + escape_html(t.tweet_id) + '" class="trtr_action trtr_action_retweet" title="' + escape_html(mes('action_retweet')) + '"><span><em></em>' + escape_html(mes('action_retweet')) + '</span></a> <a href="https://twitter.com/intent/favorite?tweet_id=' + escape_html(t.tweet_id) + '" class="trtr_action trtr_action_favorite" title="' + escape_html(mes('action_favorite')) + '"><span><em></em>' + escape_html(mes('action_favorite')) + '</span></a> </div><span class="trtr_metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="trtr_author" style="color:#999;line-height:19px;"><a href="http://twitter.com/' + escape_html(t.screen_name) + '"><img src="' + escape_html(t.profile_image_url) + '" style="float:left;margin:0 7px 0 0;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + escape_html(t.screen_name) + '">' + escape_html(t.user_name) + '</a></strong><br/>@' + escape_html(t.screen_name) + '</span></span></div></div>\n';
                 tweet_html += '<!-- end of tweet -->\n';
 
                 t.tweet_html = tweet_html;
@@ -1030,7 +1078,7 @@ THE SOFTWARE.
         if (trtr.templates.hasOwnProperty(trtr.option.mode)) {
             trtr.templates[trtr.option.mode].set_tweet_html(t);
         } else {
-            alert('teritori: Unknown mode \'' + trtr.option.mode.toString() + '\'');
+            alert('teritori: Unknown mode \'' + escape_html(trtr.option.mode.toString()) + '\'');
             return;
         }
 
@@ -1088,30 +1136,30 @@ THE SOFTWARE.
             trtr.load_jsonp(matches[7]);
         } else if (trtr.new_twitter) {
             $('.stream-tweet').live('hover', function () {
-                var actions, tweet_link, tweet_id, action_gethtml;
+                var actions, tweet_link, tweet_id, action_gethtml_html;
 
                 actions = $(this).find('.tweet-actions');
                 if (actions && actions.find('.trtr_gethtml').length === 0) {
                     tweet_link = actions.siblings('.tweet-timestamp').attr('href');
                     tweet_id = (tweet_link.match(/^\/(#\!\/)?([a-zA-Z0-9_]{1,15})\/status(es)?\/([1-9][0-9]+)/))[4];
-                    action_gethtml = $('<a href="#" class="trtr_gethtml" style="padding-left:18px"><span>GetHTML</span></a>');
-                    actions.append(action_gethtml);
-                    action_gethtml.click(function () {
+                    action_gethtml_html = $('<a href="#" class="trtr_gethtml" style="padding-left:18px"><span>GetHTML</span></a>');
+                    actions.append(action_gethtml_html);
+                    action_gethtml_html.click(function () {
                         trtr.load_jsonp(tweet_id);
                     });
                 }
             });
         } else {
             $('.hentry').live('mouseover', function () {
-                var actions, tweet_link, tweet_id, action_gethtml;
+                var actions, tweet_link, tweet_id, action_gethtml_html;
 
                 actions = $(this).children('.status-body').children('.actions-hover');
                 if (actions && actions.find('.trtr_gethtml').length === 0) {
                     tweet_link = actions.siblings('.entry-meta').children('.entry-date').attr('href');
                     tweet_id = (tweet_link.match(/^https?:\/\/twitter\.com\/(#\!\/)?([a-zA-Z0-9_]{1,15})\/status(es)?\/([1-9][0-9]+)/))[4];
-                    action_gethtml = $('<li style="line-height:16px"><span><a href="#" class="trtr_gethtml" style="padding-left:18px"><span>GetHTML</span></a></span></li>');
-                    actions.prepend(action_gethtml);
-                    action_gethtml.click(function () {
+                    action_gethtml_html = $('<li style="line-height:16px"><span><a href="#" class="trtr_gethtml" style="padding-left:18px"><span>GetHTML</span></a></span></li>');
+                    actions.prepend(action_gethtml_html);
+                    action_gethtml_html.click(function () {
                         trtr.load_jsonp(tweet_id);
                         return false;
                     });
