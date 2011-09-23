@@ -584,6 +584,17 @@ THE SOFTWARE.
             return 'http://twitpic.com/show/large/' + url.match(this.regexp_media_url)[1];
         }
     }, {
+        'provider_name': 'Lockerz',
+        'provider_url': 'http://lockerz.com/',
+        'provider_icon_url': 'http://lockerz.com/favicon.ico',
+        'regexp_media_url': /^https?:\/\/(?:www\.)?lockerz\.com\/s\/([1-9][0-9]+)$/,
+        'get_middle_thumbnail_url': function (url) {
+            return 'http://api.plixi.com/api/tpapi.svc/imagefromurl?url=http://lockerz.com/s/' + url.match(this.regexp_media_url)[1] + '&size=small';
+        },
+        'get_large_thumbnail_url': function (url) {
+            return 'http://api.plixi.com/api/tpapi.svc/imagefromurl?url=http://lockerz.com/s/' + url.match(this.regexp_media_url)[1] + '&size=medium';
+        }
+    }, {
         'provider_name': 'Instagram',
         'provider_url': 'http://instagr.am/',
         'provider_icon_url': 'http://instagr.am/favicon.ico',
@@ -626,6 +637,23 @@ THE SOFTWARE.
         },
         'get_large_thumbnail_url': function (url) {
             return 'http://image.movapic.com/pic/m_' + url.match(this.regexp_media_url)[1] + '.jpeg';
+        }
+    }, {
+        'provider_name': 'Hatena Fotolife',
+        'provider_url': 'http://f.hatena.ne.jp/',
+        'provider_icon_url': 'http://f.hatena.ne.jp/favicon.ico',
+        'regexp_media_url': /^http:\/\/f\.hatena\.ne\.jp\/(([a-zA-Z])[a-zA-Z0-9_\-]{1,30}[a-zA-Z0-9])\/(([1-9][0-9]{7})[0-9]+)$/,
+        'get_middle_thumbnail_url': function (url) {
+            var m;
+
+            m = url.match(this.regexp_media_url);
+            return 'http://img.f.hatena.ne.jp/images/fotolife/' + m[2] + '/' + m[1] + '/' + m[4] + '/' + m[3] + '_120.jpg';
+        },
+        'get_large_thumbnail_url': function (url) {
+            var m;
+
+            m = url.match(this.regexp_media_url);
+            return 'http://img.f.hatena.ne.jp/images/fotolife/' + m[2] + '/' + m[1] + '/' + m[4] + '/' + m[3] + '_120.jpg';
         }
     }, {
         'provider_name': 'ニコニコ静画',
