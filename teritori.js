@@ -150,7 +150,7 @@ THE SOFTWARE.
             'debug': false,
             'link': 'entity',
             'showtco': true,
-            'media': true,
+            'media': false,
             'preview': true,
             'lang': trtr.get_lang() || 'en'
         };
