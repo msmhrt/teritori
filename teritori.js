@@ -1191,14 +1191,14 @@ THE SOFTWARE.
         }
 
         url = document.location.href;
-        matches = url.match(/^https?:\/\/twitter\.com(\/#(\!|%21))?(\/([a-zA-Z0-9_]{1,15})(\/status(es)?\/([1-9][0-9]+))?)?/);
+        matches = url.match(/^https?:\/\/twitter\.com(?:\/#(?:\!|%21))?(?:\/(?:[a-zA-Z0-9_]{1,15})(?:\/status(?:es)?\/([1-9][0-9]+))?)?/);
         if (!matches) {
             alert('teritori can use only twitter.com.');
             return;
         }
 
-        if (matches[7]) {
-            trtr.load_jsonp(matches[7]);
+        if (matches[1]) {
+            trtr.load_jsonp(matches[1]);
         } else if (trtr.new_twitter) {
             $('.stream-tweet').live('hover', function () {
                 var actions, tweet_link, tweet_id, action_gethtml_html;
@@ -1206,7 +1206,7 @@ THE SOFTWARE.
                 actions = $(this).find('.tweet-actions');
                 if (actions && actions.find('.trtr_gethtml').length === 0) {
                     tweet_link = actions.siblings('.tweet-timestamp').attr('href');
-                    tweet_id = (tweet_link.match(/^\/(#\!\/)?([a-zA-Z0-9_]{1,15})\/status(es)?\/([1-9][0-9]+)/))[4];
+                    tweet_id = (tweet_link.match(/^\/(?:#\!\/)?(?:[a-zA-Z0-9_]{1,15})\/status(?:es)?\/([1-9][0-9]+)/))[1];
                     action_gethtml_html = $('<a href="#" class="trtr_gethtml" style="padding-left:18px"><span>GetHTML</span></a>');
                     actions.append(action_gethtml_html);
                     action_gethtml_html.click(function () {
@@ -1221,7 +1221,7 @@ THE SOFTWARE.
                 actions = $(this).children('.status-body').children('.actions-hover');
                 if (actions && actions.find('.trtr_gethtml').length === 0) {
                     tweet_link = actions.siblings('.entry-meta').children('.entry-date').attr('href');
-                    tweet_id = (tweet_link.match(/^https?:\/\/twitter\.com\/(#\!\/)?([a-zA-Z0-9_]{1,15})\/status(es)?\/([1-9][0-9]+)/))[4];
+                    tweet_id = (tweet_link.match(/^https?:\/\/twitter\.com\/(?:#\!\/)?(?:[a-zA-Z0-9_]{1,15})\/status(?:es)?\/([1-9][0-9]+)/))[1];
                     action_gethtml_html = $('<li style="line-height:16px"><span><a href="#" class="trtr_gethtml" style="padding-left:18px"><span>GetHTML</span></a></span></li>');
                     actions.prepend(action_gethtml_html);
                     action_gethtml_html.click(function () {
