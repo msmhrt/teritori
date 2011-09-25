@@ -558,7 +558,7 @@ THE SOFTWARE.
         'provider_name': 'Photobucket',
         'provider_url': 'http://photobucket.com/twitter',
         'provider_icon_url': 'http://twitter.com/phoenix/img/turkey-icon.png',
-        'regexp_media_url': /^http:\/\/twitter\.com\/[a-zA-Z0-9_]{1,15}\/status\/[1-9][0-9]*\/photo\/[1-9][0-9]*$/,
+        'regexp_media_url': /^https?:\/\/twitter\.com\/[a-zA-Z0-9_]{1,15}\/status\/[1-9][0-9]*\/photo\/[1-9][0-9]*$/,
         'get_middle_thumbnail_url': function (url, entity) { //
             if (!url || !entity || (entity[0] !== 'media')) {
                 return '';
