@@ -681,7 +681,7 @@ THE SOFTWARE.
         'get_html_middle': function (url) {
             var embed_url = 'http://ext.seiga.nicovideo.jp/thumb/im' + percent_encode(url.match(this.regexp_media_url)[1]);
 
-            return '<div style="margin:5px 0 5px 0;font-size:12px"><iframe width="312" height="176" src="' + escape_html(embed_url) + '" scrolling="no" style="border:solid 1px #888;" frameborder="0"></iframe><br><img src="' + escape_html(this.provider_icon_url) + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"><span style="color:#999">' + escape_html(this.provider_name) + '</span></div>';
+            return '<div style="margin:.75em 0 .75em 0;font-size:12px"><iframe width="312" height="176" src="' + escape_html(embed_url) + '" scrolling="no" style="border:solid 1px #888;" frameborder="0"></iframe><br><img src="' + escape_html(this.provider_icon_url) + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"><span style="color:#999">' + escape_html(this.provider_name) + '</span></div>';
         }
     }];
 
