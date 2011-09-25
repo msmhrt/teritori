@@ -25,7 +25,7 @@ THE SOFTWARE.
 (function () {
     'use strict';
 
-    var trtr, mes, escape_html, re_escape_html, percent_encode;
+    var trtr, mes, escape_html, normalize_html, percent_encode;
 
     trtr = window.teritori;
 
@@ -43,7 +43,7 @@ THE SOFTWARE.
 
     escape_html = trtr.escape_html;
 
-    trtr.re_escape_html = function (text) {
+    trtr.normalize_html = function (text) {
         var escaped_text, strings, i, match;
 
         if (text === null || text === undefined) {
@@ -69,7 +69,7 @@ THE SOFTWARE.
                 } else if (match[2] !== undefined) {
                     escaped_text += ('&' + match[2] + ';' + strings[i].slice(match[2].length));
                 } else {
-                    alert('teritori: RegExp in trtr.re_escape_html() is corrputed.');
+                    alert('teritori: RegExp in trtr.normalize_html() is corrputed.');
                 }
             } else {
                 escaped_text += ('&amp;' + strings[i]);
@@ -79,7 +79,7 @@ THE SOFTWARE.
         return escaped_text.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;');
     };
 
-    re_escape_html = trtr.re_escape_html;
+    normalize_html = trtr.normalize_html;
 
     trtr.percent_encode = function (text) {
         if (text === null || text === undefined) {
@@ -424,7 +424,7 @@ THE SOFTWARE.
         }
 
         if (entity_list.length === 0) {
-            return re_escape_html(text);
+            return normalize_html(text);
         }
 
         entity_list.sort(function (a, b) {
@@ -437,7 +437,7 @@ THE SOFTWARE.
             entity = entity_list[i];
             if (!entity_callback.hasOwnProperty(entity[0])) {
                 alert('teritori: Unknown parameter \'' + escape_html(entity[0]) + '\' in entity');
-                return re_escape_html(text);
+                return normalize_html(text);
             }
 
             start = entity[1].indices[0];
@@ -445,16 +445,16 @@ THE SOFTWARE.
 
             if (index > start || start > end || end > text.length) {
                 alert('teritori: Unordered indices (' + escape_html(index.toString()) + ', ' + escape_html(start.toString()) + ', ' + escape_html(end.toString()) + ', ' + escape_html(text.length.toString()) + ')');
-                return re_escape_html(text);
+                return normalize_html(text);
             }
 
-            linked_text += re_escape_html(text.substring(index, start));
-            linked_text += entity_callback[entity[0]](entity, re_escape_html(text.substring(start, end)));
+            linked_text += normalize_html(text.substring(index, start));
+            linked_text += entity_callback[entity[0]](entity, normalize_html(text.substring(start, end)));
             index = end;
 
         }
         if (end < text.length) {
-            linked_text += re_escape_html(text.substring(end, text.length));
+            linked_text += normalize_html(text.substring(end, text.length));
         }
 
         return linked_text;
@@ -797,7 +797,7 @@ THE SOFTWARE.
                         text = a[3];
                     }
 
-                    return pre_text_html + '<a href="' + escape_html(url) + '" target="_new">' + re_escape_html(text) + '</a>';
+                    return pre_text_html + '<a href="' + escape_html(url) + '" target="_new">' + normalize_html(text) + '</a>';
                 };
 
                 body_html = t.text.replace(/(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
@@ -813,7 +813,7 @@ THE SOFTWARE.
 
                 tweet_html = '<!-- ' + escape_html(twitter_url) + ' -->\n';
                 tweet_html += '<style type="text/css">.trtr_userid_' + escape_html(t.user_id) + ' a {text-decoration:none;color:#' + escape_html(t.link_color) + ' !important;} .trtr_userid_' + escape_html(t.user_id) + ' a:hover {text-decoration:underline;}</style>\n';
-                tweet_html += '<div class="trtr_userid_' + escape_html(t.user_id) + '" style="display:block;-webkit-font-smoothing:antialiased;color:#444;font:13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-sefif"><div style="display:inline-block;padding:20px 20px 16px 20px;width:510px;background-color#fff"><div style="float:left"><a href="' + escape_html(twitter_url) + '" target="_blank"><img src="' + escape_html(t.profile_image_url) + '" alt="' + escape_html(t.user_name) + '"></a></div><div style="margin-left:15px;display:inline-block;width:367px"><div style="font-weight:bold"><h2 style="line-height:36px;font-size:30px;margin:0">' + escape_html(t.user_name) + '</h2></div><div style="font-size:13px;line-height:22px;padding:0"><span style="font-size:18px;font-weight:bold"><a href="' + escape_html(twitter_url) + '" target="_blank">@' + escape_html(t.screen_name) + '</a></span> ' + escape_html(t.user_location) + ' </div><div style="overflow:hidden;text-overflow:ellipsis;color:#777;font-family:Georgia,serif;font-size:14px;font-style:italic;">' + re_escape_html(t.user_description) + '</div>' + user_url_html + '</div></div></div>\n';
+                tweet_html += '<div class="trtr_userid_' + escape_html(t.user_id) + '" style="display:block;-webkit-font-smoothing:antialiased;color:#444;font:13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-sefif"><div style="display:inline-block;padding:20px 20px 16px 20px;width:510px;background-color#fff"><div style="float:left"><a href="' + escape_html(twitter_url) + '" target="_blank"><img src="' + escape_html(t.profile_image_url) + '" alt="' + escape_html(t.user_name) + '"></a></div><div style="margin-left:15px;display:inline-block;width:367px"><div style="font-weight:bold"><h2 style="line-height:36px;font-size:30px;margin:0">' + escape_html(t.user_name) + '</h2></div><div style="font-size:13px;line-height:22px;padding:0"><span style="font-size:18px;font-weight:bold"><a href="' + escape_html(twitter_url) + '" target="_blank">@' + escape_html(t.screen_name) + '</a></span> ' + escape_html(t.user_location) + ' </div><div style="overflow:hidden;text-overflow:ellipsis;color:#777;font-family:Georgia,serif;font-size:14px;font-style:italic;">' + normalize_html(t.user_description) + '</div>' + user_url_html + '</div></div></div>\n';
                 tweet_html += '<!-- end of profile -->\n';
 
                 t.tweet_html = tweet_html;
@@ -1019,7 +1019,7 @@ THE SOFTWARE.
                         url;
 
                     if (a[1]) {
-                        return '<a href="' + re_escape_html(a[1]) + '" target="_new"><span class="trtr_link_text">' + escape_html(a[1]) + '</span></a>';
+                        return '<a href="' + normalize_html(a[1]) + '" target="_new"><span class="trtr_link_text">' + escape_html(a[1]) + '</span></a>';
                     } else if (a[2]) {
                         url = 'http://search.twitter.com/search?q=%23' + percent_encode(a[2]);
                         return '<a class="trtr_link" href="' + escape_html(url) + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + escape_html(a[2]) + '</span></a>';
