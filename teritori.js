@@ -25,7 +25,7 @@ THE SOFTWARE.
 (function () {
     'use strict';
 
-    var trtr, mes, escape_html, re_escape_html;
+    var trtr, mes, escape_html, re_escape_html, percent_encode;
 
     trtr = window.teritori;
 
@@ -80,6 +80,18 @@ THE SOFTWARE.
     };
 
     re_escape_html = trtr.re_escape_html;
+
+    trtr.percent_encode = function (text) {
+        if (text === null || text === undefined) {
+            return '';
+        }
+
+        return encodeURIComponent(text).replace(/[!*'()]/g, function (m) {
+            return '%' + m.charCodeAt(0).toString(16).toUpperCase();
+        });
+    };
+
+    percent_encode = trtr.percent_encode;
 
     trtr.lang = {
         'en': {
@@ -567,10 +579,10 @@ THE SOFTWARE.
         'provider_icon_url': 'http://yfrog.com/favicon.ico',
         'regexp_media_url': /^http:\/\/yfrog\.(?:com|us)\/([0-9a-zA-Z]+[jpbtgsdfzx])$/,
         'get_middle_thumbnail_url': function (url) {
-            return 'http://yfrog.com/' + url.match(this.regexp_media_url)[1] + ':small';
+            return 'http://yfrog.com/' + percent_encode(url.match(this.regexp_media_url)[1]) + ':small';
         },
         'get_large_thumbnail_url': function (url) {
-            return 'http://yfrog.com/' + url.match(this.regexp_media_url)[1] + ':iphone';
+            return 'http://yfrog.com/' + percent_encode(url.match(this.regexp_media_url)[1]) + ':iphone';
         }
     }, {
         'provider_name': 'TwitPic',
@@ -578,10 +590,10 @@ THE SOFTWARE.
         'provider_icon_url': 'http://twitpic.com/favicon.ico',
         'regexp_media_url': /^http:\/\/twitpic\.com\/([0-9a-zA-Z]+)$/,
         'get_middle_thumbnail_url': function (url) {
-            return 'http://twitpic.com/show/thumb/' + url.match(this.regexp_media_url)[1];
+            return 'http://twitpic.com/show/thumb/' + percent_encode(url.match(this.regexp_media_url)[1]);
         },
         'get_large_thumbnail_url': function (url) {
-            return 'http://twitpic.com/show/large/' + url.match(this.regexp_media_url)[1];
+            return 'http://twitpic.com/show/large/' + percent_encode(url.match(this.regexp_media_url)[1]);
         }
     }, {
         'provider_name': 'Lockerz',
@@ -589,10 +601,10 @@ THE SOFTWARE.
         'provider_icon_url': 'http://lockerz.com/favicon.ico',
         'regexp_media_url': /^https?:\/\/(?:www\.)?lockerz\.com\/s\/([1-9][0-9]+)$/,
         'get_middle_thumbnail_url': function (url) {
-            return 'http://api.plixi.com/api/tpapi.svc/imagefromurl?url=http://lockerz.com/s/' + url.match(this.regexp_media_url)[1] + '&size=small';
+            return 'http://api.plixi.com/api/tpapi.svc/imagefromurl?url=http://lockerz.com/s/' + percent_encode(url.match(this.regexp_media_url)[1]) + '&size=small';
         },
         'get_large_thumbnail_url': function (url) {
-            return 'http://api.plixi.com/api/tpapi.svc/imagefromurl?url=http://lockerz.com/s/' + url.match(this.regexp_media_url)[1] + '&size=medium';
+            return 'http://api.plixi.com/api/tpapi.svc/imagefromurl?url=http://lockerz.com/s/' + percent_encode(url.match(this.regexp_media_url)[1]) + '&size=medium';
         }
     }, {
         'provider_name': 'Instagram',
@@ -600,10 +612,10 @@ THE SOFTWARE.
         'provider_icon_url': 'http://instagr.am/favicon.ico',
         'regexp_media_url': /^https?:\/\/instagr(?:\.am|am\.com)\/p\/([0-9a-zA-Z_\-]+)\/$/,
         'get_middle_thumbnail_url': function (url) {
-            return 'http://instagr.am/p/' + url.match(this.regexp_media_url)[1] + '/media?size=t';
+            return 'http://instagr.am/p/' + percent_encode(url.match(this.regexp_media_url)[1]) + '/media?size=t';
         },
         'get_large_thumbnail_url': function (url) {
-            return 'http://instagr.am/p/' + url.match(this.regexp_media_url)[1] + '/media';
+            return 'http://instagr.am/p/' + percent_encode(url.match(this.regexp_media_url)[1]) + '/media';
         }
     }, {
         'provider_name': 'Mobypicture',
@@ -611,10 +623,10 @@ THE SOFTWARE.
         'provider_icon_url': null,
         'regexp_media_url': /^http:\/\/moby\.to\/([a-z0-9]+)$/,
         'get_middle_thumbnail_url': function (url) {
-            return 'http://moby.to/' + url.match(this.regexp_media_url)[1] + ':thumb';
+            return 'http://moby.to/' + percent_encode(url.match(this.regexp_media_url)[1]) + ':thumb';
         },
         'get_large_thumbnail_url': function (url) {
-            return 'http://moby.to/' + url.match(this.regexp_media_url)[1] + ':medium';
+            return 'http://moby.to/' + percent_encode(url.match(this.regexp_media_url)[1]) + ':medium';
         }
     }, {
         'provider_name': 'フォト蔵',
@@ -622,10 +634,10 @@ THE SOFTWARE.
         'provider_icon_url': 'http://photozou.jp/favicon.ico',
         'regexp_media_url': /^http:\/\/photozou\.jp\/photo\/show\/[0-9]+\/([0-9]+)$/,
         'get_middle_thumbnail_url': function (url) {
-            return 'http://photozou.jp/p/thumb/' + url.match(this.regexp_media_url)[1];
+            return 'http://photozou.jp/p/thumb/' + percent_encode(url.match(this.regexp_media_url)[1]);
         },
         'get_large_thumbnail_url': function (url) {
-            return 'http://photozou.jp/p/img/' + url.match(this.regexp_media_url)[1];
+            return 'http://photozou.jp/p/img/' + percent_encode(url.match(this.regexp_media_url)[1]);
         }
     }, {
         'provider_name': '携帯百景',
@@ -633,10 +645,10 @@ THE SOFTWARE.
         'provider_icon_url': null,
         'regexp_media_url': /^http:\/\/movapic\.com\/pic\/([0-9a-zA-Z]+)$/,
         'get_middle_thumbnail_url': function (url) {
-            return 'http://image.movapic.com/pic/s_' + url.match(this.regexp_media_url)[1] + '.jpeg';
+            return 'http://image.movapic.com/pic/s_' + percent_encode(url.match(this.regexp_media_url)[1]) + '.jpeg';
         },
         'get_large_thumbnail_url': function (url) {
-            return 'http://image.movapic.com/pic/m_' + url.match(this.regexp_media_url)[1] + '.jpeg';
+            return 'http://image.movapic.com/pic/m_' + percent_encode(url.match(this.regexp_media_url)[1]) + '.jpeg';
         }
     }, {
         'provider_name': 'Hatena Fotolife',
@@ -647,13 +659,13 @@ THE SOFTWARE.
             var m;
 
             m = url.match(this.regexp_media_url);
-            return 'http://img.f.hatena.ne.jp/images/fotolife/' + m[2] + '/' + m[1] + '/' + m[4] + '/' + m[3] + '_120.jpg';
+            return 'http://img.f.hatena.ne.jp/images/fotolife/' + percent_encode(m[2]) + '/' + percent_encode(m[1]) + '/' + percent_encode(m[4]) + '/' + percent_encode(m[3]) + '_120.jpg';
         },
         'get_large_thumbnail_url': function (url) {
             var m;
 
             m = url.match(this.regexp_media_url);
-            return 'http://img.f.hatena.ne.jp/images/fotolife/' + m[2] + '/' + m[1] + '/' + m[4] + '/' + m[3] + '_120.jpg';
+            return 'http://img.f.hatena.ne.jp/images/fotolife/' + percent_encode(m[2]) + '/' + percent_encode(m[1]) + '/' + percent_encode(m[4]) + '/' + percent_encode(m[3]) + '_120.jpg';
         }
     }, {
         'provider_name': 'ニコニコ静画',
@@ -661,13 +673,15 @@ THE SOFTWARE.
         'provider_icon_url': 'http://seiga.nicovideo.jp/favicon.ico',
         'regexp_media_url': /^http:\/\/(?:seiga\.nicovideo\.jp\/seiga|nico\.ms)\/im([1-9][0-9]+)/,
         'get_middle_thumbnail_url': function (url) {
-            return 'http://lohas.nicoseiga.jp/thumb/' + url.match(this.regexp_media_url)[1] + 'q?';
+            return 'http://lohas.nicoseiga.jp/thumb/' + percent_encode(url.match(this.regexp_media_url)[1]) + 'q?';
         },
         'get_large_thumbnail_url': function (url) {
-            return 'http://lohas.nicoseiga.jp/thumb/' + url.match(this.regexp_media_url)[1] + 'i?';
+            return 'http://lohas.nicoseiga.jp/thumb/' + percent_encode(url.match(this.regexp_media_url)[1]) + 'i?';
         },
         'get_html_middle': function (url) {
-            return '<div style="margin:5px 0 5px 0;font-size:12px"><iframe width="312" height="176" src="http://ext.seiga.nicovideo.jp/thumb/im' + escape_html(url.match(this.regexp_media_url)[1]) + '" scrolling="no" style="border:solid 1px #888;" frameborder="0"></iframe><br><img src="' + escape_html(this.provider_icon_url) + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"><span style="color:#999">' + escape_html(this.provider_name) + '</span></div>';
+            var embed_url = 'http://ext.seiga.nicovideo.jp/thumb/im' + percent_encode(url.match(this.regexp_media_url)[1]);
+
+            return '<div style="margin:5px 0 5px 0;font-size:12px"><iframe width="312" height="176" src="' + escape_html(embed_url) + '" scrolling="no" style="border:solid 1px #888;" frameborder="0"></iframe><br><img src="' + escape_html(this.provider_icon_url) + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"><span style="color:#999">' + escape_html(this.provider_name) + '</span></div>';
         }
     }];
 
@@ -763,7 +777,7 @@ THE SOFTWARE.
         'profile-mode': {
             'description': 'profile_description',
             'set_tweet_html': function (t) {
-                var to_linked_html, body_html, user_url_html, tweet_html;
+                var to_linked_html, body_html, user_url_html, twitter_url, tweet_html;
 
                 to_linked_html = function () {
                     var a = arguments,
@@ -775,10 +789,10 @@ THE SOFTWARE.
                         url = a[1];
                         text = a[1];
                     } else if (a[2]) {
-                        url = 'http://search.twitter.com/search?q=%23' + a[2];
+                        url = 'http://search.twitter.com/search?q=%23' + percent_encode(a[2]);
                         text = '#' + a[2];
                     } else if (a[3]) {
-                        url = 'http://twitter.com/' + a[3];
+                        url = 'http://twitter.com/' + percent_encode(a[3]);
                         pre_text_html = '@';
                         text = a[3];
                     }
@@ -786,7 +800,7 @@ THE SOFTWARE.
                     return pre_text_html + '<a href="' + escape_html(url) + '" target="_new">' + re_escape_html(text) + '</a>';
                 };
 
-                body_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
+                body_html = t.text.replace(/(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                 t.profile_image_url = t.profile_image_url.replace(/_normal\.([a-zA-Z]+)$/, '_reasonably_small.$1');
 
                 if (t.user_url) {
@@ -795,9 +809,11 @@ THE SOFTWARE.
                     user_url_html = '<div><a target="_blank" rel="me nofollow"></a></div>';
                 }
 
-                tweet_html = '<!-- http://twitter.com/' + escape_html(t.screen_name) + ' -->\n';
+                twitter_url = 'http://twitter.com/' + percent_encode(t.screen_name);
+
+                tweet_html = '<!-- ' + escape_html(twitter_url) + ' -->\n';
                 tweet_html += '<style type="text/css">.trtr_userid_' + escape_html(t.user_id) + ' a {text-decoration:none;color:#' + escape_html(t.link_color) + ' !important;} .trtr_userid_' + escape_html(t.user_id) + ' a:hover {text-decoration:underline;}</style>\n';
-                tweet_html += '<div class="trtr_userid_' + escape_html(t.user_id) + '" style="display:block;-webkit-font-smoothing:antialiased;color:#444;font:13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-sefif"><div style="display:inline-block;padding:20px 20px 16px 20px;width:510px;background-color#fff"><div style="float:left"><a href="http://twitter.com/' + escape_html(t.screen_name) + '" target="_blank"><img src="' + escape_html(t.profile_image_url) + '" alt="' + escape_html(t.user_name) + '"></a></div><div style="margin-left:15px;display:inline-block;width:367px"><div style="font-weight:bold"><h2 style="line-height:36px;font-size:30px;margin:0">' + escape_html(t.user_name) + '</h2></div><div style="font-size:13px;line-height:22px;padding:0"><span style="font-size:18px;font-weight:bold"><a href="http://twitter.com/' + escape_html(t.screen_name) + '" target="_blank">@' + escape_html(t.screen_name) + '</a></span> ' + escape_html(t.user_location) + ' </div><div style="overflow:hidden;text-overflow:ellipsis;color:#777;font-family:Georgia,serif;font-size:14px;font-style:italic;">' + re_escape_html(t.user_description) + '</div>' + user_url_html + '</div></div></div>\n';
+                tweet_html += '<div class="trtr_userid_' + escape_html(t.user_id) + '" style="display:block;-webkit-font-smoothing:antialiased;color:#444;font:13px/1.5 Helvetica Neue,Arial,Helvetica,\'Liberation Sans\',FreeSans,sans-sefif"><div style="display:inline-block;padding:20px 20px 16px 20px;width:510px;background-color#fff"><div style="float:left"><a href="' + escape_html(twitter_url) + '" target="_blank"><img src="' + escape_html(t.profile_image_url) + '" alt="' + escape_html(t.user_name) + '"></a></div><div style="margin-left:15px;display:inline-block;width:367px"><div style="font-weight:bold"><h2 style="line-height:36px;font-size:30px;margin:0">' + escape_html(t.user_name) + '</h2></div><div style="font-size:13px;line-height:22px;padding:0"><span style="font-size:18px;font-weight:bold"><a href="' + escape_html(twitter_url) + '" target="_blank">@' + escape_html(t.screen_name) + '</a></span> ' + escape_html(t.user_location) + ' </div><div style="overflow:hidden;text-overflow:ellipsis;color:#777;font-family:Georgia,serif;font-size:14px;font-style:italic;">' + re_escape_html(t.user_description) + '</div>' + user_url_html + '</div></div></div>\n';
                 tweet_html += '<!-- end of profile -->\n';
 
                 t.tweet_html = tweet_html;
@@ -812,14 +828,15 @@ THE SOFTWARE.
         'tweet4kml-mode': {
             'description': 'tweet4kml_description',
             'set_tweet_html': function (t) {
-                var link_style_html, to_linked_html, body_html, entity_callback, source_html, tweet_html;
+                var link_style_html, to_linked_html, body_html, entity_callback, source_html, tweet_url, twitter_url, tweet_html;
 
                 entity_callback = {
                     'hashtags': function (entity) {
-                        var e;
+                        var e, hashtag_url;
 
                         e = entity[1];
-                        return '<span style="color:#' + escape_html(t.symbol_color) + '">#</span><a href="http://search.twitter.com/search?q=%23' + escape_html(encodeURIComponent(e.text)) + '" style="color:#' + escape_html(t.link_color) + '">' + escape_html(e.text) + '</a>';
+                        hashtag_url = 'http://search.twitter.com/search?q=%23' + percent_encode(e.text);
+                        return '<span style="color:#' + escape_html(t.symbol_color) + '">#</span><a href="' + escape_html(hashtag_url) + '" style="color:#' + escape_html(t.link_color) + '">' + escape_html(e.text) + '</a>';
                     },
                     'urls': function (entity) {
                         var e, linktext;
@@ -838,11 +855,12 @@ THE SOFTWARE.
                         return '<a href="' + escape_html(e.url) + '" style="color:#' + escape_html(t.link_color) + '">' + escape_html(linktext) + '</a>';
                     },
                     'user_mentions': function (entity, string) {
-                        var e;
+                        var e, twitter_url;
 
 
                         e = entity[1];
-                        return '<span style="color:#' + escape_html(t.symbol_color) + '">@</span><a href="http://twitter.com/' + escape_html(e.screen_name) + '" style="color:#' + escape_html(t.link_color) + '">' + escape_html(string.substring(1)) + '</a>';
+                        twitter_url = 'http://twitter.com/' + percent_encode(e.screen_name);
+                        return '<span style="color:#' + escape_html(t.symbol_color) + '">@</span><a href="' + escape_html(twitter_url) + '" style="color:#' + escape_html(t.link_color) + '">' + escape_html(string.substring(1)) + '</a>';
                     },
                     'media': function (entity) {
                         var e, linktext;
@@ -874,11 +892,11 @@ THE SOFTWARE.
                         url = a[1];
                         text = a[1];
                     } else if (a[2]) {
-                        url = 'http://search.twitter.com/search?q=%23' + a[2];
+                        url = 'http://search.twitter.com/search?q=%23' + percent_encode(a[2]);
                         pre_text_html = '<span style="color:#' + escape_html(t.symbol_color) + '">#</span>';
                         text = a[2];
                     } else if (a[3]) {
-                        url = 'http://twitter.com/' + a[3];
+                        url = 'http://twitter.com/' + percent_encode(a[3]);
                         pre_text_html = '<span style="color:#' + escape_html(t.symbol_color) + '">@</span>';
                         text = a[3];
                     }
@@ -889,7 +907,7 @@ THE SOFTWARE.
                 if (trtr.option.link === 'entity') {
                     body_html = trtr.apply_entities(t, entity_callback);
                 } else if (trtr.option.link === 'auto') {
-                    body_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
+                    body_html = t.text.replace(/(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                 } else {
                     alert('teritori: Unknown link option \'' + escape_html(trtr.option.link) + '\'');
                     return;
@@ -901,7 +919,7 @@ THE SOFTWARE.
 
                         if (trtr.option.link === 'entity') {
                             link_entity_html = body_html;
-                            link_auto_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
+                            link_auto_html = t.text.replace(/(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                         } else if (trtr.option.link === 'auto') {
                             link_entity_html = trtr.apply_entities(t, entity_callback);
                             link_auto_html = body_html;
@@ -918,10 +936,12 @@ THE SOFTWARE.
                 if (t.source_html === 'web') {
                     t.source_html = '<a href="http://twitter.com/" rel="nofollow"' + link_style_html + '>Twitter</a>';
                 } else {
-                    t.source_html = t.source_html.replace(/^<a href="([!#$%&'()*+,\-.\/0-9:;=?@A-Z\\_a-z~]+)" rel="nofollow">/, '<a href="$1" rel="nofollow"' + link_style_html + '>');
+                    t.source_html = t.source_html.replace(/^<a href="(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+)" rel="nofollow">/, '<a href="$1" rel="nofollow"' + link_style_html + '>');
                 }
 
                 source_html = mes('format_source_html').replace('%s', t.source_html);
+                tweet_url = 'http://twitter.com/' + percent_encode(t.screen_name) + '/status/' + percent_encode(t.tweet_id);
+                twitter_url = 'http://twitter.com/' + percent_encode(t.screen_name);
 
                 tweet_html = '<div style="margin:0 .5em .3em .5em;min-height:60px;color:#' + escape_html(t.text_color) + ';font-size:16px"><div>' + body_html;
 
@@ -929,7 +949,7 @@ THE SOFTWARE.
                     tweet_html += t.media_html;
                 }
 
-                tweet_html += ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="http://twitter.com/' + escape_html(t.screen_name) + '/status/' + escape_html(t.tweet_id) + '"' + link_style_html + '>' + escape_html(t.timestamp) + '</a> ' + source_html + ' </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #E6E6E6"><a href="http://twitter.com/' + escape_html(t.screen_name) + '"' + link_style_html + '><img src="' + escape_html(t.profile_image_url) + '" alt="' + escape_html(t.user_name) + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="http://twitter.com/' + escape_html(t.screen_name) + '"' + link_style_html + '>@' + escape_html(t.screen_name) + '</a></strong><span style="color:#999;font-size:14px"><br>' + escape_html(t.user_name) + ' </span></div></div>';
+                tweet_html += ' </div><div style="margin-bottom:.5em"><span style="font-size:12px;display:block;color:#999"><a href="' + escape_html(tweet_url) + '"' + link_style_html + '>' + escape_html(t.timestamp) + '</a> ' + source_html + ' </span></div><div style="padding:.5em 0 .5em 0;width:100%;border-top:1px solid #E6E6E6"><a href="' + escape_html(twitter_url) + '"' + link_style_html + '><img src="' + escape_html(t.profile_image_url) + '" alt="' + escape_html(t.user_name) + '" width="38" height="38" style="float:left;margin-right:7px;width:38px;padding:0;border:none"></a><strong><a href="' + escape_html(twitter_url) + '"' + link_style_html + '>@' + escape_html(t.screen_name) + '</a></strong><span style="color:#999;font-size:14px"><br>' + escape_html(t.user_name) + ' </span></div></div>';
 
                 t.tweet_html = tweet_html;
             },
@@ -943,14 +963,15 @@ THE SOFTWARE.
         'tweet-mode': {
             'description': 'tweet_description',
             'set_tweet_html': function (t) {
-                var to_linked_html, body_html, entity_callback, background_html, source_html, tweet_html;
+                var to_linked_html, body_html, entity_callback, background_html, source_html, tweet_url, twitter_url, intent_follow_url, intent_reply_url, intent_retweet_url, intent_favorite_url, tweet_html;
 
                 entity_callback = {
                     'hashtags': function (entity) {
-                        var e;
+                        var e, hashtag_url;
 
                         e = entity[1];
-                        return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + escape_html(encodeURIComponent(e.text)) + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + escape_html(e.text) + '</span></a>';
+                        hashtag_url = 'http://search.twitter.com/search?q=%23' + percent_encode(e.text);
+                        return '<a class="trtr_link" href="' + escape_html(hashtag_url) + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + escape_html(e.text) + '</span></a>';
                     },
                     'urls': function (entity) {
                         var e, linktext;
@@ -969,10 +990,11 @@ THE SOFTWARE.
                         return '<a href="' + escape_html(e.url) + '" target="_new"><span class="trtr_link_text">' + escape_html(linktext) + '</span></a>';
                     },
                     'user_mentions': function (entity, string) {
-                        var e;
+                        var e, twitter_url;
 
                         e = entity[1];
-                        return '<a class="trtr_link" href="http://twitter.com/' + escape_html(e.screen_name) + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + escape_html(string.substring(1)) + '</span></a>';
+                        twitter_url = 'http://twitter.com/' + percent_encode(e.screen_name);
+                        return '<a class="trtr_link" href="' + escape_html(twitter_url) + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + escape_html(string.substring(1)) + '</span></a>';
                     },
                     'media': function (entity) {
                         var e, linktext;
@@ -993,14 +1015,17 @@ THE SOFTWARE.
                 };
 
                 to_linked_html = function () {
-                    var a = arguments;
+                    var a = arguments,
+                        url;
 
                     if (a[1]) {
-                        return '<a href="' + escape_html(a[1]) + '" target="_new"><span class="trtr_link_text">' + escape_html(a[1]) + '</span></a>';
+                        return '<a href="' + re_escape_html(a[1]) + '" target="_new"><span class="trtr_link_text">' + escape_html(a[1]) + '</span></a>';
                     } else if (a[2]) {
-                        return '<a class="trtr_link" href="http://search.twitter.com/search?q=%23' + escape_html(a[2]) + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + escape_html(a[2]) + '</span></a>';
+                        url = 'http://search.twitter.com/search?q=%23' + percent_encode(a[2]);
+                        return '<a class="trtr_link" href="' + escape_html(url) + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + escape_html(a[2]) + '</span></a>';
                     } else if (a[3]) {
-                        return '<a class="trtr_link" href="http://twitter.com/' + escape_html(a[3]) + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + escape_html(a[3]) + '</span></a>';
+                        url = 'http://twitter.com/' + percent_encode(a[3]);
+                        return '<a class="trtr_link" href="' + escape_html(url) + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + escape_html(a[3]) + '</span></a>';
                     } else {
                         alert('teritori: Unknown link error');
                     }
@@ -1009,7 +1034,7 @@ THE SOFTWARE.
                 if (trtr.option.link === 'entity') {
                     body_html = trtr.apply_entities(t, entity_callback);
                 } else if (trtr.option.link === 'auto') {
-                    body_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
+                    body_html = t.text.replace(/(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                 } else {
                     alert('teritori: Unknown link option \'' + escape_html(trtr.option.link) + '\'');
                     return;
@@ -1021,7 +1046,7 @@ THE SOFTWARE.
 
                         if (trtr.option.link === 'entity') {
                             link_entity_html = body_html;
-                            link_auto_html = t.text.replace(/(http:\/\/\S+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
+                            link_auto_html = t.text.replace(/(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+)|#([a-zA-Z0-9_]+)|@([a-zA-Z0-9_]{1,15})/g, to_linked_html);
                         } else if (trtr.option.link === 'auto') {
                             link_entity_html = trtr.apply_entities(t, entity_callback);
                             link_auto_html = body_html;
@@ -1044,8 +1069,14 @@ THE SOFTWARE.
                 }
 
                 source_html = mes('format_source_html').replace('%s', t.source_html);
+                tweet_url = 'http://twitter.com/' + percent_encode(t.screen_name) + '/status/' + percent_encode(t.tweet_id);
+                twitter_url = 'http://twitter.com/' + percent_encode(t.screen_name);
+                intent_follow_url = 'https://twitter.com/intent/user?user_id=' + percent_encode(t.user_id);
+                intent_reply_url = 'https://twitter.com/intent/tweet?in_reply_to=' + percent_encode(t.tweet_id);
+                intent_retweet_url = 'https://twitter.com/intent/retweet?tweet_id=' + percent_encode(t.tweet_id);
+                intent_favorite_url = 'https://twitter.com/intent/favorite?tweet_id=' + percent_encode(t.tweet_id);
 
-                tweet_html = '<!-- http://twitter.com/' + escape_html(t.screen_name) + '/status/' + escape_html(t.tweet_id) + ' -->\n';
+                tweet_html = '<!-- ' + escape_html(tweet_url) + ' -->\n';
                 tweet_html += '<style type="text/css">.trtr_tweetid_' + escape_html(t.tweet_id) + ' a {text-decoration:none;color:#' + escape_html(t.link_color) + ' !important} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_link span.trtr_link_symbol {opacity:0.5} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a:hover {text-decoration:underline} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_link:hover {text-decoration:none} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_link:hover span.trtr_link_text {text-decoration:underline} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action span em {background:transparent url(http://si0.twimg.com/images/dev/cms/intents/icons/sprites/everything-spritev2.png) no-repeat;margin:0 3px -3.5px 3px;display:inline-block;vertical-align:baseline;position:relative;outline:none;width:15px;height:15px;} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_reply span em {background-position 0 0} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_reply:hover span em {background-position:-16px 0} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_retweet span em {background-position:-80px 0} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_retweet:hover span em {background-position:-96px 0} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_favorite span em {background-position:-32px 0} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_favorite:hover span em {background-position:-48px 0} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_follow span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_blue/bird_16_blue.png)} .trtr_tweetid_' + escape_html(t.tweet_id) + ' a.trtr_action_follow:hover span em {background-image:url(http://si0.twimg.com/images/dev/cms/intents/bird/bird_black/bird_16_black.png)}</style>';
                 tweet_html += '<div class="trtr_tweetid_' + escape_html(t.tweet_id) + '" style="background:' + background_html + ';padding:20px"><div style="background:#fff;padding:10px 12px 10px 12px;margin:0;min-height:48px;color:#' + escape_html(t.text_color) + ';font-size:16px !important;line-height:22px;border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;word-wrap:break-word">' + body_html;
 
@@ -1053,7 +1084,7 @@ THE SOFTWARE.
                     tweet_html += t.media_html;
                 }
 
-                tweet_html += ' <div class="trtr_actions" style="color:#999;font-size:12px;display:block"><a href="https://twitter.com/intent/user?user_id=' + escape_html(t.user_id) + '" class="trtr_action trtr_action_follow" title="' + escape_html(mes('action_follow')) + '"><span><em></em></span></a> <span class="trtr_timestamp"><a title="' + escape_html(t.timestamp) + '" href="http://twitter.com/' + escape_html(t.screen_name) + '/status/' + escape_html(t.tweet_id) + '">' + escape_html(t.timestamp) + '</a> ' + source_html + ' </span><a href="https://twitter.com/intent/tweet?in_reply_to=' + escape_html(t.tweet_id) + '" class="trtr_action trtr_action_reply" title="' + escape_html(mes('action_reply')) + '"><span><em></em>' + escape_html(mes('action_reply')) + '</span></a> <a href="https://twitter.com/intent/retweet?tweet_id=' + escape_html(t.tweet_id) + '" class="trtr_action trtr_action_retweet" title="' + escape_html(mes('action_retweet')) + '"><span><em></em>' + escape_html(mes('action_retweet')) + '</span></a> <a href="https://twitter.com/intent/favorite?tweet_id=' + escape_html(t.tweet_id) + '" class="trtr_action trtr_action_favorite" title="' + escape_html(mes('action_favorite')) + '"><span><em></em>' + escape_html(mes('action_favorite')) + '</span></a> </div><span class="trtr_metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="trtr_author" style="color:#999;line-height:19px;"><a href="http://twitter.com/' + escape_html(t.screen_name) + '"><img src="' + escape_html(t.profile_image_url) + '" style="float:left;margin:0 7px 0 0;width:38px;height:38px;" /></a><strong><a href="http://twitter.com/' + escape_html(t.screen_name) + '">' + escape_html(t.user_name) + '</a></strong><br/>@' + escape_html(t.screen_name) + '</span></span></div></div>\n';
+                tweet_html += ' <div class="trtr_actions" style="color:#999;font-size:12px;display:block"><a href="' + escape_html(intent_follow_url) + '" class="trtr_action trtr_action_follow" title="' + escape_html(mes('action_follow')) + '"><span><em></em></span></a> <span class="trtr_timestamp"><a title="' + escape_html(t.timestamp) + '" href="' + escape_html(tweet_url) + '">' + escape_html(t.timestamp) + '</a> ' + source_html + ' </span><a href="' + escape_html(intent_reply_url) + '" class="trtr_action trtr_action_reply" title="' + escape_html(mes('action_reply')) + '"><span><em></em>' + escape_html(mes('action_reply')) + '</span></a> <a href="' + escape_html(intent_retweet_url) + '" class="trtr_action trtr_action_retweet" title="' + escape_html(mes('action_retweet')) + '"><span><em></em>' + escape_html(mes('action_retweet')) + '</span></a> <a href="' + escape_html(intent_favorite_url) + '" class="trtr_action trtr_action_favorite" title="' + escape_html(mes('action_favorite')) + '"><span><em></em>' + escape_html(mes('action_favorite')) + '</span></a> </div><span class="trtr_metadata" style="display:block;width:100%;clear:both;margin-top:8px;padding-top:12px;height:40px;border-top:1px solid #fff;border-top:1px solid #e6e6e6;"><span class="trtr_author" style="color:#999;line-height:19px;"><a href="' + escape_html(twitter_url) + '"><img src="' + escape_html(t.profile_image_url) + '" style="float:left;margin:0 7px 0 0;width:38px;height:38px;" /></a><strong><a href="' + escape_html(twitter_url) + '">' + escape_html(t.user_name) + '</a></strong><br/>@' + escape_html(t.screen_name) + '</span></span></div></div>\n';
                 tweet_html += '<!-- end of tweet -->\n';
 
                 t.tweet_html = tweet_html;
@@ -1141,7 +1172,7 @@ THE SOFTWARE.
         } else {
             jsonp = document.createElement('script');
             jsonp.type = 'text/javascript';
-            jsonp.src = 'https://api.twitter.com/1/statuses/show.json?include_entities=true&contributor_details=true&callback=teritori.display_html&id=' + id;
+            jsonp.src = 'https://api.twitter.com/1/statuses/show.json?include_entities=true&contributor_details=true&callback=teritori.display_html&id=' + percent_encode(id);
             document.getElementsByTagName('head')[0].appendChild(jsonp);
         }
     };
