@@ -683,6 +683,24 @@ THE SOFTWARE.
 
             return '<div style="margin:.75em 0 .75em 0;font-size:12px"><iframe width="312" height="176" src="' + escape_html(embed_url) + '" scrolling="no" style="border:solid 1px #888;" frameborder="0"></iframe><br><img src="' + escape_html(this.provider_icon_url) + '" width="14" height="14" style="vertical-align:middle;margin-right:3px"><span style="color:#999">' + escape_html(this.provider_name) + '</span></div>';
         }
+    }, {
+        'provider_name': 'YouTube',
+        'provider_url': 'http://www.youtube.com/',
+        'provider_icon_url': 'http://www.youtube.com/favicon.ico',
+        'regexp_media_url': /^http(?:s?:\/\/www\.youtube\.com\/watch\?v=|:\/\/youtu\.be\/)([a-zA-Z0-9\-_]+)/,
+        'get_html_middle': function (url) {
+            var embed_url = 'http://www.youtube.com/embed/' + percent_encode(url.match(this.regexp_media_url)[1]);
+
+            return '<div style="margin:.75em 0 .75em 0;font-size:12px"><iframe src="' + escape_html(embed_url) + '" width="244" height="154" frameborder="0"></iframe><br>' + this.get_attribution_html_middle() + '</div>';
+        },
+        'get_html_large': function (url) {
+            var embed_url = 'http://www.youtube.com/embed/' + percent_encode(url.match(this.regexp_media_url)[1]) + '?wmode=opaque';
+
+            return '<div style="margin:12px 0 12px 0;font-size:12px;line-height:normal"><iframe src="' + escape_html(embed_url) + '" width="315" height="266" frameborder="0"></iframe><br>' + this.get_attribution_html_middle() + '</div>';
+        },
+        'get_html_kml': function () {
+            return this.get_html_middle.apply(this, arguments);
+        }
     }];
 
     trtr.media_methods = {
