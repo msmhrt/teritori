@@ -25,12 +25,22 @@ THE SOFTWARE.
 // JSLint declarations
 /*global $:false, alert:false, console:false, document:false, window:false */
 
-(function () {
+(function (global) {
     'use strict';
 
     var trtr, mes, escape_html, normalize_html, percent_encode;
 
-    trtr = window.teritori;
+    try {
+        if (!global.teritori.cfg) {
+            throw 'we aren\'t called from bookmarklet';
+        }
+
+        trtr = global.teritori;
+        trtr.bookmarklet_mode = true;
+    } catch (ignore) {
+        trtr = {};
+        trtr.bookmarklet_mode = false;
+    }
 
     mes = function (key) {
         return trtr.lang[trtr.option.lang][key];
@@ -1254,5 +1264,9 @@ THE SOFTWARE.
         }
     };
 
-    trtr.main();
-}());
+    if (trtr.bookmarklet_mode) {
+        trtr.main();
+    } else {
+        global.teritori = trtr;
+    }
+}(this));
