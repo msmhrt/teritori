@@ -22,6 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+// JSLint declarations
+/*global $:false, alert:false, console:false, document:false, window:false */
+
 (function () {
     'use strict';
 
