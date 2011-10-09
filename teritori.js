@@ -1129,60 +1129,66 @@ THE SOFTWARE.
         }
     };
 
-    trtr.display_html = function (tweet) {
-        var t;
+    trtr.create_tweet = function (json) {
+        var tweet;
 
-        trtr.cached_json['statuses/show/' + tweet.id_str] = tweet;
-
-        if (tweet.retweeted_status) {
-            tweet = tweet.retweeted_status;
+        if (json.retweeted_status) {
+            json = json.retweeted_status;
         }
 
         if (trtr.option.debug) {
-            console.info('teritori: tweet = ', tweet);
+            console.info('teritori: json = ', json);
         }
 
-        t = {};
-        t.tweet_id = tweet.id_str;
-        t.source_html = tweet.source;
+        tweet = {};
+        tweet.tweet_id = json.id_str;
+        tweet.source_html = json.source;
 
-        t.screen_name = tweet.user.screen_name;
-        t.user_name = tweet.user.name;
-        t.user_id = tweet.user.id_str;
-        t.user_description = (tweet.user.description === null) ? '' : tweet.user.description;
-        t.user_location = (tweet.user.location === null) ? '' : tweet.user.location;
-        t.user_url = tweet.user.url;
-        t.background_image = tweet.user.profile_use_background_image;
-        t.background_image_url = tweet.user.profile_background_image_url;
-        t.background_tile = tweet.user.profile_background_tile;
-        t.profile_image_url = tweet.user.profile_image_url;
-        t.background_color = tweet.user.profile_background_color;
-        t.text_color = tweet.user.profile_text_color;
-        t.link_color = tweet.user.profile_link_color;
-        t.symbol_color = trtr.get_color_blended_by_opacity(t.link_color);
-        t.timestamp = trtr.get_timestamp(tweet.created_at);
-        t.text = tweet.text;
-        t.entities = tweet.entities;
-        t.needs_option = {
+        tweet.screen_name = json.user.screen_name;
+        tweet.user_name = json.user.name;
+        tweet.user_id = json.user.id_str;
+        tweet.user_description = (json.user.description === null) ? '' : json.user.description;
+        tweet.user_location = (json.user.location === null) ? '' : json.user.location;
+        tweet.user_url = json.user.url;
+        tweet.background_image = json.user.profile_use_background_image;
+        tweet.background_image_url = json.user.profile_background_image_url;
+        tweet.background_tile = json.user.profile_background_tile;
+        tweet.profile_image_url = json.user.profile_image_url;
+        tweet.background_color = json.user.profile_background_color;
+        tweet.text_color = json.user.profile_text_color;
+        tweet.link_color = json.user.profile_link_color;
+        tweet.symbol_color = trtr.get_color_blended_by_opacity(tweet.link_color);
+        tweet.timestamp = trtr.get_timestamp(json.created_at);
+        tweet.text = json.text;
+        tweet.entities = json.entities;
+        tweet.needs_option = {
             'media': false,
             'preview': true,
             'showtco': false
         };
 
-        t.media_html = '';
+        tweet.media_html = '';
 
         if (trtr.templates.hasOwnProperty(trtr.option.mode)) {
-            trtr.templates[trtr.option.mode].set_tweet_html(t);
+            trtr.templates[trtr.option.mode].set_tweet_html(tweet);
         } else {
             alert('teritori: Unknown mode \'' + escape_html(trtr.option.mode.toString()) + '\'');
             return;
         }
 
-        if (t.tweet_html === undefined) {
-            t.tweet_html = '';
+        if (tweet.tweet_html === undefined) {
+            tweet.tweet_html = '';
         }
 
-        trtr.display_dialog(t);
+        return tweet;
+    };
+
+    trtr.display_html = function (json) {
+        var tweet;
+
+        tweet = trtr.create_tweet(json);
+        trtr.cached_json['statuses/show/' + tweet.tweet_id] = json;
+        trtr.display_dialog(tweet);
     };
 
     trtr.load_jsonp = function (id) {
