@@ -422,7 +422,7 @@ THE SOFTWARE.
     };
 
     trtr.apply_entities = function (t, entity_callback) {
-        var i, j, text, entities, key, index, start, end, linked_text, entity_list, entity;
+        var i, text, entities, key, index, start, end, linked_text, entity_list, entity;
 
         text = t.text;
         entities = t.entities;
@@ -430,8 +430,8 @@ THE SOFTWARE.
         entity_list = [];
         for (key in entities) {
             if ((typeof entities[key] !== 'function') && (entities[key].length !== 0)) {
-                for (j = 0; j < entities[key].length; j += 1) {
-                    entity_list.push([key, entities[key][j]]);
+                for (i = 0; i < entities[key].length; i += 1) {
+                    entity_list.push([key, entities[key][i]]);
                 }
             }
         }
@@ -774,7 +774,7 @@ THE SOFTWARE.
     };
 
     trtr.add_media_html = function (t, entity, media_mode) {
-        var e, j, url, match;
+        var e, i, url, match;
 
         if (trtr.option.debug) {
             console.info('teritori: entity = ', entity);
@@ -789,11 +789,11 @@ THE SOFTWARE.
             return;
         }
 
-        for (j = 0; j < trtr.media.length; j += 1) {
-            match = url.match(trtr.media[j].regexp_media_url);
+        for (i = 0; i < trtr.media.length; i += 1) {
+            match = url.match(trtr.media[i].regexp_media_url);
             if (match) {
-                trtr.set_media_default_methods(trtr.media[j]);
-                t.media_html += trtr.media[j]['get_html_' + media_mode](url, entity);
+                trtr.set_media_default_methods(trtr.media[i]);
+                t.media_html += trtr.media[i]['get_html_' + media_mode](url, entity);
 
                 if (t.media_html.length > 0) {
                     t.needs_option.media = true;
