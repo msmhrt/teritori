@@ -57,7 +57,7 @@ THE SOFTWARE.
     escape_html = trtr.escape_html;
 
     trtr.normalize_html = function (text) {
-        var escaped_text, strings, i, match;
+        var escaped_text, strings, i, i_max, match;
 
         if (text === null || text === undefined) {
             return '';
@@ -70,7 +70,8 @@ THE SOFTWARE.
         }
 
         escaped_text = strings[0];
-        for (i = 1; i < strings.length; i += 1) {
+        i_max = strings.length;
+        for (i = 1; i < i_max; i += 1) {
             match = strings[i].match(/^(?:((?:l(?:e(?:ft(?:right(?:squigarrow|harpoons|arrows?)|(?:leftarrow|threetime)s|harpoon(?:down|up)|arrow(?:tail)?)|s(?:s(?:(?:eq?q)?gtr|approx|dot|sim)|dot(?:or?)?|g(?:es)?|cc)?|q(?:slant|q)?|g)?|o(?:ng(?:(?:lef(?:trigh)?|righ)tarrow|mapsto)|oparrow(?:righ|lef)t|p(?:lus|ar|f)|w(?:ast|bar)|z(?:enge|f)?|a(?:ng|rr)|times|brk)|a(?:rr(?:b(?:fs)?|[pt]l|sim|fs|hk|lp)?|t(?:ail|es?)?|ng(?:le|d)?|emptyv|cute|gran|mbda|quo|p)|t(?:r(?:i[ef]?|Par)|(?:ques|do)t|c(?:ir|c)|hree|imes|larr)?|s(?:q(?:uor?|b)|im[eg]?|aquo|trok|cr|h)|b(?:r(?:k(?:sl[du]|e)|ac[ek])|arr|brk)|n(?:ap(?:prox)?|e(?:q?q)?|sim|E)|r(?:(?:corne|ar)r|hard?|tri|m)|d(?:r(?:us|d)har|quor?|ca|sh)|l(?:(?:corne|ar)r|hard|tri)?|(?:(?:ur(?:ds|u)h|H)a|Bar)r|m(?:oust(?:ache)?|idot)|c(?:ed?il|aron|ub|y)|h(?:ar(?:ul?|d)|blk)|f(?:(?:loo)?r|isht)|v(?:ertneqq|nE)|A(?:a?rr|tail)|par(?:lt)?|Eg?|gE?|jcy)|n(?:s(?:u(?:[bp](?:[Ee]|set(?:eq?q)?)?|cc(?:eq)?)|hort(?:parallel|mid)|c(?:(?:cu)?e|r)?|im(?:eq?)?|qsu[bp]e|mid|par)|l(?:e(?:f(?:trigh)?tarrow|q(?:slant|q)?|s?s)?|(?:[Aa]r|d)r|t(?:rie?)?|sim|E)|v(?:l(?:t(?:rie)?|Arr|e)|r(?:trie|Arr)|[Dd]ash|g[et]|infin|Harr|sim|ap)|p(?:r(?:e(?:c(?:eq)?)?|cue)?|ar(?:(?:alle|s)l|t)?|olint)|e(?:ar(?:r(?:ow)?|hk)|s(?:ear|im)|xists?|quiv|Arr|dot)?|a(?:p(?:prox|id|os|E)?|tur(?:als?)?|cute|bla|ng)|o(?:t(?:in(?:v[abc]|dot|E)?|ni(?:v[abc])?)?|pf)|t(?:riangle(?:righ|lef)t(?:eq)?|ilde|gl|lg)|c(?:ong(?:dot)?|a(?:ron|p)|edil|up|y)|g(?:e(?:q(?:slant|q)?|s)?|sim|tr?|E)|w(?:ar(?:r(?:ow)?|hk)|(?:nea|Ar)r)|r(?:ightarrow|arr[cw]?|trie?|Arr)|L(?:ef(?:trigh)?tarrow|tv?|l)|(?:h(?:[Aa]r|pa)|f)r|u(?:m(?:ero|sp)?)?|(?:V[Dd]|d)ash|b(?:umpe?|sp)|i(?:sd?|v)?|G(?:tv?|g)|Rightarrow|jcy|mid)|s(?:u(?:p(?:[123E]|s(?:et(?:n?eq?q)?|u[bp]|im)|d(?:sub|ot)|hs(?:ol|ub)|e(?:dot)?|n[Ee]|larr|mult|plus)?|b(?:s(?:et(?:n?eq?q)?|u[bp]|im)|(?:mul|do)t|e(?:dot)?|n[Ee]|plus|rarr|E)?|cc(?:n(?:approx|eqq|sim)|(?:curly)?eq|approx|sim)?|ng|m)|c(?:[Ey]|n(?:sim|ap|E)|a(?:ron|p)|e(?:dil)?|polint|cue|irc|sim)?|e(?:ar(?:r(?:ow)?|hk)|tm(?:inus|n)|(?:swa|Ar)r|[cx]t|mi)|q(?:su[bp](?:set(?:eq)?|e)?|u(?:ar[ef]|f)?|c[au]ps?)|m(?:a(?:llsetminus|shp)|i(?:le|d)|t(?:es?)?|eparsl)|i(?:m(?:[gl]E?|plus|rarr|dot|eq?|ne)?|gma[fv]?)|h(?:ort(?:parallel|mid)|(?:(?:ch)?c)?y|arp)|t(?:r(?:aight(?:epsilon|phi)|ns)|arf?)|w(?:ar(?:r(?:ow)?|hk)|(?:nwa|Ar)r)|o(?:l(?:b(?:ar)?)?|ftcy|pf)|s(?:etmn|mile|tarf|cr)|pa(?:des(?:uit)?|r)|fr(?:own)?|dot[be]?|[lr]arr|acute|bquo|zlig)|N(?:o(?:t(?:S(?:u(?:cceeds(?:(?:Slant)?Equal|Tilde)?|(?:per|b)set(?:Equal)?)|quareSu(?:per|b)set(?:Equal)?)|Le(?:ss(?:(?:Slant)?Equal|Greater|Tilde|Less)?|ftTriangle(?:Equal|Bar)?)|Greater(?:(?:Slant|Full)?Equal|Greater|Tilde|Less)?|R(?:ightTriangle(?:Equal|Bar)?|everseElement)|Nested(?:GreaterGreater|LessLess)|E(?:qual(?:Tilde)?|lement|xists)|Tilde(?:(?:Full)?Equal|Tilde)?|Precedes(?:(?:Slant)?Equal)?|(?:Double)?VerticalBar|Hump(?:DownHump|Equal)|C(?:ongruent|upCap))?|nBreakingSpace|Break|pf)|e(?:(?:gative(?:Thi(?:ck|n)|VeryThin|Medium)Spac|wLin)e|sted(?:GreaterGreater|LessLess))|c(?:aron|edil|y)|(?:acut|tild)e|(?:sc|f)r|Jcy|u)|r(?:i(?:ght(?:(?:left(?:harpoon|arrow)|rightarrow|threetime)s|harpoon(?:down|up)|arrow(?:tail)?|squigarrow)|singdotseq|ng)|a(?:rr(?:[cw]|b(?:fs)?|[al]p|[pt]l|sim|fs|hk)?|t(?:io(?:nals)?|ail)|ng(?:l?e|d)?|c(?:ut)?e|emptyv|dic|quo)|o(?:p(?:lus|ar|f)|a(?:ng|rr)|times|brk)|b(?:r(?:k(?:sl[du]|e)|ac[ek])|arr|brk)|t(?:ri(?:[ef]|ltri)?|hree|imes)|e(?:al(?:part|ine|s)?|ct|g)|s(?:q(?:uor?|b)|aquo|cr|h)|(?:(?:uluh|H)a|[Br]ar)r|d(?:ldhar|quor?|ca|sh)|p(?:ar(?:gt)?|polint)|c(?:ed?il|aron|ub|y)|h(?:ar(?:ul?|d)|ov?)|f(?:(?:loo)?r|isht)|l(?:(?:ar|ha)r|m)|A(?:a?rr|tail)|moust(?:ache)?|nmid|x)|c(?:u(?:r(?:ly(?:eq(?:pre|suc)c|(?:wedg|ve)e)|vearrow(?:righ|lef)t|arrm?|ren)|p(?:(?:c[au]|brca)p|dot|or|s)?|e(?:pr|sc)|darr[lr]|larrp?|vee|wed)|o(?:m(?:p(?:le(?:ment|xes)|fn)?|mat?)|p(?:y(?:sr)?|rod|f)|n(?:g(?:dot)?|int)|lon(?:eq?)?)|ir(?:[Ee]|c(?:le(?:d(?:[RS]|circ|dash|ast)|arrow(?:righ|lef)t)|eq)?|fnint|scir|mid)?|a(?:p(?:(?:c[au]|brcu)p|and|dot|s)?|r(?:et|on)|cute)|c(?:a(?:ron|ps)|ups(?:sm)?|edil|irc)|e(?:n(?:terdo)?t|mptyv|dil)|h(?:ec(?:kmar)?k|cy|i)|(?:w(?:con)?in|t?do)t|s(?:u[bp]e?|cr)|lubs(?:uit)?|r(?:arr|oss)|ylcty|fr)|b(?:ig(?:o(?:(?:time|plu)s|dot)|triangle(?:down|up)|c(?:[au]p|irc)|s(?:qcup|tar)|(?:wedg|ve)e|uplus)|o(?:x(?:(?:(?:min|pl)u|time)s|[Vv][HLRhlr]?|[DUdu][LRlr]|[Hh][DUdu]?|box)|t(?:tom)?|wtie|pf)|l(?:a(?:ck(?:triangle(?:(?:righ|lef)t|down)?|(?:lozeng|squar)e)|nk)|k(?:1[24]|34)|ock)|a(?:ck(?:sim(?:eq)?|epsilon|prime|cong)|r(?:wed(?:ge)?|vee))|e(?:t(?:[ah]|ween)|cause?|mptyv|rnou|psi)|s(?:ol(?:(?:hsu)?b)?|ime?|emi|cr)|u(?:mp(?:eq?|E)?|ll(?:et)?)|n(?:e(?:quiv)?|ot)|r(?:vbar|eve)|(?:brkt)?brk|c(?:ong|y)|karow|prime|dquo|Not|fr)|L(?:e(?:ft(?:(?:Up(?:(?:Down|Tee)Vecto|Vecto(?:rBa)?)|Vecto(?:rBa)?|Floo)r|Do(?:wn(?:Vecto(?:rBa)?|TeeVecto)r|ubleBracket)|T(?:riangle(?:Equal|Bar)?|ee(?:Vector|Arrow)?)|A(?:rrow(?:RightArrow|Bar)?|ngleBracket)|Right(?:Vector|Arrow)|(?:right)?arrow|Ceiling)|ss(?:(?:Slant|Full)Equal|(?:Equal)?Greater|Tilde|Less))|o(?:(?:ng(?:(?:Lef(?:tRigh)?|Righ)tA|(?:lef(?:trigh)?|righ)ta)|wer(?:Righ|Lef)tA)rrow|pf)|a(?:placetrf|cute|mbda|ng|rr)|c(?:aron|edil|y)|l(?:eftarrow)?|s(?:trok|cr|h)|(?:mido)?t|Jcy|fr|T)|D(?:o(?:uble(?:L(?:ong(?:Lef(?:tRigh)?|Righ)tArrow|eft(?:(?:Right)?Arrow|Tee))|Right(?:Arrow|Tee)|Up(?:Down)?Arrow|ContourIntegral|Do(?:wnArrow|t)|VerticalBar)|wn(?:(?:Left(?:(?:Right|Tee)Vecto|Vecto(?:rBa)?)|Right(?:Vecto(?:rBa)?|TeeVecto))r|Arrow(?:UpArrow|Bar)?|Tee(?:Arrow)?|Breve|arrow)|t(?:Equal|Dot)?|pf)|i(?:a(?:critical(?:(?:Acut|Grav|Tild)e|Do(?:ubleAcute|t))|mond)|fferentialD)|a(?:(?:gge|r)r|shv)|D(?:otrahd)?|s(?:trok|cr)|c(?:aron|y)|el(?:ta)?|[JSZ]cy|fr)|d(?:o(?:wn(?:harpoon(?:righ|lef)t|downarrows|arrow)|t(?:(?:min|pl)us|eq(?:dot)?|square)?|ublebarwedge|llar|pf)|i(?:v(?:ide(?:ontimes)?|onx)?|am(?:ond(?:suit)?|s)?|gamma|sin|e)|a(?:(?:gge|r)r|leth|shv?)|r(?:c(?:orn|rop)|bkarow)|d(?:a(?:gge|r)r|otseq)?|(?:u(?:ar|ha)|Ar|Ha)r|s(?:c[ry]|trok|ol)|e(?:mptyv|lta|g)|b(?:karow|lac)|z(?:igrarr|cy)|lc(?:orn|rop)|t(?:rif?|dot)|c(?:aron|y)|f(?:isht|r)|har[lr]|wangle|jcy)|R(?:ight(?:(?:Up(?:(?:Down|Tee)Vecto|Vecto(?:rBa)?)|Vecto(?:rBa)?|Floo)r|Do(?:wn(?:Vecto(?:rBa)?|TeeVecto)r|ubleBracket)|T(?:riangle(?:Equal|Bar)?|ee(?:Vector|Arrow)?)|A(?:rrow(?:LeftArrow|Bar)?|ngleBracket)|Ceiling|arrow)|e(?:verse(?:E(?:quilibrium|lement)|UpEquilibrium))?|a(?:rr(?:tl)?|cute|ng)|o(?:undImplies|pf)|c(?:aron|edil|y)|(?:Bar|f)r|rightarrow|uleDelayed|s(?:cr|h)|EG|ho)|e(?:q(?:s(?:lant(?:less|gtr)|im)|u(?:iv(?:DD)?|als|est)|c(?:olon|irc)|vparsl)|m(?:pty(?:set|v)?|sp(?:1[34])?|acr)|x(?:p(?:onentiale|ectation)|ist|cl)|p(?:si(?:lon|v)?|ar(?:sl)?|lus)|l(?:s(?:dot)?|inters|l)?|c(?:(?:ar|ol)on|irc?|y)|g(?:s(?:dot)?|rave)?|a(?:cute|ster)|s(?:dot|cr|im)|r(?:Dot|arr)|(?:D?D|d)ot|o(?:gon|pf)|f(?:Dot|r)|u(?:ml|ro)|n(?:sp|g)|t[ah]|e)|t(?:r(?:i(?:angle(?:(?:righ|lef)t(?:eq)?|down|q)?|(?:min|pl)us|(?:tim)?e|dot|sb)|pezium|ade)|h(?:e(?:re(?:fore|4)|ta(?:sym|v)?)|i(?:ck(?:approx|sim)|nsp)|k(?:sim|ap)|orn)|o(?:p(?:f(?:ork)?|bot|cir)?|[es]a)|w(?:ohead(?:righ|lef)tarrow|ixt)|i(?:mes(?:b(?:ar)?|d)?|lde|nt)|s(?:c[ry]|trok|hcy)|c(?:aron|edil|y)|a(?:rget|u)|elrec|prime|brk|dot|fr)|p(?:r(?:e(?:c(?:n(?:approx|eqq|sim)|(?:curly)?eq|approx|sim)?)?|o(?:f(?:alar|line|surf)|p(?:to)?|d)|n(?:sim|ap|E)|imes?|urel|cue|sim|ap|E)?|l(?:us(?:[be]|a?cir|d[ou]|sim|two|mn)?|an(?:ckh?|kv))|ar(?:a(?:llel)?|s(?:im|l)|t)?|er(?:tenk|cnt|iod|mil|p)|o(?:intint|und|pf)|h(?:mmat|iv?|one)|i(?:tchfork|v)?|s(?:cr|i)|uncsp|cy|fr|m)|u(?:p(?:harpoon(?:righ|lef)t|(?:uparrow|lu)s|(?:down)?arrow|si(?:lon|h)?)|r(?:c(?:orn(?:er)?|rop)|ing|tri)|l(?:c(?:orn(?:er)?|rop)|tri)|d(?:(?:ar|ha)r|blac)|t(?:ilde|rif?|dot)|(?:wangl|grav)e|h(?:ar[lr]|blk)|(?:Ar|Ha|sc)r|a(?:cute|rr)|br(?:eve|cy)|f(?:isht|r)|o(?:gon|pf)|u(?:arr|ml)|c(?:irc|y)|m(?:acr|l))|C(?:o(?:n(?:(?:grue|i)nt|tourIntegral)|unterClockwiseContourIntegral|p(?:roduct|f)|lone?)|lo(?:seCurly(?:Double)?Quote|ckwiseContourIntegral)|a(?:p(?:italDifferentialD)?|yleys|cute)|ircle(?:(?:(?:Min|Pl)u|Time)s|Dot)|c(?:onint|aron|edil|irc)|e(?:nterDot|dilla)|u(?:pCa)?p|(?:sc|f)r|ross|Hcy|OPY|dot|hi)|S(?:u(?:c(?:ceeds(?:(?:Slant)?Equal|Tilde)?|hThat)|p(?:erset(?:Equal)?|set)?|b(?:set(?:Equal)?)?|m)|q(?:uare(?:Su(?:per|b)set(?:Equal)?|(?:Intersect|Un)ion)?|rt)|hort(?:(?:Righ|Lef)t|Down|Up)Arrow|c(?:aron|edil|irc|y)?|(?:mallCircl|acut)e|(?:(?:HC)?H|OFT)cy|(?:sc|ta|f)r|igma|opf)|U(?:p(?:(?:(?:per(?:Righ|Lef)t|Down)A|(?:down)?a)rrow|Arrow(?:DownArrow|Bar)?|Tee(?:Arrow)?|Equilibrium|si(?:lon)?)|n(?:der(?:B(?:rac(?:ket|e)|ar)|Parenthesis)|ion(?:Plus)?)|a(?:r(?:roci)?r|cute)|(?:(?:ma|s)c|f)r|(?:grav|tild)e|br(?:eve|cy)|o(?:gon|pf)|c(?:irc|y)|dblac|ring|uml)|a(?:n(?:g(?:msd(?:a[abcdefgh])?|rt(?:vbd?)?|s(?:ph|t)|zarr|l?e)?|d(?:(?:an)?d|slope|v)?)|p(?:[Ee]|prox(?:eq)?|acir|id|os)?|(?:(?:bre|gra)v|acut|tild)e|l(?:e(?:fsym|ph)|pha)|s(?:ymp(?:eq)?|cr|t)|c(?:[Edy]|irc|ute)?|m(?:a(?:cr|lg)|p)|(?:eli|rin)g|w(?:con)?int|o(?:gon|pf)|fr?|uml)|o(?:r(?:d(?:[fm]|er(?:of)?)?|(?:ar|o)r|slope|igof|v)?|m(?:i(?:cron|nus|d)|acr|ega)|l(?:c(?:ross|ir)|arr|ine|t)|d(?:blac|sold|ash|iv|ot)|ti(?:me(?:sa)?s|lde)|(?:f(?:ci)?|vba)r|p(?:erp|lus|ar)|s(?:lash|cr|ol)|g(?:rave|on|t)|a(?:cute|st)|c(?:irc?|y)|h(?:bar|m)|elig|int|opf|uml|S)|g(?:t(?:r(?:(?:eq?q)?less|a(?:pprox|rr)|dot|sim)|(?:ques|do)t|c(?:ir|c)|lPar)?|e(?:s(?:dot(?:ol?)?|l(?:es)?|cc)?|q(?:slant|q)?|l)?|n(?:ap(?:prox)?|e(?:q?q)?|sim|E)|a(?:mmad?|cute|p)|s(?:im[el]?|cr)|v(?:ertneqq|nE)|(?:bre|ra)ve|c(?:irc|y)|l[Eaj]?|imel|El?|dot|g?g|jcy|opf|fr)|i(?:n(?:t(?:e(?:gers|rcal)|larhk|prod|cal)?|fin(?:tie)?|care|odot)?|m(?:a(?:g(?:(?:lin)?e|part)|cr|th)|ped|of)|s(?:in(?:[Ev]|dot|sv?)?|cr)|i(?:i?int|nfin|ota)?|o(?:gon|cy|pf|ta)|(?:acut|grav)e|c(?:irc|y)?|e(?:xcl|cy)|u(?:kcy|ml)|t(?:ilde)?|f[fr]|quest|jlig|prod)|v(?:a(?:r(?:t(?:riangle(?:righ|lef)t|heta)|s(?:u[bp]setneq?q|igma)|p(?:ropto|h?i)|r(?:ho)?|epsilon|nothing|kappa)|ngrt)|e(?:e(?:bar|eq)?|r(?:bar|t)|llip)|s(?:u[bp]n[Ee]|cr)|(?:Ar|f)r|[Dd]ash|[lr]tri|nsu[bp]|zigzag|Barv?|prop|opf|cy)|m(?:a(?:p(?:sto(?:down|left|up)?)?|l(?:t(?:ese)?|e)|(?:rke|c)r)|i(?:d(?:(?:as|do)t|cir)?|nus(?:du?|b)?|cro)|u(?:(?:lti)?map)?|easuredangle|o(?:dels|pf)|s(?:tpos|cr)|c(?:omma|y)|l(?:cp|dr)|nplus|DDot|dash|fr|ho|p)|h(?:o(?:ok(?:righ|lef)tarrow|(?:rba|ar)r|mtht|pf)|a(?:r(?:r(?:cir|w)?|dcy)|irsp|milt|lf)|e(?:arts(?:uit)?|llip|rcon)|s(?:lash|trok|cr)|y(?:bull|phen)|(?:Ar|ba|f)r|ks[ew]arow|circ)|E(?:m(?:pt(?:yVer)?ySmallSquare|acr)|qu(?:al(?:Tilde)?|ilibrium)|x(?:ponentialE|ists)|c(?:aron|irc|y)|(?:acut|grav)e|(?:lemen|do)t|o(?:gon|pf)|s(?:cr|im)|psilon|uml|NG|TH|fr|ta)|I(?:n(?:t(?:e(?:rsection|gral))?|visible(?:Comma|Times))|m(?:a(?:ginaryI|cr)|plies)?|(?:acut|grav|tild)e|o(?:gon|pf|ta)|u(?:kcy|ml)|c(?:irc|y)|(?:sc|f)r|[EO]cy|Jlig|dot)|O(?:(?:(?:penCurly(?:Double)?Quo|acu)t|grav)e|ver(?:B(?:rac(?:ket|e)|ar)|Parenthesis)|m(?:icron|acr|ega)|ti(?:lde|mes)|s(?:lash|cr)|c(?:irc|y)|dblac|Elig|f?r|opf|uml)|f(?:r(?:a(?:c(?:1[234568]|3[458]|2[35]|5[68]|45|78)|sl)|own)|o(?:r(?:all|kv?)|pf)|f(?:(?:l?|i)lig|r)|l(?:lig|tns|at)|allingdotseq|[ij]lig|partint|emale|nof|scr|cy)|T(?:h(?:e(?:refore|ta)|i(?:ck|n)Space)|ilde(?:(?:Full)?Equal|Tilde)?|c(?:aron|edil|y)|s(?:trok|cr)|ripleDot|SH?cy|a[bu]|HORN|RADE|opf|fr)|G(?:[Tg]|reater(?:(?:Slant|Full)Equal|Equal(?:Less)?|Greater|Tilde|Less)|c(?:edil|irc|y)|(?:sc|f)r|(?:do)?t|ammad?|breve|Jcy|opf)|P(?:r(?:ecedes(?:(?:Slant)?Equal|Tilde)?|o(?:portion(?:al)?|duct)|ime)?|o(?:incareplane|pf)|s(?:cr|i)|lusMinus|artialD|h?i|cy|fr)|A(?:(?:(?:bre|gra)v|acut|tild)e|(?:Eli|rin)g|pplyFunction|s(?:sign|cr)|o(?:gon|pf)|(?:mac|f)r|c(?:irc|y)|lpha|uml|MP|nd)|x(?:o(?:p(?:lus|f)|time|dot)|(?:[hlr][Aa]r|f)r|c(?:[au]p|irc)|u(?:plus|tri)|(?:wedg|ve)e|s(?:qcup|cr)|(?:dtr)?i|map|nis)|V(?:e(?:r(?:t(?:ical(?:(?:Separato|Ba)r|(?:Tild|Lin)e))?|yThinSpace|bar)|e)|(?:ba|sc|f)r|(?:vd|D)ash|dashl?|opf|cy)|H(?:ump(?:DownHump|Equal)|o(?:rizontalLine|pf)|s(?:trok|cr)|ilbertSpace|a(?:cek|t)|ARDcy|circ|fr)|B(?:a(?:r(?:wed|v)|ckslash)|e(?:rnoullis|cause|ta)|(?:sc|f)r|umpeq|reve|opf|cy)|F(?:illed(?:Very)?SmallSquare|o(?:(?:uriertr|p)f|rAll)|(?:sc|f)r|cy)|z(?:(?:igrar|sc|f)r|e(?:etrf|ta)|c(?:aron|y)|acute|wn?j|dot|hcy|opf)|Z(?:e(?:roWidthSpace|ta)|c(?:aron|y)|(?:sc|f)r|acute|Hcy|dot|opf)|q(?:u(?:at(?:ernions|int)|est(?:eq)?|ot)|(?:sc|f)r|prime|int|opf)|w(?:e(?:d(?:geq?|bar)|ierp)|r(?:eath)?|(?:sc|f)r|circ|opf|p)|y(?:ac(?:ute|y)|c(?:irc|y)|u(?:cy|ml)|(?:sc|f)r|icy|opf|en)|M(?:e(?:diumSpace|llintrf)|(?:sc|f)r|inusPlus|opf|ap|cy|u)|k(?:c(?:edil|y)|(?:sc|f)r|[hj]cy|appav?|green|opf)|Y(?:c(?:irc|y)|(?:sc|f)r|[AIU]cy|acute|opf|uml)|j(?:s(?:ercy|cr)|c(?:irc|y)|math|ukcy|opf|fr)|K(?:c(?:edil|y)|(?:sc|f)r|[HJ]cy|appa|opf)|J(?:s(?:ercy|cr)|c(?:irc|y)|ukcy|opf|fr)|#(?:\d+|[Xx][\dABCDEFabcdef]+)|W(?:(?:sc|f)r|circ|edge|opf)|Q(?:(?:sc|f)r|UOT|opf)|X(?:(?:sc|f)r|opf|i));)|((?:a(?:(?:acut|grav|tild)e|(?:eli|rin)g|c(?:irc|ute)|uml|mp)|A(?:(?:acut|grav|tild)e|(?:Eli|rin)g|circ|uml|MP)|o(?:(?:acut|grav|tild)e|rd[fm]|slash|circ|uml)|i(?:(?:acut|grav)e|(?:exc|um)l|quest|circ)|O(?:(?:acut|grav|tild)e|slash|circ|uml)|c(?:e(?:dil|nt)|cedil|urren|opy)|E(?:(?:acut|grav)e|circ|uml|TH)|e(?:(?:acut|grav)e|circ|uml|th)|u(?:(?:acut|grav)e|circ|u?ml)|I(?:(?:acut|grav)e|circ|uml)|U(?:(?:acut|grav)e|circ|uml)|s(?:up[123]|zlig|ect|hy)|m(?:i(?:ddot|cro)|acr)|p(?:lusmn|ound|ara)|n(?:tilde|bsp|ot)|y(?:acute|uml|en)|(?:Ntild|Yacut)e|frac(?:1[24]|34)|C(?:cedil|OPY)|t(?:horn|imes)|(?:[GL]|QUO)T|d(?:ivide|eg)|r(?:aquo|eg)|l(?:aquo|t)|(?:quo|g)t|brvbar|THORN|REG)))/);
             if (match) {
                 if (trtr.option.debug) {
@@ -168,7 +169,7 @@ THE SOFTWARE.
     };
 
     trtr.get_option_from_cfg = function (config_string) {
-        var i, newconfig_table, config_list, config, option;
+        var i, i_max, newconfig_table, config_list, config, option;
 
         option = {
             'mode': 'tweet-mode',
@@ -195,7 +196,8 @@ THE SOFTWARE.
         }
 
         config_list = config_string.split(',');
-        for (i = 0; i < config_list.length; i += 1) {
+        i_max = config_list.length;
+        for (i = 0; i < i_max; i += 1) {
             config = config_list[i].split(':');
             switch (config[0]) {
             case 'mode':
@@ -252,7 +254,7 @@ THE SOFTWARE.
     };
 
     trtr.display_dialog = function (t) {
-        var i, key, close_dialog, dialog_html, trtr_dialog, mode_list, lang_list, dialog_position, trtr_dialog_header, trtr_mode_select_menu, trtr_lang_select_menu, trtr_preview_checkbox, trtr_showtco_checkbox, trtr_media_checkbox;
+        var i, i_max, key, close_dialog, dialog_html, trtr_dialog, mode_list, lang_list, dialog_position, trtr_dialog_header, trtr_mode_select_menu, trtr_lang_select_menu, trtr_preview_checkbox, trtr_showtco_checkbox, trtr_media_checkbox;
 
         close_dialog = function () {
             $('.trtr-dialog').remove();
@@ -290,7 +292,8 @@ THE SOFTWARE.
         });
 
         trtr_mode_select_menu = trtr_dialog.find('.trtr-mode-select-menu');
-        for (i = 0; i < mode_list.length; i += 1) {
+        i_max = mode_list.length;
+        for (i = 0; i < i_max; i += 1) {
             trtr_mode_select_menu.append($('<option value="' + escape_html(mode_list[i][0]) + '">' + escape_html(mode_list[i][1]) + '</option>'));
         }
         trtr_mode_select_menu.val(trtr.option.mode);
@@ -318,7 +321,8 @@ THE SOFTWARE.
         });
 
         trtr_lang_select_menu = trtr_dialog.find('.trtr-lang-select-menu');
-        for (i = 0; i < lang_list.length; i += 1) {
+        i_max = lang_list.length;
+        for (i = 0; i < i_max; i += 1) {
             trtr_lang_select_menu.append($('<option value="' + escape_html(lang_list[i][0]) + '">' + escape_html(lang_list[i][1]) + '</option>'));
         }
         trtr_lang_select_menu.val(trtr.option.lang);
@@ -422,7 +426,7 @@ THE SOFTWARE.
     };
 
     trtr.apply_entities = function (t, entity_callback) {
-        var i, text, entities, key, index, start, end, linked_text, entity_list, entity;
+        var i, i_max, text, entities, key, index, start, end, linked_text, entity_list, entity;
 
         text = t.text;
         entities = t.entities;
@@ -430,7 +434,8 @@ THE SOFTWARE.
         entity_list = [];
         for (key in entities) {
             if ((typeof entities[key] !== 'function') && (entities[key].length !== 0)) {
-                for (i = 0; i < entities[key].length; i += 1) {
+                i_max = entities[key].length;
+                for (i = 0; i < i_max; i += 1) {
                     entity_list.push([key, entities[key][i]]);
                 }
             }
@@ -446,7 +451,8 @@ THE SOFTWARE.
 
         index = 0;
         linked_text = '';
-        for (i = 0; i < entity_list.length; i += 1) {
+        i_max = entity_list.length;
+        for (i = 0; i < i_max; i += 1) {
             entity = entity_list[i];
             if (!entity_callback.hasOwnProperty(entity[0])) {
                 alert('teritori: Unknown parameter \'' + escape_html(entity[0]) + '\' in entity');
@@ -774,7 +780,7 @@ THE SOFTWARE.
     };
 
     trtr.add_media_html = function (t, entity, media_mode) {
-        var e, i, url, match;
+        var e, i, i_max, url, match;
 
         if (trtr.option.debug) {
             console.info('teritori: entity = ', entity);
@@ -789,7 +795,8 @@ THE SOFTWARE.
             return;
         }
 
-        for (i = 0; i < trtr.media.length; i += 1) {
+        i_max = trtr.media.length;
+        for (i = 0; i < i_max; i += 1) {
             match = url.match(trtr.media[i].regexp_media_url);
             if (match) {
                 trtr.set_media_default_methods(trtr.media[i]);
