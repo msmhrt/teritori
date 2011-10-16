@@ -615,6 +615,74 @@ THE SOFTWARE.
             return 'http://twitpic.com/show/large/' + percent_encode(url.match(this.regexp_media_url)[1]);
         }
     }, {
+        'provider_name': 'img.ly',
+        'provider_url': 'http://img.ly/',
+        'provider_icon_url': null,
+        'regexp_media_url': /^http:\/\/img\.ly\/([1-9a-zA-Z][0-9a-zA-Z]*)$/,
+        'get_middle_thumbnail_url': function (url) {
+            return 'http://img.ly/show/thumb/' + percent_encode(url.match(this.regexp_media_url)[1]);
+        },
+        'get_large_thumbnail_url': function (url) {
+            return 'http://img.ly/show/large/' + percent_encode(url.match(this.regexp_media_url)[1]);
+        }
+    }, {
+        'provider_name': 'ついっぷるフォト',
+        'provider_url': 'http://p.twipple.jp/',
+        'provider_icon_url': 'http://p.twipple.jp/favicon.ico',
+        'regexp_media_url': /^http:\/\/p\.twipple\.jp\/([0-9a-zA-Z]+)$/,
+        'get_middle_thumbnail_url': function (url) {
+            return 'http://p.twipple.jp/show/thumb/' + percent_encode(url.match(this.regexp_media_url)[1]);
+        },
+        'get_large_thumbnail_url': function (url) {
+            return 'http://p.twipple.jp/show/large/' + percent_encode(url.match(this.regexp_media_url)[1]);
+        }
+    }, {
+        'provider_name': 'Twitgoo',
+        'provider_url': 'http://twitgoo.com/',
+        'provider_icon_url': 'http://twitgoo.com/favicon.ico',
+        'regexp_media_url': /^http:\/\/twitgoo\.com\/([0-9a-z]+)$/,
+        'get_middle_thumbnail_url': function (url) {
+            return 'http://twitgoo.com/show/thumb/' + percent_encode(url.match(this.regexp_media_url)[1]);
+        },
+        'get_large_thumbnail_url': function (url) {
+            return 'http://twitgoo.com/show/img/' + percent_encode(url.match(this.regexp_media_url)[1]);
+        }
+    }, {
+        'provider_name': 'imgur',
+        'provider_url': 'http://imgur.com/',
+        'provider_icon_url': 'http://imgur.com/favicon.ico',
+        'regexp_media_url': /^http:\/\/(?:(?:i\.)?imgur\.com\/([a-zA-Z0-9]{5})(?:[hlmbts]?\.|\?|#|$)|imgur\.com\/gallery\/([a-zA-Z0-9]{5})$)/,
+        'get_middle_thumbnail_url': function (url) {
+            var matches, hash;
+
+            matches = url.match(this.regexp_media_url);
+            if (matches[1] !== undefined) {
+                hash = matches[1];
+                if (hash === 'stats' || hash === 'tools') {
+                    return '';
+                }
+            } else {
+                hash = matches[2];
+            }
+
+            return 'http://i.imgur.com/' + percent_encode(hash) + 'b.jpg';
+        },
+        'get_large_thumbnail_url': function (url) {
+            var matches, hash;
+
+            matches = url.match(this.regexp_media_url);
+            if (matches[1] !== undefined) {
+                hash = matches[1];
+                if (hash === 'stats' || hash === 'tools') {
+                    return '';
+                }
+            } else {
+                hash = matches[2];
+            }
+
+            return 'http://i.imgur.com/' + percent_encode(hash) + 'm.jpg';
+        }
+    }, {
         'provider_name': 'Lockerz',
         'provider_url': 'http://lockerz.com/',
         'provider_icon_url': 'http://lockerz.com/favicon.ico',
