@@ -934,7 +934,7 @@ THE SOFTWARE.
         'tweet4kml-mode': {
             'description': 'tweet4kml_description',
             'set_tweet_html': function (t) {
-                var link_style_html, to_linked_html, body_html, entity_callback, source_html, tweet_url, twitter_url, tweet_html;
+                var link_style_html, to_linked_html, body_html, entity_callback, match, source_html, tweet_url, twitter_url, tweet_html;
 
                 entity_callback = {
                     'hashtags': function (entity) {
@@ -1042,7 +1042,12 @@ THE SOFTWARE.
                 if (t.source_html === 'web') {
                     t.source_html = '<a href="http://twitter.com/" rel="nofollow"' + link_style_html + '>Twitter</a>';
                 } else {
-                    t.source_html = t.source_html.replace(/^<a href="(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+)" rel="nofollow">/, '<a href="$1" rel="nofollow"' + link_style_html + '>');
+                    match = t.source_html.match(/^<a href="(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+(?:\?(?:[0-9a-zA-Z\-._~!$&'()*+,;=:@\/?]|%[0-9A-F]{2})*)?(?:#(?:[0-9a-zA-Z\-._~!$&'()*+,;=:@\/?]|%[0-9A-F]{2})*)?)" rel="nofollow">([ -;\u003D-\uFFFD]*)<\/a>$/);
+                    if (match === undefined || match[1] === undefined || match[2] === undefined) {
+                        alert('teritori: RegExp for source_html is corrputed.');
+                    }
+
+                    t.source_html = '<a href="' + normalize_html(match[1]) + '" rel="nofollow"' + link_style_html + '>' + normalize_html(match[2]) + '</a>';
                 }
 
                 source_html = mes('format_source_html').replace('%s', t.source_html);
@@ -1069,7 +1074,7 @@ THE SOFTWARE.
         'tweet-mode': {
             'description': 'tweet_description',
             'set_tweet_html': function (t) {
-                var to_linked_html, body_html, entity_callback, background_html, source_html, tweet_url, twitter_url, intent_follow_url, intent_reply_url, intent_retweet_url, intent_favorite_url, tweet_html;
+                var to_linked_html, body_html, entity_callback, background_html, match, source_html, tweet_url, twitter_url, intent_follow_url, intent_reply_url, intent_retweet_url, intent_favorite_url, tweet_html;
 
                 entity_callback = {
                     'hashtags': function (entity) {
@@ -1173,6 +1178,13 @@ THE SOFTWARE.
                         background_html += ' no-repeat';
                     }
                 }
+
+                match = t.source_html.match(/^<a href="(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+(?:\?(?:[0-9a-zA-Z\-._~!$&'()*+,;=:@\/?]|%[0-9A-F]{2})*)?(?:#(?:[0-9a-zA-Z\-._~!$&'()*+,;=:@\/?]|%[0-9A-F]{2})*)?)" rel="nofollow">([ -;\u003D-\uFFFD]*)<\/a>$/);
+                if (match === undefined || match[1] === undefined || match[2] === undefined) {
+                    alert('teritori: RegExp for source_html is corrputed.');
+                }
+
+                t.source_html = '<a href="' + normalize_html(match[1]) + '" rel="nofollow">' + normalize_html(match[2]) + '</a>';
 
                 source_html = mes('format_source_html').replace('%s', t.source_html);
                 tweet_url = 'http://twitter.com/' + percent_encode(t.screen_name) + '/status/' + percent_encode(t.tweet_id);
