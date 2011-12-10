@@ -1179,12 +1179,14 @@ THE SOFTWARE.
                     }
                 }
 
-                match = t.source_html.match(/^<a href="(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+(?:\?(?:[0-9a-zA-Z\-._~!$&'()*+,;=:@\/?]|%[0-9A-F]{2})*)?(?:#(?:[0-9a-zA-Z\-._~!$&'()*+,;=:@\/?]|%[0-9A-F]{2})*)?)" rel="nofollow">([ -;\u003D-\uFFFD]*)<\/a>$/);
-                if (match === undefined || match[1] === undefined || match[2] === undefined) {
-                    alert('teritori: RegExp for source_html is corrputed.');
-                }
+                if (t.source_html !== 'web') {
+                    match = t.source_html.match(/^<a href="(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+(?:\?(?:[0-9a-zA-Z\-._~!$&'()*+,;=:@\/?]|%[0-9A-F]{2})*)?(?:#(?:[0-9a-zA-Z\-._~!$&'()*+,;=:@\/?]|%[0-9A-F]{2})*)?)" rel="nofollow">([ -;\u003D-\uFFFD]*)<\/a>$/);
+                    if (match === undefined || match[1] === undefined || match[2] === undefined) {
+                        alert('teritori: RegExp for source_html is corrputed.');
+                    }
 
-                t.source_html = '<a href="' + normalize_html(match[1]) + '" rel="nofollow">' + normalize_html(match[2]) + '</a>';
+                    t.source_html = '<a href="' + normalize_html(match[1]) + '" rel="nofollow">' + normalize_html(match[2]) + '</a>';
+                }
 
                 source_html = mes('format_source_html').replace('%s', t.source_html);
                 tweet_url = 'http://twitter.com/' + percent_encode(t.screen_name) + '/status/' + percent_encode(t.tweet_id);
