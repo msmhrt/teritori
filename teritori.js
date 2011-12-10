@@ -1043,8 +1043,9 @@ THE SOFTWARE.
                     t.source_html = '<a href="http://twitter.com/" rel="nofollow"' + link_style_html + '>Twitter</a>';
                 } else {
                     match = t.source_html.match(/^<a href="(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+(?:\?(?:[0-9a-zA-Z\-._~!$&'()*+,;=:@\/?]|%[0-9A-F]{2})*)?(?:#(?:[0-9a-zA-Z\-._~!$&'()*+,;=:@\/?]|%[0-9A-F]{2})*)?)" rel="nofollow">([ -;\u003D-\uFFFD]*)<\/a>$/);
-                    if (match === undefined || match[1] === undefined || match[2] === undefined) {
+                    if (match === null || match[1] === undefined || match[2] === undefined) {
                         alert('teritori: RegExp for source_html is corrputed.');
+                        return;
                     }
 
                     t.source_html = '<a href="' + normalize_html(match[1]) + '" rel="nofollow"' + link_style_html + '>' + normalize_html(match[2]) + '</a>';
@@ -1181,8 +1182,9 @@ THE SOFTWARE.
 
                 if (t.source_html !== 'web') {
                     match = t.source_html.match(/^<a href="(https?:\/\/[#$%&+,\-.\/0-9:;=?@A-Z_a-z~]+(?:\?(?:[0-9a-zA-Z\-._~!$&'()*+,;=:@\/?]|%[0-9A-F]{2})*)?(?:#(?:[0-9a-zA-Z\-._~!$&'()*+,;=:@\/?]|%[0-9A-F]{2})*)?)" rel="nofollow">([ -;\u003D-\uFFFD]*)<\/a>$/);
-                    if (match === undefined || match[1] === undefined || match[2] === undefined) {
+                    if (match === null || match[1] === undefined || match[2] === undefined) {
                         alert('teritori: RegExp for source_html is corrputed.');
+                        return;
                     }
 
                     t.source_html = '<a href="' + normalize_html(match[1]) + '" rel="nofollow">' + normalize_html(match[2]) + '</a>';
