@@ -1132,15 +1132,16 @@ THE SOFTWARE.
 
                     if (a[1]) {
                         return '<a href="' + normalize_html(a[1]) + '" target="_new"><span class="trtr_link_text">' + escape_html(a[1]) + '</span></a>';
-                    } else if (a[2]) {
+                    }
+                    if (a[2]) {
                         url = 'http://search.twitter.com/search?q=%23' + percent_encode(a[2]);
                         return '<a class="trtr_link" href="' + escape_html(url) + '" target="_new"><span class="trtr_link_symbol">#</span><span class="trtr_link_text">' + escape_html(a[2]) + '</span></a>';
-                    } else if (a[3]) {
+                    }
+                    if (a[3]) {
                         url = 'http://twitter.com/' + percent_encode(a[3]);
                         return '<a class="trtr_link" href="' + escape_html(url) + '" target="_new"><span class="trtr_link_symbol">@</span><span class="trtr_link_text">' + escape_html(a[3]) + '</span></a>';
-                    } else {
-                        alert('teritori: Unknown link error');
                     }
+                    alert('teritori: Unknown link error');
                 };
 
                 if (trtr.option.link === 'entity') {
