@@ -334,11 +334,11 @@ THE SOFTWARE.
 
         trtr_preview_checkbox = trtr_dialog.find('.trtr-dialog-preview-checkbox');
         if (trtr.option.preview) {
-            trtr_preview_checkbox.attr('checked', 'checked');
+            trtr_preview_checkbox.prop('checked', 'checked');
             trtr_dialog.find('.trtr-dialog-previewarea').append(trtr.templates[trtr.option.mode].preview_box);
             trtr_dialog.find('.trtr-dialog-previewbox').append(t.tweet_html);
         } else {
-            trtr_preview_checkbox.attr('checked', '');
+            trtr_preview_checkbox.prop('checked', '');
         }
 
         if (trtr.templates[trtr.option.mode].uses_option.preview && t.needs_option.preview) {
@@ -347,15 +347,15 @@ THE SOFTWARE.
                 trtr.reload();
             });
         } else {
-            trtr_preview_checkbox.attr('disabled', 'disabled');
+            trtr_preview_checkbox.prop('disabled', 'disabled');
             trtr_preview_checkbox.next().css('color', '#7F7F7F');
         }
 
         trtr_showtco_checkbox = trtr_dialog.find('.trtr-dialog-showtco-checkbox');
         if (trtr.option.showtco) {
-            trtr_showtco_checkbox.attr('checked', 'checked');
+            trtr_showtco_checkbox.prop('checked', 'checked');
         } else {
-            trtr_showtco_checkbox.attr('checked', '');
+            trtr_showtco_checkbox.prop('checked', '');
         }
 
         if (trtr.templates[trtr.option.mode].uses_option.showtco && t.needs_option.showtco) {
@@ -364,15 +364,15 @@ THE SOFTWARE.
                 trtr.reload();
             });
         } else {
-            trtr_showtco_checkbox.attr('disabled', 'disabled');
+            trtr_showtco_checkbox.prop('disabled', 'disabled');
             trtr_showtco_checkbox.next().css('color', '#7F7F7F');
         }
 
         trtr_media_checkbox = trtr_dialog.find('.trtr-dialog-media-checkbox');
         if (trtr.option.media) {
-            trtr_media_checkbox.attr('checked', 'checked');
+            trtr_media_checkbox.prop('checked', 'checked');
         } else {
-            trtr_media_checkbox.attr('checked', '');
+            trtr_media_checkbox.prop('checked', '');
         }
 
         if (trtr.templates[trtr.option.mode].uses_option.media && t.needs_option.media) {
@@ -381,7 +381,7 @@ THE SOFTWARE.
                 trtr.reload();
             });
         } else {
-            trtr_media_checkbox.attr('disabled', 'disabled');
+            trtr_media_checkbox.prop('disabled', 'disabled');
             trtr_media_checkbox.next().css('color', '#7F7F7F');
         }
 
@@ -1329,14 +1329,14 @@ THE SOFTWARE.
         if (matches[1]) {
             trtr.load_jsonp(matches[1]);
         } else if (trtr.new_twitter) {
-            $('.stream-tweet').live('hover', function () {
+            $('.stream-item').live('hover', function () {
                 var actions, tweet_link, tweet_id, action_gethtml_html;
 
                 actions = $(this).find('.tweet-actions');
                 if (actions && actions.find('.trtr_gethtml').length === 0) {
-                    tweet_link = actions.siblings('.tweet-timestamp').attr('href');
+                    tweet_link = actions.parent().find('.details').attr('href');
                     tweet_id = (tweet_link.match(/^\/(?:#\!\/)?(?:[a-zA-Z0-9_]{1,15})\/status(?:es)?\/([1-9][0-9]+)/))[1];
-                    action_gethtml_html = $('<a href="#" class="trtr_gethtml" style="padding-left:18px"><span>GetHTML</span></a>');
+                    action_gethtml_html = $('<a href="#" class="trtr_gethtml"><span>GetHTML</span></a>');
                     actions.append(action_gethtml_html);
                     action_gethtml_html.click(function () {
                         trtr.load_jsonp(tweet_id);
