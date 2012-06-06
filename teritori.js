@@ -23,7 +23,7 @@ THE SOFTWARE.
 */
 
 // JSLint declarations
-/*global $:false, alert:false, console:false, document:false, window:false */
+/*global $:false, alert:false, console:false, document:false, jQuery:false, window:false */
 
 (function (global) {
     'use strict';
@@ -1363,7 +1363,27 @@ THE SOFTWARE.
     };
 
     if (trtr.bookmarklet_mode) {
-        trtr.main();
+        if (typeof jQuery === 'undefined') {
+            (function () {
+                var script;
+
+                script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js';
+                script.onload = function () {
+                    var script;
+
+                    script = document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.src = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js';
+                    script.onload = trtr.main;
+                    document.body.appendChild(script);
+                };
+                document.body.appendChild(script);
+            }());
+        } else {
+            trtr.main();
+        }
     } else {
         global.teritori = trtr;
     }
